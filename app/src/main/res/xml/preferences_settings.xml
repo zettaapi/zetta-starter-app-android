@@ -3,7 +3,6 @@
 
   <com.zetta.android.settings.EditTextWithHistoryPreference
     android:key="pref_api_url"
-    android:summary="Add a new API url"
     android:title="API" />
 
 </android.support.v7.preference.PreferenceScreen>
