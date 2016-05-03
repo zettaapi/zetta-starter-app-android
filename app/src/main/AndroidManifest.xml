@@ -19,7 +19,9 @@
     </activity>
     <activity android:name=".device.DeviceDetailsActivity" />
     <activity android:name=".device.events.EventsActivity" />
-    <activity android:name=".settings.SettingsActivity" />
+    <activity
+      android:name=".settings.SettingsActivity"
+      android:theme="@style/SettingsTheme" />
   </application>
 
 </manifest>

@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">Zetta</string>
   <string name="Settings">Settings</string>
+  <string name="API_History">API History</string>
 </resources>

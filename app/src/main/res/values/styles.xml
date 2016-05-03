@@ -17,10 +17,8 @@
     <!-- android:actionMenuTextColor is the color of the text of action (menu) items  -->
     <item name="actionMenuTextColor">@android:color/holo_green_light</item>
     <!-- Enable these below if you want clicking icons to trigger a ripple effect -->
-    <!--
     <item name="selectableItemBackground">?android:selectableItemBackground</item>
     <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
-    -->
   </style>
 
   <!-- This configures the styles for the title within the Toolbar  -->
@@ -28,6 +26,11 @@
     parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
     <item name="android:textSize">21sp</item>
     <item name="android:textStyle">italic</item>
+  </style>
+
+  <style name="SettingsTheme"
+    parent="AppTheme">
+    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
   </style>
 
 </resources>
