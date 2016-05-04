@@ -7,11 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
+import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
 import java.net.MalformedURLException;
@@ -53,7 +55,6 @@ public class DeviceListActivity extends AppCompatActivity {
         }
         adapter.updateAll(items);
         recyclerView.setAdapter(adapter);
-
     }
 
     // TODO hide toolbar on scroll https://guides.codepath.com/android/Using-the-App-ToolBar
@@ -62,6 +63,14 @@ public class DeviceListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_device_list, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String url = ApiUrlFetcher.newInstance(this).getUrl();
+        Log.d("xxx", "got url " + url);
     }
 
     @Override

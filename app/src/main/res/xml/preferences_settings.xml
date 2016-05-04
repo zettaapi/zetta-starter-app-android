@@ -2,7 +2,7 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
   <com.zetta.android.settings.EditTextWithHistoryPreference
-    android:key="pref_api_url"
+    android:key="@string/key_api_url_with_history"
     android:title="API" />
 
 </android.support.v7.preference.PreferenceScreen>

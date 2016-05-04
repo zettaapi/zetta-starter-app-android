@@ -6,14 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.zetta.android.R;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,13 +21,13 @@ import java.util.List;
  * This preference will store a string into the SharedPreferences.
  */
 public class EditTextWithHistoryPreference extends DialogPreference {
-    static final String SEPARATOR = "[";
-    private static final String ESC_SEPARATOR = "\\[";
+    static final String SEPARATOR = HistoryCollection.SEPARATOR;
 
-    private String text;
+    private final HistoryCollection historyCollection;
 
     public EditTextWithHistoryPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        historyCollection = new HistoryCollection();
     }
 
     public EditTextWithHistoryPreference(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -49,20 +46,13 @@ public class EditTextWithHistoryPreference extends DialogPreference {
     public void setText(String text) {
         final boolean wasBlocking = shouldDisableDependents();
 
-        if (getCurrentText().equals(text)) {
+        if (historyCollection.hasHeadItem(text)) {
             return;
         }
 
-        if (this.text == null) {
-            this.text = text;
-        } else {
-            if (this.text.split(ESC_SEPARATOR).length >= 5) {
-                this.text = this.text.substring(this.text.indexOf(SEPARATOR) + 1, this.text.length());
-            }
-
-            this.text = this.text + SEPARATOR + text;
-        }
-        persistString(this.text);
+        historyCollection.appendTail(text);
+        String history = historyCollection.toString();
+        persistString(history);
 
         final boolean isBlocking = shouldDisableDependents();
         if (isBlocking != wasBlocking) {
@@ -76,21 +66,11 @@ public class EditTextWithHistoryPreference extends DialogPreference {
      * @return The current preference value.
      */
     public String getCurrentText() {
-        if (text == null) {
-            return "";
-        }
-        if (text.contains(SEPARATOR)) {
-            return text.substring(text.lastIndexOf(SEPARATOR) + 1, text.length());
-        } else {
-            return text;
-        }
+        return historyCollection.getHead();
     }
 
     public List<String> getHistory() {
-        if (text == null) {
-            return Collections.emptyList();
-        }
-        return Arrays.asList(text.split(ESC_SEPARATOR));
+        return historyCollection.getHistory();
     }
 
     @Override
@@ -100,13 +80,13 @@ public class EditTextWithHistoryPreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setText(restoreValue ? getPersistedString(text) : (String) defaultValue);
+        setText(restoreValue ? getPersistedString(historyCollection.toString()) : (String) defaultValue);
         setSummary(getCurrentText());
     }
 
     @Override
     public boolean shouldDisableDependents() {
-        return TextUtils.isEmpty(text) || super.shouldDisableDependents();
+        return historyCollection.isEmpty() || super.shouldDisableDependents();
     }
 
     @Override

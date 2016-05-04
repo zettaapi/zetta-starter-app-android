@@ -2,4 +2,6 @@
   <string name="app_name">Zetta</string>
   <string name="Settings">Settings</string>
   <string name="API_History">API History</string>
+  <string name="key_api_url_with_history"
+    translatable="false">pref_api_url</string>
 </resources>
