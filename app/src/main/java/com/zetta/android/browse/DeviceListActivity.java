@@ -47,8 +47,6 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    // TODO hide toolbar on scroll https://guides.codepath.com/android/Using-the-App-ToolBar
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_device_list, menu);

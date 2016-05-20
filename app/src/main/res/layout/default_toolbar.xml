@@ -9,6 +9,7 @@
   android:theme="@style/ToolbarTheme"
   custom:contentInsetLeft="0dp"
   custom:contentInsetStart="0dp"
+  custom:layout_scrollFlags="scroll"
   custom:popupTheme="@style/ThemeOverlay.AppCompat.Light"
   custom:titleTextAppearance="@style/Toolbar.TitleText"
   custom:titleTextColor="@android:color/white">
