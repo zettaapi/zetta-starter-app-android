@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
+import com.zetta.android.device.DeviceDetailsActivity;
 import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
@@ -36,7 +37,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.device_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DeviceListAdapter adapter = new DeviceListAdapter(new ImageLoader());
+        DeviceListAdapter adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
         List<ListItem> items;
         try {
             items = Arrays.asList(
@@ -56,6 +57,14 @@ public class DeviceListActivity extends AppCompatActivity {
         adapter.updateAll(items);
         recyclerView.setAdapter(adapter);
     }
+
+    private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
+        @Override
+        public void onDeviceClick() {
+            Intent intent = new Intent(DeviceListActivity.this, DeviceDetailsActivity.class);
+            startActivity(intent);
+        }
+    };
 
     // TODO hide toolbar on scroll https://guides.codepath.com/android/Using-the-App-ToolBar
 

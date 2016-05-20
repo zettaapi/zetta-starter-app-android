@@ -15,6 +15,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
