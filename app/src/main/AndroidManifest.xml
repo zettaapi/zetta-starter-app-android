@@ -17,10 +17,15 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".device.DeviceDetailsActivity" />
-    <activity android:name=".device.events.EventsActivity" />
+    <activity
+      android:name=".device.DeviceDetailsActivity"
+      android:parentActivityName=".browse.DeviceListActivity" />
+    <activity
+      android:name=".device.events.EventsActivity"
+      android:parentActivityName=".device.DeviceDetailsActivity" />
     <activity
       android:name=".settings.SettingsActivity"
+      android:parentActivityName=".browse.DeviceListActivity"
       android:theme="@style/SettingsTheme" />
   </application>
 
