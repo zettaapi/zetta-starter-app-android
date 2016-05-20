@@ -1,7 +1,6 @@
 package com.zetta.android.browse;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +16,6 @@ import com.zetta.android.device.DeviceDetailsActivity;
 import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 public class DeviceListActivity extends AppCompatActivity {
@@ -38,22 +34,7 @@ public class DeviceListActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.device_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DeviceListAdapter adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
-        List<ListItem> items;
-        try {
-            items = Arrays.asList(
-                new ListItem.ServerListItem(Color.parseColor("#0000ff"), "bangalor"),
-                new ListItem.DeviceListItem("Door", "closed", new URL("http://www.zettaapi.org/icons/door-closed.png")),
-                new ListItem.DeviceListItem("Photocell", "ready", new URL("http://www.zettaapi.org/icons/photocell-ready.png")),
-                new ListItem.DeviceListItem("Security System", "disarmed", new URL("http://www.zettaapi.org/icons/security-disarmed.png")),
-                new ListItem.DeviceListItem("Window", "closed", new URL("http://www.zettaapi.org/icons/window-closed.png")),
-                new ListItem.ServerListItem(Color.parseColor("#dd33ff"), "neworleans"),
-                new ListItem.DeviceListItem("Motion", "no-motion", new URL("http://www.zettaapi.org/icons/motion-no-motion.png")),
-                new ListItem.DeviceListItem("Thermometer", "ready", new URL("http://www.zettaapi.org/icons/thermometer-ready.png")),
-                new ListItem.DeviceListItem("Camera", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg"))
-            );
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        List<ListItem> items = MockZettaService.getListItems();
         adapter.updateAll(items);
         recyclerView.setAdapter(adapter);
     }
@@ -77,7 +58,6 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         String url = ApiUrlFetcher.newInstance(this).getUrl();
         Log.d("xxx", "got url " + url);
     }
