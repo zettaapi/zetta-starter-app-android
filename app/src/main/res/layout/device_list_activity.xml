@@ -2,17 +2,14 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:custom="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/main_content"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
   tools:context=".browse.DeviceListActivity">
 
   <android.support.design.widget.AppBarLayout
-    android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
-    android:fitsSystemWindows="true"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <include layout="@layout/default_toolbar" />
