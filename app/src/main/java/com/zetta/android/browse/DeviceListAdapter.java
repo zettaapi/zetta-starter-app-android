@@ -94,6 +94,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             nameLabelWidget.setText(deviceListItem.getName());
             stateLabelWidget.setText(deviceListItem.getState());
             imageLoader.load(deviceListItem.getStateImageUrl(), stateImageWidget);
+            stateImageWidget.setColorFilter(deviceListItem.getStateImageColor());
         }
     }
 

@@ -41,11 +41,13 @@ interface ListItem {
         private final String name;
         private final String state;
         private final URL stateImageUrl;
+        private final int stateImageColor;
 
-        public DeviceListItem(String name, String state, URL stateImageUrl) {
+        public DeviceListItem(String name, String state, URL stateImageUrl, int stateImageColor) {
             this.name = name;
             this.state = state;
             this.stateImageUrl = stateImageUrl;
+            this.stateImageColor = stateImageColor;
         }
 
         @Override
@@ -63,6 +65,10 @@ interface ListItem {
 
         public URL getStateImageUrl() {
             return stateImageUrl;
+        }
+
+        public int getStateImageColor() {
+            return stateImageColor;
         }
     }
 }
