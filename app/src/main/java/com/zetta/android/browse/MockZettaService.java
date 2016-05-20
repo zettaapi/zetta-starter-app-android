@@ -22,7 +22,17 @@ public class MockZettaService {
                 new ListItem.ServerListItem(Color.parseColor("#dd33ff"), "neworleans"),
                 new ListItem.DeviceListItem("Motion", "no-motion", new URL("http://www.zettaapi.org/icons/motion-no-motion.png")),
                 new ListItem.DeviceListItem("Thermometer", "ready", new URL("http://www.zettaapi.org/icons/thermometer-ready.png")),
-                new ListItem.DeviceListItem("Camera", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg"))
+                new ListItem.DeviceListItem("Camera", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg")),
+                new ListItem.ServerListItem(Color.parseColor("#dd3322"), "detroit"),
+                new ListItem.DeviceListItem("Motion1", "no-motion", new URL("http://www.zettaapi.org/icons/motion-no-motion.png")),
+                new ListItem.DeviceListItem("Thermometer1", "ready", new URL("http://www.zettaapi.org/icons/thermometer-ready.png")),
+                new ListItem.DeviceListItem("Camera1", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg")),
+                new ListItem.DeviceListItem("Motion2", "no-motion", new URL("http://www.zettaapi.org/icons/motion-no-motion.png")),
+                new ListItem.DeviceListItem("Thermometer2", "ready", new URL("http://www.zettaapi.org/icons/thermometer-ready.png")),
+                new ListItem.DeviceListItem("Camera2", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg")),
+                new ListItem.DeviceListItem("Motion3", "no-motion", new URL("http://www.zettaapi.org/icons/motion-no-motion.png")),
+                new ListItem.DeviceListItem("Thermometer3", "ready", new URL("http://www.zettaapi.org/icons/thermometer-ready.png")),
+                new ListItem.DeviceListItem("Camera3", "ready", new URL("http://www.zettaapi.org/public/demo/detroit.jpg"))
             );
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
