@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
@@ -31,12 +32,21 @@ public class DeviceListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        View emptyView = findViewById(R.id.device_list_empty_view);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.device_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DeviceListAdapter adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
         List<ListItem> items = MockZettaService.getListItems();
         adapter.updateAll(items);
         recyclerView.setAdapter(adapter);
+
+        if (items.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {

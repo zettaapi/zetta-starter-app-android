@@ -4,4 +4,5 @@
   <string name="API_History">API History</string>
   <string name="key_api_url_with_history"
     translatable="false">pref_api_url</string>
+  <string name="waiting_for_something_to_connect">waiting for something to connect</string>
 </resources>
