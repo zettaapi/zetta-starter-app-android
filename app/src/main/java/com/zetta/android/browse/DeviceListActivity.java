@@ -21,9 +21,17 @@ import java.util.List;
 
 public class DeviceListActivity extends AppCompatActivity {
 
+    private ApiUrlFetcher apiUrlFetcher;
+    private DeviceListAdapter adapter;
+
+    private RecyclerView recyclerView;
+    private EmptyLoadingView emptyView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        apiUrlFetcher = ApiUrlFetcher.newInstance(this);
+
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -32,21 +40,10 @@ public class DeviceListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        View emptyView = findViewById(R.id.device_list_empty_view);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.device_list);
+        emptyView = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
+        recyclerView = (RecyclerView) findViewById(R.id.device_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DeviceListAdapter adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
-        List<ListItem> items = MockZettaService.getListItems();
-        adapter.updateAll(items);
-        recyclerView.setAdapter(adapter);
-
-        if (items.isEmpty()) {
-            emptyView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            emptyView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+        adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
     }
 
     private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
@@ -66,8 +63,25 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String url = ApiUrlFetcher.newInstance(this).getUrl();
+        String url = apiUrlFetcher.getUrl();
         Log.d("xxx", "got url " + url);
+
+        List<ListItem> items = MockZettaService.getListItems();
+        adapter.updateAll(items);
+        recyclerView.setAdapter(adapter);
+
+        if (!items.isEmpty()) {
+            emptyView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else if (items.isEmpty() && apiUrlFetcher.hasUrl()) {
+            emptyView.setStateLoading(apiUrlFetcher.getUrl());
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyView.setStateEmpty();
+            emptyView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 
     @Override

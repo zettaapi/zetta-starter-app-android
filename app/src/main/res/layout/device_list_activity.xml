@@ -22,19 +22,10 @@
     android:layout_height="match_parent"
     custom:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-  <FrameLayout
+  <com.zetta.android.browse.EmptyLoadingView
     android:id="@+id/device_list_empty_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:visibility="gone">
-
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:drawableTop="@android:drawable/ic_menu_info_details"
-      android:text="@string/waiting_for_something_to_connect" />
-
-  </FrameLayout>
+    android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

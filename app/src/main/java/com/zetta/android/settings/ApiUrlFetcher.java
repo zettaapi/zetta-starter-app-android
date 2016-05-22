@@ -22,6 +22,10 @@ public class ApiUrlFetcher {
         this.key = key;
     }
 
+    public boolean hasUrl() {
+        return !"".equals(getUrl().trim());
+    }
+
     public String getUrl() {
         String collection = sharedPreferences.getString(key, "");
         HistoryCollection historyCollection = new HistoryCollection();

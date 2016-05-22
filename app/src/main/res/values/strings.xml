@@ -4,5 +4,6 @@
   <string name="API_History">API History</string>
   <string name="key_api_url_with_history"
     translatable="false">pref_api_url</string>
-  <string name="waiting_for_something_to_connect">waiting for something to connect</string>
+  <string name="waiting_for_devices_to_connect_to_x">waiting for devices to connect to %1$s</string>
+  <string name="no_server_url_has_been_set">no server url has been set</string>
 </resources>
