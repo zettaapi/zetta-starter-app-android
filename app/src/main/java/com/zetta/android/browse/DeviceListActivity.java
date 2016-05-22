@@ -24,8 +24,8 @@ public class DeviceListActivity extends AppCompatActivity {
     private ApiUrlFetcher apiUrlFetcher;
     private DeviceListAdapter adapter;
 
-    private RecyclerView recyclerView;
-    private EmptyLoadingView emptyView;
+    private RecyclerView deviceListWidget;
+    private EmptyLoadingView emptyLoadingWidget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +40,9 @@ public class DeviceListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        emptyView = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
-        recyclerView = (RecyclerView) findViewById(R.id.device_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
+        deviceListWidget = (RecyclerView) findViewById(R.id.device_list);
+        deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
     }
 
@@ -68,19 +68,19 @@ public class DeviceListActivity extends AppCompatActivity {
 
         List<ListItem> items = MockZettaService.getListItems();
         adapter.updateAll(items);
-        recyclerView.setAdapter(adapter);
+        deviceListWidget.setAdapter(adapter);
 
         if (!items.isEmpty()) {
-            emptyView.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            emptyLoadingWidget.setVisibility(View.GONE);
+            deviceListWidget.setVisibility(View.VISIBLE);
         } else if (items.isEmpty() && apiUrlFetcher.hasUrl()) {
-            emptyView.setStateLoading(apiUrlFetcher.getUrl());
-            emptyView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            emptyLoadingWidget.setStateLoading(apiUrlFetcher.getUrl());
+            emptyLoadingWidget.setVisibility(View.VISIBLE);
+            deviceListWidget.setVisibility(View.GONE);
         } else {
-            emptyView.setStateEmpty();
-            emptyView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            emptyLoadingWidget.setStateEmpty();
+            emptyLoadingWidget.setVisibility(View.VISIBLE);
+            deviceListWidget.setVisibility(View.GONE);
         }
     }
 
