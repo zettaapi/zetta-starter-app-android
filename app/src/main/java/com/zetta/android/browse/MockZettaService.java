@@ -19,7 +19,7 @@ public class MockZettaService {
     public static List<ListItem> getListItems() {
         int banglorForegroundColor = Color.parseColor("#0000ff");
         int newOrleansForegroundColor = Color.parseColor("#dd33ff");
-        int detroitForgroundColor = Color.parseColor("#dd3322");
+        int detroitForegroundColor = Color.parseColor("#dd3322");
 
         List<ListItem> items;
         try {
@@ -54,42 +54,42 @@ public class MockZettaService {
                                             new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
                                             newOrleansForegroundColor
                 ),
-                new ListItem.ServerListItem(detroitForgroundColor, "detroit"),
+                new ListItem.ServerListItem(detroitForegroundColor, "detroit"),
                 new ListItem.DeviceListItem("Motion1", "no-motion",
                                             new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Thermometer1", "ready",
                                             new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Camera1", "ready",
                                             new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Motion2", "no-motion",
                                             new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Thermometer2", "ready",
                                             new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Camera2", "ready",
                                             new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Motion3", "no-motion",
                                             new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Thermometer3", "ready",
                                             new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 ),
                 new ListItem.DeviceListItem("Camera3", "ready",
                                             new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                            detroitForgroundColor
+                                            detroitForegroundColor
                 )
             );
         } catch (MalformedURLException e) {
