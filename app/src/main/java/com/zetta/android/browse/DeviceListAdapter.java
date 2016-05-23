@@ -28,6 +28,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void updateAll(List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -47,12 +48,21 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ServerViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_device, parent, false);
-            return new DeviceViewHolder(v, imageLoader, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onDeviceClickListener.onDeviceClick();
-                }
-            });
+            return new DeviceViewHolder(v, imageLoader,
+                                        new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                onDeviceClickListener.onDeviceClick();
+                                            }
+                                        },
+                                        new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
+                                                onDeviceClickListener.onDeviceLongClick();
+                                                return true;
+                                            }
+                                        }
+            );
         }
     }
 
@@ -70,27 +80,34 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnDeviceClickListener {
         void onDeviceClick();
+
+        void onDeviceLongClick();
     }
 
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageLoader imageLoader;
-        private final View.OnClickListener onDeviceClickListener;
+        private final View.OnClickListener onClickListener;
+        private final View.OnLongClickListener onLongClickListener;
         private final TextView nameLabelWidget;
         private final TextView stateLabelWidget;
         private final ImageView stateImageWidget;
 
-        public DeviceViewHolder(View itemView, ImageLoader imageLoader, View.OnClickListener onClickListener) {
+        public DeviceViewHolder(View itemView,
+                                ImageLoader imageLoader,
+                                View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener) {
             super(itemView);
             this.imageLoader = imageLoader;
-            this.onDeviceClickListener = onClickListener;
+            this.onClickListener = onClickListener;
+            this.onLongClickListener = onLongClickListener;
             nameLabelWidget = (TextView) itemView.findViewById(R.id.list_item_device_name);
             stateLabelWidget = (TextView) itemView.findViewById(R.id.list_item_device_state);
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_device_state_image);
         }
 
         public void bind(ListItem.DeviceListItem deviceListItem) {
-            itemView.setOnClickListener(onDeviceClickListener);
+            itemView.setOnClickListener(onClickListener);
+            itemView.setOnLongClickListener(onLongClickListener);
             nameLabelWidget.setText(deviceListItem.getName());
             stateLabelWidget.setText(deviceListItem.getState());
             imageLoader.load(deviceListItem.getStateImageUrl(), stateImageWidget);

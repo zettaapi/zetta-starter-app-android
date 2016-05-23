@@ -22,6 +22,13 @@
     android:layout_height="match_parent"
     custom:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/device_list_bottom_sheet_quick_actions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    custom:layout_behavior="@string/bottom_sheet_behavior" />
+
   <com.zetta.android.browse.EmptyLoadingView
     android:id="@+id/device_list_empty_view"
     android:layout_width="match_parent"

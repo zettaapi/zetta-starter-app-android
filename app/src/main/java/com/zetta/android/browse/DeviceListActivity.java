@@ -2,6 +2,9 @@ package com.zetta.android.browse;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +20,9 @@ import com.zetta.android.device.DeviceDetailsActivity;
 import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DeviceListActivity extends AppCompatActivity {
 
@@ -26,6 +31,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
     private RecyclerView deviceListWidget;
     private EmptyLoadingView emptyLoadingWidget;
+    private BottomSheetBehavior<? extends View> bottomSheetBehavior;
+    private RecyclerView deviceQuickActionsWidget;
+    private QuickActionsAdapter quickActionsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +49,17 @@ public class DeviceListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
-        deviceListWidget = (RecyclerView) findViewById(R.id.device_list);
-        deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
+        deviceListWidget = (RecyclerView) findViewById(R.id.device_list);
+        deviceListWidget.setHasFixedSize(true);
+        deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
+        deviceListWidget.setAdapter(adapter);
+        quickActionsAdapter = new QuickActionsAdapter();
+        deviceQuickActionsWidget = (RecyclerView) findViewById(R.id.device_list_bottom_sheet_quick_actions);
+        deviceQuickActionsWidget.setAdapter(quickActionsAdapter);
+        deviceQuickActionsWidget.setHasFixedSize(true);
+        deviceQuickActionsWidget.setLayoutManager(new LinearLayoutManager(this));
+        bottomSheetBehavior = BottomSheetBehavior.from(deviceQuickActionsWidget);
     }
 
     private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
@@ -51,6 +67,24 @@ public class DeviceListActivity extends AppCompatActivity {
         public void onDeviceClick() {
             Intent intent = new Intent(DeviceListActivity.this, DeviceDetailsActivity.class);
             startActivity(intent);
+        }
+
+        @Override
+        public void onDeviceLongClick() {
+            List<String> items = new ArrayList<>();
+            items.add("foo " + new Random().nextInt());
+            items.add("bar " + new Random().nextInt());
+            items.add("raa " + new Random().nextInt());
+            items.add("daa " + new Random().nextInt());
+            quickActionsAdapter.updateAll(items);
+
+            // Hack that fixes an issue with bottom sheet not showing recycler view data when opened
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }, 1);
         }
     };
 
@@ -68,7 +102,6 @@ public class DeviceListActivity extends AppCompatActivity {
 
         List<ListItem> items = MockZettaService.getListItems();
         adapter.updateAll(items);
-        deviceListWidget.setAdapter(adapter);
 
         if (!items.isEmpty()) {
             emptyLoadingWidget.setVisibility(View.GONE);
@@ -91,5 +124,14 @@ public class DeviceListActivity extends AppCompatActivity {
             startActivity(intent);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
