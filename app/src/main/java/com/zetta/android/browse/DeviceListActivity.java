@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
@@ -53,7 +54,7 @@ public class DeviceListActivity extends AppCompatActivity {
         deviceListWidget.setHasFixedSize(true);
         deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
         deviceListWidget.setAdapter(adapter);
-        quickActionsAdapter = new QuickActionsAdapter();
+        quickActionsAdapter = new QuickActionsAdapter(onActionClickListener);
         deviceQuickActionsWidget = (RecyclerView) findViewById(R.id.device_list_bottom_sheet_quick_actions);
         deviceQuickActionsWidget.setAdapter(quickActionsAdapter);
         deviceQuickActionsWidget.setHasFixedSize(true);
@@ -83,6 +84,13 @@ public class DeviceListActivity extends AppCompatActivity {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
             }, 1);
+        }
+    };
+
+    private final QuickActionsAdapter.OnActionClickListener onActionClickListener = new QuickActionsAdapter.OnActionClickListener() {
+        @Override
+        public void onActionClick(String label) {
+            Toast.makeText(DeviceListActivity.this, "TODO " + label, Toast.LENGTH_SHORT).show();
         }
     };
 

@@ -15,6 +15,11 @@ import java.util.List;
 class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ListItem> items = new ArrayList<>();
+    private final OnActionClickListener onActionClickListener;
+
+    public QuickActionsAdapter(OnActionClickListener onActionClickListener) {
+        this.onActionClickListener = onActionClickListener;
+    }
 
     public void updateAll(List<ListItem> listItems) {
         this.items.clear();
@@ -48,7 +53,10 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return;
         } else if (type == ListItem.TYPE_ACTION) {
             ListItem.QuickActionListItem actionListItem = (ListItem.QuickActionListItem) items.get(position);
-            ((QuickActionViewHolder) holder).bind(actionListItem);
+            ((QuickActionViewHolder) holder).bind(
+                actionListItem,
+                onActionClickListener
+            );
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -57,6 +65,10 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public interface OnActionClickListener {
+        void onActionClick(String label);
     }
 
     public static class QuickActionViewHolder extends RecyclerView.ViewHolder {
@@ -70,9 +82,15 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             actionToggleButton = (Button) itemView.findViewById(R.id.list_item_action_toggle);
         }
 
-        public void bind(ListItem.QuickActionListItem item) {
+        public void bind(final ListItem.QuickActionListItem item, final OnActionClickListener onActionClickListener) {
             actionLabelWidget.setText(item.getLabel());
             actionToggleButton.setText(item.getAction());
+            actionToggleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onActionClickListener.onActionClick(item.getLabel());
+                }
+            });
         }
     }
 
