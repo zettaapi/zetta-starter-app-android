@@ -12,6 +12,11 @@
     android:layout_height="wrap_content"
     tools:text="open" />
 
+  <Space
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_weight="100" />
+
   <Button
     android:id="@+id/list_item_action_toggle"
     android:layout_width="wrap_content"
