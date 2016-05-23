@@ -48,21 +48,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ServerViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_device, parent, false);
-            return new DeviceViewHolder(v, imageLoader,
-                                        new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                onDeviceClickListener.onDeviceClick();
-                                            }
-                                        },
-                                        new View.OnLongClickListener() {
-                                            @Override
-                                            public boolean onLongClick(View v) {
-                                                onDeviceClickListener.onDeviceLongClick();
-                                                return true;
-                                            }
-                                        }
-            );
+            return new DeviceViewHolder(v, imageLoader);
         }
     }
 
@@ -74,7 +60,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ServerViewHolder) holder).bind(serverListItem);
         } else {
             ListItem.DeviceListItem deviceListItem = (ListItem.DeviceListItem) listItems.get(position);
-            ((DeviceViewHolder) holder).bind(deviceListItem);
+            ((DeviceViewHolder) holder).bind(deviceListItem, onDeviceClickListener);
         }
     }
 
@@ -87,27 +73,34 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageLoader imageLoader;
-        private final View.OnClickListener onClickListener;
-        private final View.OnLongClickListener onLongClickListener;
         private final TextView nameLabelWidget;
         private final TextView stateLabelWidget;
         private final ImageView stateImageWidget;
 
-        public DeviceViewHolder(View itemView,
-                                ImageLoader imageLoader,
-                                View.OnClickListener onClickListener, View.OnLongClickListener onLongClickListener) {
+        public DeviceViewHolder(View itemView, ImageLoader imageLoader) {
             super(itemView);
             this.imageLoader = imageLoader;
-            this.onClickListener = onClickListener;
-            this.onLongClickListener = onLongClickListener;
             nameLabelWidget = (TextView) itemView.findViewById(R.id.list_item_device_name);
             stateLabelWidget = (TextView) itemView.findViewById(R.id.list_item_device_state);
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_device_state_image);
         }
 
-        public void bind(ListItem.DeviceListItem deviceListItem) {
-            itemView.setOnClickListener(onClickListener);
-            itemView.setOnLongClickListener(onLongClickListener);
+        public void bind(ListItem.DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
+            itemView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onDeviceClickListener.onDeviceClick();
+                    }
+                });
+            itemView.setOnLongClickListener(
+                new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        onDeviceClickListener.onDeviceLongClick();
+                        return true;
+                    }
+                });
             nameLabelWidget.setText(deviceListItem.getName());
             stateLabelWidget.setText(deviceListItem.getState());
             imageLoader.load(deviceListItem.getStateImageUrl(), stateImageWidget);
