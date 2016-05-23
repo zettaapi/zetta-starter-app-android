@@ -46,10 +46,11 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ListItem.TYPE_SERVER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_server, parent, false);
             return new ServerViewHolder(v);
-        } else {
+        } else if (viewType == ListItem.TYPE_DEVICE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_device, parent, false);
             return new DeviceViewHolder(v, imageLoader);
         }
+        throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
 
     @Override
@@ -58,10 +59,13 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (type == ListItem.TYPE_SERVER) {
             ListItem.ServerListItem serverListItem = (ListItem.ServerListItem) listItems.get(position);
             ((ServerViewHolder) holder).bind(serverListItem);
-        } else {
+            return;
+        } else if (type == ListItem.TYPE_DEVICE) {
             ListItem.DeviceListItem deviceListItem = (ListItem.DeviceListItem) listItems.get(position);
             ((DeviceViewHolder) holder).bind(deviceListItem, onDeviceClickListener);
+            return;
         }
+        throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
     }
 
     public interface OnDeviceClickListener {
