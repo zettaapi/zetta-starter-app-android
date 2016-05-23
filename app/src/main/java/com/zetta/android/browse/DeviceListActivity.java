@@ -22,7 +22,6 @@ import com.zetta.android.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class DeviceListActivity extends AppCompatActivity {
 
@@ -71,11 +70,10 @@ public class DeviceListActivity extends AppCompatActivity {
 
         @Override
         public void onDeviceLongClick() {
-            List<String> items = new ArrayList<>();
-            items.add("foo " + new Random().nextInt());
-            items.add("bar " + new Random().nextInt());
-            items.add("raa " + new Random().nextInt());
-            items.add("daa " + new Random().nextInt());
+            List<ListItem> items = new ArrayList<>();
+            items.add(new ListItem.HeaderQuickActionsListItem("Door"));
+            items.add(new ListItem.QuickActionListItem("open", "open"));
+            items.add(new ListItem.QuickActionListItem("image...", "update-state-image"));
             quickActionsAdapter.updateAll(items);
 
             // Hack that fixes an issue with bottom sheet not showing recycler view data when opened

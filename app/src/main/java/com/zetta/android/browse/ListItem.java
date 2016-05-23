@@ -8,6 +8,8 @@ interface ListItem {
 
     int TYPE_SERVER = 0;
     int TYPE_DEVICE = 1;
+    int TYPE_HEADER = 2;
+    int TYPE_ACTION = 3;
 
     int getType();
 
@@ -69,6 +71,48 @@ interface ListItem {
 
         public int getStateImageColor() {
             return stateImageColor;
+        }
+    }
+
+    class HeaderQuickActionsListItem implements ListItem {
+
+        private final String title;
+
+        public HeaderQuickActionsListItem(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_HEADER;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+    class QuickActionListItem implements ListItem {
+
+        private final String label;
+        private final String action;
+
+        public QuickActionListItem(String label, String action) {
+            this.label = label;
+            this.action = action;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_ACTION;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getAction() {
+            return action;
         }
     }
 }
