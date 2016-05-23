@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-public class MockZettaService {
+class MockZettaService {
 
     /**
      * TODO note this structure is only the UI structure and it is not what I expect to be return from the 'zetta library'
