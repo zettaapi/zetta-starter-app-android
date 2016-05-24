@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,12 +29,12 @@ public class DeviceListActivity extends AppCompatActivity {
 
     private ApiUrlFetcher apiUrlFetcher;
     private DeviceListAdapter adapter;
-
     private RecyclerView deviceListWidget;
     private EmptyLoadingView emptyLoadingWidget;
     private BottomSheetBehavior<? extends View> bottomSheetBehavior;
     private RecyclerView deviceQuickActionsWidget;
     private QuickActionsAdapter quickActionsAdapter;
+    private SwipeRefreshLayout pullRefreshWidget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +52,17 @@ public class DeviceListActivity extends AppCompatActivity {
         emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
         adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
         deviceListWidget = (RecyclerView) findViewById(R.id.device_list);
+        deviceListWidget.setAdapter(adapter);
         deviceListWidget.setHasFixedSize(true);
         deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
-        deviceListWidget.setAdapter(adapter);
         quickActionsAdapter = new QuickActionsAdapter(onActionClickListener);
         deviceQuickActionsWidget = (RecyclerView) findViewById(R.id.device_list_bottom_sheet_quick_actions);
         deviceQuickActionsWidget.setAdapter(quickActionsAdapter);
         deviceQuickActionsWidget.setHasFixedSize(true);
         deviceQuickActionsWidget.setLayoutManager(new LinearLayoutManager(this));
         bottomSheetBehavior = BottomSheetBehavior.from(deviceQuickActionsWidget);
+        pullRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.pull_refresh);
+        pullRefreshWidget.setOnRefreshListener(onPullRefreshListener);
     }
 
     private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
@@ -91,6 +94,16 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onActionClick(String label) {
             Toast.makeText(DeviceListActivity.this, "TODO " + label, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private final SwipeRefreshLayout.OnRefreshListener onPullRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
+            List<ListItem> items = MockZettaService.getListItems();
+            adapter.updateAll(items);
+            pullRefreshWidget.setRefreshing(false);
         }
     };
 
