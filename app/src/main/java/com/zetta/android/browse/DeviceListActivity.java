@@ -80,7 +80,7 @@ public class DeviceListActivity extends AppCompatActivity {
             items.add(new ListItem.QuickActionListItem("image...", "update-state-image"));
             quickActionsAdapter.updateAll(items);
 
-            // Hack that fixes an issue with bottom sheet not showing recycler view data when opened
+            // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
