@@ -8,8 +8,9 @@ interface ListItem {
 
     int TYPE_SERVER = 0;
     int TYPE_DEVICE = 1;
-    int TYPE_HEADER = 2;
-    int TYPE_ACTION = 3;
+    int TYPE_EMPTY_SERVER = 2;
+    int TYPE_HEADER = 3;
+    int TYPE_ACTION = 4;
 
     int getType();
 
@@ -71,6 +72,24 @@ interface ListItem {
 
         public int getStateImageColor() {
             return stateImageColor;
+        }
+    }
+
+    class EmptyServerListItem implements ListItem {
+
+        private final String message;
+
+        public EmptyServerListItem(String message) {
+            this.message = message;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_EMPTY_SERVER;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 

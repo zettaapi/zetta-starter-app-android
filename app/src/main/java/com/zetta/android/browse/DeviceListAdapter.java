@@ -49,6 +49,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_DEVICE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_device, parent, false);
             return new DeviceViewHolder(v, imageLoader);
+        } else if (viewType == ListItem.TYPE_EMPTY_SERVER) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_empty_server, parent, false);
+            return new EmptyServerViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -63,6 +66,10 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (type == ListItem.TYPE_DEVICE) {
             ListItem.DeviceListItem deviceListItem = (ListItem.DeviceListItem) listItems.get(position);
             ((DeviceViewHolder) holder).bind(deviceListItem, onDeviceClickListener);
+            return;
+        } else if (type == ListItem.TYPE_EMPTY_SERVER) {
+            ListItem.EmptyServerListItem emptyServerListItem = (ListItem.EmptyServerListItem) listItems.get(position);
+            ((EmptyServerViewHolder) holder).bind(emptyServerListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -126,6 +133,20 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(ListItem.ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
+        }
+    }
+
+    public static class EmptyServerViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView messageWidget;
+
+        public EmptyServerViewHolder(View itemView) {
+            super(itemView);
+            messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_server_message);
+        }
+
+        public void bind(ListItem.EmptyServerListItem listItem) {
+            messageWidget.setText(listItem.getMessage());
         }
     }
 }

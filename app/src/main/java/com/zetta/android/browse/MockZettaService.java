@@ -20,6 +20,7 @@ class MockZettaService {
         int banglorForegroundColor = Color.parseColor("#0000ff");
         int newOrleansForegroundColor = Color.parseColor("#dd33ff");
         int detroitForegroundColor = Color.parseColor("#dd3322");
+        int stageForegroundColor = Color.parseColor("#008822");
 
         List<ListItem> items;
         try {
@@ -90,7 +91,9 @@ class MockZettaService {
                 new ListItem.DeviceListItem("Camera3", "ready",
                                             new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
                                             detroitForegroundColor
-                )
+                ),
+                new ListItem.ServerListItem(stageForegroundColor, "stage"),
+                new ListItem.EmptyServerListItem("No devices online for this server")
             );
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
