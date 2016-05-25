@@ -75,6 +75,10 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
     }
 
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
     public interface OnDeviceClickListener {
         void onDeviceClick();
 

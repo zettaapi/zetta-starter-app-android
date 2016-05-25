@@ -1,28 +1,28 @@
 package com.zetta.android.browse;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 class MockZettaService {
 
     /**
      * TODO note this structure is only the UI structure and it is not what I expect to be return from the 'zetta library'
-     *
-     * @return
      */
-    @NonNull
-    public static List<ListItem> getListItems() {
+    public static void getListItems(final Callback callback) {
         int banglorForegroundColor = Color.parseColor("#0000ff");
         int newOrleansForegroundColor = Color.parseColor("#dd33ff");
         int detroitForegroundColor = Color.parseColor("#dd3322");
         int stageForegroundColor = Color.parseColor("#008822");
 
-        List<ListItem> items;
+        final List<ListItem> items;
         try {
             items = Arrays.asList(
                 new ListItem.ServerListItem(banglorForegroundColor, "bangalor"),
@@ -98,6 +98,23 @@ class MockZettaService {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        return items;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.on(items);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    interface Callback {
+        void on(List<ListItem> listItems);
     }
 }

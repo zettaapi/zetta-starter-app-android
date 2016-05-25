@@ -101,9 +101,13 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
-            List<ListItem> items = MockZettaService.getListItems();
-            adapter.updateAll(items);
-            pullRefreshWidget.setRefreshing(false);
+            MockZettaService.getListItems(new MockZettaService.Callback() {
+                @Override
+                public void on(List<ListItem> listItems) {
+                    adapter.updateAll(listItems);
+                    pullRefreshWidget.setRefreshing(false);
+                }
+            });
         }
     };
 
@@ -119,13 +123,22 @@ public class DeviceListActivity extends AppCompatActivity {
         String url = apiUrlFetcher.getUrl();
         Log.d("xxx", "got url " + url);
 
-        List<ListItem> items = MockZettaService.getListItems();
-        adapter.updateAll(items);
+        updateState();
+        MockZettaService.getListItems(new MockZettaService.Callback() {
+            @Override
+            public void on(List<ListItem> listItems) {
+                adapter.updateAll(listItems);
+                pullRefreshWidget.setRefreshing(false);
+                updateState();
+            }
+        });
+    }
 
-        if (!items.isEmpty()) {
+    private void updateState() {
+        if (!adapter.isEmpty()) {
             emptyLoadingWidget.setVisibility(View.GONE);
             deviceListWidget.setVisibility(View.VISIBLE);
-        } else if (items.isEmpty() && apiUrlFetcher.hasUrl()) {
+        } else if (adapter.isEmpty() && apiUrlFetcher.hasUrl()) {
             emptyLoadingWidget.setStateLoading(apiUrlFetcher.getUrl());
             emptyLoadingWidget.setVisibility(View.VISIBLE);
             deviceListWidget.setVisibility(View.GONE);
