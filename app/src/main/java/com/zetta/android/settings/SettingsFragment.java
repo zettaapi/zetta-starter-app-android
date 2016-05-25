@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
+import com.zetta.android.BuildConfig;
 import com.zetta.android.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -13,6 +14,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_settings);
+
+        Preference appVersionPref = findPreference(getString(R.string.key_app_version));
+        appVersionPref.setSummary(BuildConfig.VERSION_NAME);
     }
 
     @Override

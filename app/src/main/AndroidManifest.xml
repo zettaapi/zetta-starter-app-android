@@ -27,6 +27,19 @@
       android:name=".settings.SettingsActivity"
       android:parentActivityName=".browse.DeviceListActivity"
       android:theme="@style/SettingsTheme" />
+
+    <activity
+      android:name=".settings.licenses.OpenSourceLicensesActivity"
+      android:exported="false"
+      android:label="@string/open_source_licenses"
+      android:theme="@style/SettingsTheme">
+
+      <intent-filter>
+        <action android:name="com.zetta.OPEN_SOURCE_LICENSES" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+
+    </activity>
   </application>
 
 </manifest>
