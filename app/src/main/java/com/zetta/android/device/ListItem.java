@@ -2,9 +2,28 @@ package com.zetta.android.device;
 
 interface ListItem {
 
+    int TYPE_HEADER_ACTION = 0;
     int TYPE_ACTIONS = 1;
 
     int getType();
+
+    class HeaderActionListItem implements ListItem {
+
+        private final String title;
+
+        public HeaderActionListItem(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_HEADER_ACTION;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
 
     class ActionListItem implements ListItem {
 

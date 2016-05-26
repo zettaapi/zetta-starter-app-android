@@ -16,6 +16,7 @@ class MockZettaService {
     public static void getDetails(final Callback callback) {
         final List<ListItem> items = new ArrayList<>();
 
+        items.add(new ListItem.HeaderActionListItem("Actions"));
         items.add(new ListItem.ActionListItem("color", "set-color"));
         items.add(new ListItem.ActionListItem("brightness", "set-brightness"));
         items.add(new ListItem.ActionListItem("blink", "set-blinker"));

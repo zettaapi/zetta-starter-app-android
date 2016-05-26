@@ -43,7 +43,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ListItem.TYPE_ACTIONS) {
+        if (viewType == ListItem.TYPE_HEADER_ACTION) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_header, parent, false);
+            return new HeaderViewHolder(v);
+        } else if (viewType == ListItem.TYPE_ACTIONS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action, parent, false);
             return new ActionsViewHolder(v);
         }
@@ -53,7 +56,12 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int type = getItemViewType(position);
-        if (type == ListItem.TYPE_ACTIONS) {
+        if (type == ListItem.TYPE_HEADER_ACTION) {
+            ListItem.HeaderActionListItem headerListItem = (ListItem.HeaderActionListItem) listItems.get(position);
+            String title = headerListItem.getTitle();
+            ((HeaderViewHolder) holder).bind(title);
+            return;
+        } else if (type == ListItem.TYPE_ACTIONS) {
             ListItem.ActionListItem actionListItem = (ListItem.ActionListItem) listItems.get(position);
             ((ActionsViewHolder) holder).bind(actionListItem, onActionClickListener);
             return;
@@ -63,6 +71,20 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnActionClickListener {
         void onActionClick(String label);
+    }
+
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView headerWidget;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            headerWidget = (TextView) itemView.findViewById(R.id.list_item_header_label);
+        }
+
+        public void bind(String title) {
+            headerWidget.setText(title);
+        }
     }
 
     public class ActionsViewHolder extends RecyclerView.ViewHolder {
