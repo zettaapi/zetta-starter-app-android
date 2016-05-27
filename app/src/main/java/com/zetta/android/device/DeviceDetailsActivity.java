@@ -1,5 +1,6 @@
 package com.zetta.android.device;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
+import com.zetta.android.device.events.EventsActivity;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        adapter = new DetailsListAdapter(new ImageLoader(), onActionClickListener);
+        adapter = new DetailsListAdapter(new ImageLoader(), onActionClickListener, onEventsClickListener);
         detailsListWidget = (RecyclerView) findViewById(R.id.device_details_list);
         detailsListWidget.setAdapter(adapter);
         detailsListWidget.setHasFixedSize(true);
@@ -38,6 +40,14 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         @Override
         public void onActionClick(String label) {
             Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private final DetailsListAdapter.OnEventsClickListener onEventsClickListener = new DetailsListAdapter.OnEventsClickListener() {
+        @Override
+        public void onEventsClick() {
+            Intent intent = new Intent(DeviceDetailsActivity.this, EventsActivity.class);
+            startActivity(intent);
         }
     };
 

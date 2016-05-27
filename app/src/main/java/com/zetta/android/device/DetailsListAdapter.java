@@ -19,10 +19,14 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final ImageLoader imageLoader;
     private final OnActionClickListener onActionClickListener;
+    private final OnEventsClickListener onEventsClickListener;
 
-    public DetailsListAdapter(ImageLoader imageLoader, OnActionClickListener onActionClickListener) {
+    public DetailsListAdapter(ImageLoader imageLoader,
+                              OnActionClickListener onActionClickListener,
+                              OnEventsClickListener onEventsClickListener) {
         this.imageLoader = imageLoader;
         this.onActionClickListener = onActionClickListener;
+        this.onEventsClickListener = onEventsClickListener;
     }
 
     public void updateAll(List<ListItem> listItems) {
@@ -55,6 +59,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_PROPERTY) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_property, parent, false);
             return new PropertyViewHolder(v);
+        } else if (viewType == ListItem.TYPE_EVENTS) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_events, parent, false);
+            return new EventsViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -78,12 +85,20 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ListItem.PropertyListItem propertyListItem = (ListItem.PropertyListItem) listItems.get(position);
             ((PropertyViewHolder) holder).bind(propertyListItem);
             return;
+        } else if (type == ListItem.TYPE_EVENTS) {
+            ListItem.EventsListItem eventsListItem = (ListItem.EventsListItem) listItems.get(position);
+            ((EventsViewHolder) holder).bind(eventsListItem, onEventsClickListener);
+            return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
     }
 
     public interface OnActionClickListener {
         void onActionClick(String label);
+    }
+
+    public interface OnEventsClickListener {
+        void onEventsClick();
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -155,6 +170,26 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(ListItem.PropertyListItem item) {
             propertyLabelWidget.setText(item.getProperty());
             valueLabelWidget.setText(item.getValue());
+        }
+    }
+
+    public class EventsViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView eventsLabelWidget;
+
+        public EventsViewHolder(View itemView) {
+            super(itemView);
+            eventsLabelWidget = (TextView) itemView.findViewById(R.id.list_item_events_label);
+        }
+
+        public void bind(ListItem.EventsListItem item, final OnEventsClickListener onEventsClickListener) {
+            eventsLabelWidget.setText(item.getDescription());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onEventsClickListener.onEventsClick();
+                }
+            });
         }
     }
 }

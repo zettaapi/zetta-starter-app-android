@@ -32,6 +32,8 @@ class MockZettaService {
         items.add(new ListItem.PropertyListItem("state", "on"));
         items.add(new ListItem.PropertyListItem("color", ""));
         items.add(new ListItem.PropertyListItem("blink", ""));
+        items.add(new ListItem.HeaderListItem("Events"));
+        items.add(new ListItem.EventsListItem("View Events (42)"));
 
         new Thread(new Runnable() {
             @Override

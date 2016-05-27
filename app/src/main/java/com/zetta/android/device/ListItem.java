@@ -6,6 +6,7 @@ interface ListItem {
     int TYPE_ACTION = 1;
     int TYPE_STREAM = 2;
     int TYPE_PROPERTY = 3;
+    int TYPE_EVENTS = 4;
 
     int getType();
 
@@ -96,6 +97,24 @@ interface ListItem {
 
         public String getValue() {
             return value;
+        }
+    }
+
+    class EventsListItem implements ListItem {
+
+        private final String description;
+
+        public EventsListItem(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_EVENTS;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 }
