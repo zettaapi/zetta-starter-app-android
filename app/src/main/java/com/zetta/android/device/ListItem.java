@@ -4,6 +4,7 @@ interface ListItem {
 
     int TYPE_HEADER = 0;
     int TYPE_ACTIONS = 1;
+    int TYPE_STREAMS = 2;
 
     int getType();
 
@@ -46,6 +47,30 @@ interface ListItem {
 
         public String getAction() {
             return action;
+        }
+    }
+
+    class StreamListItem implements ListItem {
+
+        private final String stream;
+        private final String value;
+
+        public StreamListItem(String stream, String value) {
+            this.stream = stream;
+            this.value = value;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_STREAMS;
+        }
+
+        public String getStream() {
+            return stream;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
 }

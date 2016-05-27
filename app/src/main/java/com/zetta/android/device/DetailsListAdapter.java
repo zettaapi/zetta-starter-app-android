@@ -49,6 +49,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_ACTIONS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action, parent, false);
             return new ActionsViewHolder(v);
+        } else if (viewType == ListItem.TYPE_STREAMS) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_stream, parent, false);
+            return new StreamsViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -63,6 +66,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (type == ListItem.TYPE_ACTIONS) {
             ListItem.ActionListItem actionListItem = (ListItem.ActionListItem) listItems.get(position);
             ((ActionsViewHolder) holder).bind(actionListItem, onActionClickListener);
+            return;
+        } else if (type == ListItem.TYPE_STREAMS) {
+            ListItem.StreamListItem streamListItem = (ListItem.StreamListItem) listItems.get(position);
+            ((StreamsViewHolder) holder).bind(streamListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -107,6 +114,23 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onActionClickListener.onActionClick(item.getLabel());
                 }
             });
+        }
+    }
+
+    public class StreamsViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView streamLabelWidget;
+        private final TextView valueLabelWidget;
+
+        public StreamsViewHolder(View itemView) {
+            super(itemView);
+            streamLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_label);
+            valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_value_label);
+        }
+
+        public void bind(ListItem.StreamListItem item) {
+            streamLabelWidget.setText(item.getStream());
+            valueLabelWidget.setText(item.getValue());
         }
     }
 }
