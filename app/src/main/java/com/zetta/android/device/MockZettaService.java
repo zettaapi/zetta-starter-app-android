@@ -23,6 +23,15 @@ class MockZettaService {
         items.add(new ListItem.ActionListItem("turn-off", "turn-off"));
         items.add(new ListItem.HeaderListItem("Streams"));
         items.add(new ListItem.StreamListItem("state", "on"));
+        items.add(new ListItem.HeaderListItem("Properties"));
+        items.add(new ListItem.PropertyListItem("type", "light"));
+        items.add(new ListItem.PropertyListItem("style", ""));
+        items.add(new ListItem.PropertyListItem("brightness", ""));
+        items.add(new ListItem.PropertyListItem("name", "Porch Light"));
+        items.add(new ListItem.PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2"));
+        items.add(new ListItem.PropertyListItem("state", "on"));
+        items.add(new ListItem.PropertyListItem("color", ""));
+        items.add(new ListItem.PropertyListItem("blink", ""));
 
         new Thread(new Runnable() {
             @Override

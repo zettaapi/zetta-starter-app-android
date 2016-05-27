@@ -5,6 +5,7 @@ interface ListItem {
     int TYPE_HEADER = 0;
     int TYPE_ACTIONS = 1;
     int TYPE_STREAMS = 2;
+    int TYPE_PROPERTIES = 3;
 
     int getType();
 
@@ -67,6 +68,30 @@ interface ListItem {
 
         public String getStream() {
             return stream;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    class PropertyListItem implements ListItem {
+
+        private final String property;
+        private final String value;
+
+        public PropertyListItem(String property, String value) {
+            this.property = property;
+            this.value = value;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_PROPERTIES;
+        }
+
+        public String getProperty() {
+            return property;
         }
 
         public String getValue() {

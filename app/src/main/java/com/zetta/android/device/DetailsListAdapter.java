@@ -52,6 +52,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_STREAMS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_stream, parent, false);
             return new StreamsViewHolder(v);
+        } else if (viewType == ListItem.TYPE_PROPERTIES) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_property, parent, false);
+            return new PropertiesViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -70,6 +73,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (type == ListItem.TYPE_STREAMS) {
             ListItem.StreamListItem streamListItem = (ListItem.StreamListItem) listItems.get(position);
             ((StreamsViewHolder) holder).bind(streamListItem);
+            return;
+        } else if (type == ListItem.TYPE_PROPERTIES) {
+            ListItem.PropertyListItem propertyListItem = (ListItem.PropertyListItem) listItems.get(position);
+            ((PropertiesViewHolder) holder).bind(propertyListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -130,6 +137,23 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(ListItem.StreamListItem item) {
             streamLabelWidget.setText(item.getStream());
+            valueLabelWidget.setText(item.getValue());
+        }
+    }
+
+    public class PropertiesViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView propertyLabelWidget;
+        private final TextView valueLabelWidget;
+
+        public PropertiesViewHolder(View itemView) {
+            super(itemView);
+            propertyLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_label);
+            valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_value_label);
+        }
+
+        public void bind(ListItem.PropertyListItem item) {
+            propertyLabelWidget.setText(item.getProperty());
             valueLabelWidget.setText(item.getValue());
         }
     }
