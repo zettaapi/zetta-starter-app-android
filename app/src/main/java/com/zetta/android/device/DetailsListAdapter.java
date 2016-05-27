@@ -46,15 +46,15 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ListItem.TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_header, parent, false);
             return new HeaderViewHolder(v);
-        } else if (viewType == ListItem.TYPE_ACTIONS) {
+        } else if (viewType == ListItem.TYPE_ACTION) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action, parent, false);
-            return new ActionsViewHolder(v);
-        } else if (viewType == ListItem.TYPE_STREAMS) {
+            return new ActionViewHolder(v);
+        } else if (viewType == ListItem.TYPE_STREAM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_stream, parent, false);
-            return new StreamsViewHolder(v);
-        } else if (viewType == ListItem.TYPE_PROPERTIES) {
+            return new StreamViewHolder(v);
+        } else if (viewType == ListItem.TYPE_PROPERTY) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_property, parent, false);
-            return new PropertiesViewHolder(v);
+            return new PropertyViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -66,17 +66,17 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ListItem.HeaderListItem headerListItem = (ListItem.HeaderListItem) listItems.get(position);
             ((HeaderViewHolder) holder).bind(headerListItem);
             return;
-        } else if (type == ListItem.TYPE_ACTIONS) {
+        } else if (type == ListItem.TYPE_ACTION) {
             ListItem.ActionListItem actionListItem = (ListItem.ActionListItem) listItems.get(position);
-            ((ActionsViewHolder) holder).bind(actionListItem, onActionClickListener);
+            ((ActionViewHolder) holder).bind(actionListItem, onActionClickListener);
             return;
-        } else if (type == ListItem.TYPE_STREAMS) {
+        } else if (type == ListItem.TYPE_STREAM) {
             ListItem.StreamListItem streamListItem = (ListItem.StreamListItem) listItems.get(position);
-            ((StreamsViewHolder) holder).bind(streamListItem);
+            ((StreamViewHolder) holder).bind(streamListItem);
             return;
-        } else if (type == ListItem.TYPE_PROPERTIES) {
+        } else if (type == ListItem.TYPE_PROPERTY) {
             ListItem.PropertyListItem propertyListItem = (ListItem.PropertyListItem) listItems.get(position);
-            ((PropertiesViewHolder) holder).bind(propertyListItem);
+            ((PropertyViewHolder) holder).bind(propertyListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -101,12 +101,12 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class ActionsViewHolder extends RecyclerView.ViewHolder {
+    public class ActionViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView actionLabelWidget;
         private final Button actionToggleButton;
 
-        public ActionsViewHolder(View itemView) {
+        public ActionViewHolder(View itemView) {
             super(itemView);
             actionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_action_label);
             actionToggleButton = (Button) itemView.findViewById(R.id.list_item_action_toggle);
@@ -124,12 +124,12 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class StreamsViewHolder extends RecyclerView.ViewHolder {
+    public class StreamViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView streamLabelWidget;
         private final TextView valueLabelWidget;
 
-        public StreamsViewHolder(View itemView) {
+        public StreamViewHolder(View itemView) {
             super(itemView);
             streamLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_label);
             valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_value_label);
@@ -141,12 +141,12 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class PropertiesViewHolder extends RecyclerView.ViewHolder {
+    public class PropertyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView propertyLabelWidget;
         private final TextView valueLabelWidget;
 
-        public PropertiesViewHolder(View itemView) {
+        public PropertyViewHolder(View itemView) {
             super(itemView);
             propertyLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_label);
             valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_value_label);

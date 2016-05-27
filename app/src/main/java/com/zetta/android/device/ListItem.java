@@ -3,9 +3,9 @@ package com.zetta.android.device;
 interface ListItem {
 
     int TYPE_HEADER = 0;
-    int TYPE_ACTIONS = 1;
-    int TYPE_STREAMS = 2;
-    int TYPE_PROPERTIES = 3;
+    int TYPE_ACTION = 1;
+    int TYPE_STREAM = 2;
+    int TYPE_PROPERTY = 3;
 
     int getType();
 
@@ -39,7 +39,7 @@ interface ListItem {
 
         @Override
         public int getType() {
-            return TYPE_ACTIONS;
+            return TYPE_ACTION;
         }
 
         public String getLabel() {
@@ -63,7 +63,7 @@ interface ListItem {
 
         @Override
         public int getType() {
-            return TYPE_STREAMS;
+            return TYPE_STREAM;
         }
 
         public String getStream() {
@@ -87,7 +87,7 @@ interface ListItem {
 
         @Override
         public int getType() {
-            return TYPE_PROPERTIES;
+            return TYPE_PROPERTY;
         }
 
         public String getProperty() {
