@@ -20,6 +20,7 @@ class MockZettaService {
         items.add(new ListItem.ActionListItem("color", "set-color"));
         items.add(new ListItem.ActionListItem("brightness", "set-brightness"));
         items.add(new ListItem.ActionListItem("blink", "set-blinker"));
+        items.add(new ListItem.ActionListItem("turn-off", "turn-off"));
 
         new Thread(new Runnable() {
             @Override
