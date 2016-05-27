@@ -43,7 +43,7 @@ class MockZettaService {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        callback.on(items);
+                        callback.on("Porch Light", "neworleans", items);
                     }
                 });
             }
@@ -51,6 +51,6 @@ class MockZettaService {
     }
 
     interface Callback {
-        void on(List<ListItem> listItems);
+        void on(String deviceName, String serverName, List<ListItem> listItems);
     }
 }
