@@ -43,7 +43,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ListItem.TYPE_HEADER_ACTION) {
+        if (viewType == ListItem.TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_header, parent, false);
             return new HeaderViewHolder(v);
         } else if (viewType == ListItem.TYPE_ACTIONS) {
@@ -56,10 +56,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int type = getItemViewType(position);
-        if (type == ListItem.TYPE_HEADER_ACTION) {
-            ListItem.HeaderActionListItem headerListItem = (ListItem.HeaderActionListItem) listItems.get(position);
-            String title = headerListItem.getTitle();
-            ((HeaderViewHolder) holder).bind(title);
+        if (type == ListItem.TYPE_HEADER) {
+            ListItem.HeaderListItem headerListItem = (ListItem.HeaderListItem) listItems.get(position);
+            ((HeaderViewHolder) holder).bind(headerListItem);
             return;
         } else if (type == ListItem.TYPE_ACTIONS) {
             ListItem.ActionListItem actionListItem = (ListItem.ActionListItem) listItems.get(position);
@@ -82,7 +81,8 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             headerWidget = (TextView) itemView.findViewById(R.id.list_item_header_label);
         }
 
-        public void bind(String title) {
+        public void bind(ListItem.HeaderListItem headerListItem) {
+            String title = headerListItem.getTitle();
             headerWidget.setText(title);
         }
     }
