@@ -109,7 +109,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onEventsClick();
     }
 
-    public class HeaderViewHolder extends RecyclerView.ViewHolder {
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView headerWidget;
 
@@ -124,7 +124,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class ActionViewHolder extends RecyclerView.ViewHolder {
+    public static class ActionViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView actionLabelWidget;
         private final Button actionToggleButton;
@@ -147,7 +147,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class StreamViewHolder extends RecyclerView.ViewHolder {
+    public static class StreamViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView streamLabelWidget;
         private final TextView valueLabelWidget;
@@ -164,7 +164,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class PropertyViewHolder extends RecyclerView.ViewHolder {
+    public static class PropertyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView propertyLabelWidget;
         private final TextView valueLabelWidget;
@@ -181,7 +181,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class EventsViewHolder extends RecyclerView.ViewHolder {
+    public static class EventsViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView eventsLabelWidget;
 
