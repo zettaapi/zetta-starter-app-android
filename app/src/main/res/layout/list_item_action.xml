@@ -4,7 +4,10 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal"
-  android:padding="@dimen/spacing_double">
+  android:paddingBottom="@dimen/spacing_single"
+  android:paddingLeft="@dimen/spacing_double"
+  android:paddingRight="@dimen/spacing_double"
+  android:paddingTop="@dimen/spacing_single">
 
   <TextView
     android:id="@+id/list_item_action_label"
@@ -19,6 +22,7 @@
 
   <Button
     android:id="@+id/list_item_action_toggle"
+    style="@android:style/TextAppearance.Small"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:text="open" />
