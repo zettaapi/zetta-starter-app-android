@@ -43,7 +43,6 @@ public class DeviceListActivity extends AppCompatActivity {
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setPadding(toolbar.getPaddingLeft() + 20, toolbar.getPaddingTop(), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
