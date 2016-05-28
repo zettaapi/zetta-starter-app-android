@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.View;
 
 import com.zetta.android.R;
 
@@ -21,7 +20,6 @@ public class EventsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.events_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.findViewById(R.id.toolbar_title).setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.Events);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

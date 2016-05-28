@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
@@ -27,7 +26,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.findViewById(R.id.toolbar_title).setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);

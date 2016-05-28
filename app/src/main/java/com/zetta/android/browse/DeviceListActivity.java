@@ -43,11 +43,13 @@ public class DeviceListActivity extends AppCompatActivity {
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setPadding(toolbar.getPaddingLeft() + 20, toolbar.getPaddingTop(), toolbar.getPaddingRight(), toolbar.getPaddingBottom());
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_list_empty_view);
         adapter = new DeviceListAdapter(new ImageLoader(), onDeviceClickListener);
