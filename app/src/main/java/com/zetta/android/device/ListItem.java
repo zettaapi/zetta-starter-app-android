@@ -1,5 +1,7 @@
 package com.zetta.android.device;
 
+import java.net.URL;
+
 interface ListItem {
 
     int TYPE_HEADER = 0;
@@ -7,6 +9,7 @@ interface ListItem {
     int TYPE_STREAM = 2;
     int TYPE_PROPERTY = 3;
     int TYPE_EVENTS = 4;
+    int TYPE_STATE = 5;
 
     int getType();
 
@@ -115,6 +118,36 @@ interface ListItem {
 
         public String getDescription() {
             return description;
+        }
+    }
+
+    class StateListItem implements ListItem {
+
+        private final String state;
+        private final URL stateImageUrl;
+        private final int foregroundColor;
+
+        public StateListItem(String state, URL stateImageUrl, int foregroundColor) {
+            this.state = state;
+            this.stateImageUrl = stateImageUrl;
+            this.foregroundColor = foregroundColor;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_STATE;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public URL getStateImageUrl() {
+            return stateImageUrl;
+        }
+
+        public int getStateColor() {
+            return foregroundColor;
         }
     }
 }

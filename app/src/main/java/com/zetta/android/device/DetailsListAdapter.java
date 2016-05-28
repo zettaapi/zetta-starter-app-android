@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zetta.android.ImageLoader;
@@ -62,6 +63,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_EVENTS) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_events, parent, false);
             return new EventsViewHolder(v);
+        } else if (viewType == ListItem.TYPE_STATE) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_state, parent, false);
+            return new StateViewHolder(v, imageLoader);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -88,6 +92,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (type == ListItem.TYPE_EVENTS) {
             ListItem.EventsListItem eventsListItem = (ListItem.EventsListItem) listItems.get(position);
             ((EventsViewHolder) holder).bind(eventsListItem, onEventsClickListener);
+            return;
+        } else if (type == ListItem.TYPE_STATE) {
+            ListItem.StateListItem stateListItem = (ListItem.StateListItem) listItems.get(position);
+            ((StateViewHolder) holder).bind(stateListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -190,6 +198,28 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onEventsClickListener.onEventsClick();
                 }
             });
+        }
+    }
+
+    public static class StateViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageLoader imageLoader;
+        private final TextView stateLabelWidget;
+        private final ImageView stateImageWidget;
+
+        public StateViewHolder(View itemView, ImageLoader imageLoader) {
+            super(itemView);
+            this.imageLoader = imageLoader;
+            stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_state_image);
+            stateLabelWidget = (TextView) itemView.findViewById(R.id.list_item_state_label);
+        }
+
+        public void bind(ListItem.StateListItem item) {
+            imageLoader.load(item.getStateImageUrl(), stateImageWidget);
+            stateImageWidget.setColorFilter(item.getStateColor());
+            stateLabelWidget.setText(item.getState());
+            stateLabelWidget.setTextColor(item.getStateColor());
+
         }
     }
 }
