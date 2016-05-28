@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:custom="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
+  android:fitsSystemWindows="true"
   tools:context="com.zetta.android.device.events.EventsActivity">
 
-  <include layout="@layout/default_toolbar" />
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-</LinearLayout>
+    <include layout="@layout/default_toolbar" />
+
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/events_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    custom:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+</android.support.design.widget.CoordinatorLayout>

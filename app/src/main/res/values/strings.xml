@@ -15,4 +15,5 @@
   <string name="no_server_url_has_been_set">no server url has been set</string>
   <string name="open_source_licenses">Software Licenses</string>
   <string name="library_author">© %1$s</string>
+  <string name="Events">Events</string>
 </resources>
