@@ -1,6 +1,8 @@
 package com.zetta.android.browse;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -77,8 +79,12 @@ public class DeviceListActivity extends AppCompatActivity {
         public void onDeviceLongClick() {
             List<ListItem> items = new ArrayList<>();
             items.add(new ListItem.HeaderQuickActionsListItem("Door"));
-            items.add(new ListItem.QuickActionListItem("open", "open"));
-            items.add(new ListItem.QuickActionListItem("image...", "update-state-image"));
+            int foregroundColor = Color.parseColor("#0000ff");
+            int backgroundColor = Color.parseColor("#ffffff");
+            ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
+            ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
+            items.add(new ListItem.QuickActionListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.QuickActionListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
             quickActionsAdapter.updateAll(items);
 
             // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened

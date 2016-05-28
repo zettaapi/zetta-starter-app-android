@@ -40,7 +40,8 @@ interface ListItem {
         private final ColorStateList foregroundColorList;
         private final ColorStateList backgroundColorList;
 
-        public ActionListItem(String label, String action,
+        public ActionListItem(String label,
+                              String action,
                               ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
             this.label = label;
             this.action = action;
