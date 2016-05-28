@@ -41,6 +41,10 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return listItems.size();
     }
 
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ListItem.TYPE_SERVER) {
@@ -73,10 +77,6 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
-    }
-
-    public boolean isEmpty() {
-        return getItemCount() == 0;
     }
 
     public interface OnDeviceClickListener {

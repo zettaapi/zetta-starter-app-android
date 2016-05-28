@@ -46,6 +46,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return listItems.size();
     }
 
+    public boolean isEmpty() {
+        return listItems.isEmpty();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ListItem.TYPE_HEADER) {

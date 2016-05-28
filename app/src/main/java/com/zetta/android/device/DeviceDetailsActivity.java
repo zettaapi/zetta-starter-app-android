@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
@@ -18,6 +19,7 @@ import java.util.List;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
+    private EmptyLoadingView emptyLoadingWidget;
     private DetailsListAdapter adapter;
     private RecyclerView detailsListWidget;
 
@@ -30,6 +32,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
+        emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_details_empty_view);
         adapter = new DetailsListAdapter(new ImageLoader(), onActionClickListener, onEventsClickListener);
         detailsListWidget = (RecyclerView) findViewById(R.id.device_details_list);
         detailsListWidget.setAdapter(adapter);
@@ -62,15 +65,27 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        updateState();
         MockZettaService.getDetails(new MockZettaService.Callback() {
             @Override
             public void on(String deviceName, String serverName, List<ListItem> listItems) {
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(deviceName);
                 actionBar.setSubtitle(serverName);
-
                 adapter.updateAll(listItems);
+                updateState();
             }
         });
+    }
+
+    private void updateState() {
+        if (adapter.isEmpty()) {
+            emptyLoadingWidget.setStateLoading();
+            emptyLoadingWidget.setVisibility(View.VISIBLE);
+            detailsListWidget.setVisibility(View.GONE);
+        } else {
+            emptyLoadingWidget.setVisibility(View.GONE);
+            detailsListWidget.setVisibility(View.VISIBLE);
+        }
     }
 }
