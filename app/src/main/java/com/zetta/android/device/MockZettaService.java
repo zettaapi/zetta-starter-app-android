@@ -1,5 +1,6 @@
 package com.zetta.android.device;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,16 +21,20 @@ class MockZettaService {
         final List<ListItem> items = new ArrayList<>();
 
         try {
+            int foregroundColor = Color.parseColor("#0000ff");
+            int backgroundColor = Color.parseColor("#ffffff");
+            ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
+            ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
             items.add(new ListItem.StateListItem(
                 "on",
                 new URL("http://www.zettaapi.org/icons/light-on.png"),
-                Color.parseColor("#0000ff")
+                foregroundColor
             ));
             items.add(new ListItem.HeaderListItem("Actions"));
-            items.add(new ListItem.ActionListItem("color", "set-color"));
-            items.add(new ListItem.ActionListItem("brightness", "set-brightness"));
-            items.add(new ListItem.ActionListItem("blink", "set-blinker"));
-            items.add(new ListItem.ActionListItem("turn-off", "turn-off"));
+            items.add(new ListItem.ActionListItem("color", "set-color", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
             items.add(new ListItem.HeaderListItem("Streams"));
             items.add(new ListItem.StreamListItem("state", "on"));
             items.add(new ListItem.HeaderListItem("Properties"));

@@ -1,10 +1,10 @@
 package com.zetta.android.device;
 
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -131,12 +131,12 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static class ActionViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView actionLabelWidget;
-        private final Button actionToggleButton;
+        private final AppCompatButton actionToggleButton;
 
         public ActionViewHolder(View itemView) {
             super(itemView);
             actionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_action_label);
-            actionToggleButton = (Button) itemView.findViewById(R.id.list_item_action_toggle);
+            actionToggleButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_toggle);
         }
 
         public void bind(final ListItem.ActionListItem item, final OnActionClickListener onActionClickListener) {
@@ -148,6 +148,8 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onActionClickListener.onActionClick(item.getLabel());
                 }
             });
+            actionToggleButton.setTextColor(item.getActionTextColorList());
+            actionToggleButton.setSupportBackgroundTintList(item.getActionColorList());
         }
     }
 

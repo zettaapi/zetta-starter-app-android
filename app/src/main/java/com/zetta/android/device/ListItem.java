@@ -1,5 +1,7 @@
 package com.zetta.android.device;
 
+import android.content.res.ColorStateList;
+
 import java.net.URL;
 
 interface ListItem {
@@ -35,10 +37,15 @@ interface ListItem {
 
         private final String label;
         private final String action;
+        private final ColorStateList foregroundColorList;
+        private final ColorStateList backgroundColorList;
 
-        public ActionListItem(String label, String action) {
+        public ActionListItem(String label, String action,
+                              ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
             this.label = label;
             this.action = action;
+            this.foregroundColorList = foregroundColorList;
+            this.backgroundColorList = backgroundColorList;
         }
 
         @Override
@@ -52,6 +59,14 @@ interface ListItem {
 
         public String getAction() {
             return action;
+        }
+
+        public ColorStateList getActionColorList() {
+            return foregroundColorList;
+        }
+
+        public ColorStateList getActionTextColorList() {
+            return backgroundColorList;
         }
     }
 
