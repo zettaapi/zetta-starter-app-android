@@ -11,6 +11,7 @@ public class ImageLoader {
     public void load(URL url, ImageView imageView) {
         Glide.with(imageView.getContext())
             .load(url.toString())
+            .placeholder(R.drawable.device_placeholder)
             .crossFade()
             .error(android.R.drawable.stat_notify_error)
             .into(imageView);
