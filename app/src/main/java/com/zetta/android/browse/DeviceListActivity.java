@@ -34,7 +34,6 @@ public class DeviceListActivity extends AppCompatActivity {
     private RecyclerView deviceListWidget;
     private EmptyLoadingView emptyLoadingWidget;
     private BottomSheetBehavior<? extends View> bottomSheetBehavior;
-    private RecyclerView deviceQuickActionsWidget;
     private QuickActionsAdapter quickActionsAdapter;
     private SwipeRefreshLayout pullRefreshWidget;
 
@@ -59,7 +58,7 @@ public class DeviceListActivity extends AppCompatActivity {
         deviceListWidget.setHasFixedSize(true);
         deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
         quickActionsAdapter = new QuickActionsAdapter(onActionClickListener);
-        deviceQuickActionsWidget = (RecyclerView) findViewById(R.id.device_list_bottom_sheet_quick_actions);
+        RecyclerView deviceQuickActionsWidget = (RecyclerView) findViewById(R.id.device_list_bottom_sheet_quick_actions);
         deviceQuickActionsWidget.setAdapter(quickActionsAdapter);
         deviceQuickActionsWidget.setHasFixedSize(true);
         deviceQuickActionsWidget.setLayoutManager(new LinearLayoutManager(this));
