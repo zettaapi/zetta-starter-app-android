@@ -1,6 +1,7 @@
 package com.zetta.android.browse;
 
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 
 import java.net.URL;
@@ -17,11 +18,14 @@ interface ListItem {
 
     class ServerListItem implements ListItem {
 
+        @ColorInt
         private final int swatchColor;
+        private final Drawable background;
         private final String name;
 
-        public ServerListItem(@ColorInt int swatchColor, String name) {
-            this.swatchColor = swatchColor;
+        public ServerListItem(@ColorInt int foregroundColor, Drawable background, String name) {
+            this.swatchColor = foregroundColor;
+            this.background = background;
             this.name = name;
         }
 
@@ -38,6 +42,10 @@ interface ListItem {
         public String getName() {
             return name;
         }
+
+        public Drawable getBackground() {
+            return background;
+        }
     }
 
     class DeviceListItem implements ListItem {
@@ -45,13 +53,16 @@ interface ListItem {
         private final String name;
         private final String state;
         private final URL stateImageUrl;
-        private final int stateImageColor;
+        @ColorInt
+        private final int foregroundColor;
+        private final Drawable background;
 
-        public DeviceListItem(String name, String state, URL stateImageUrl, int stateImageColor) {
+        public DeviceListItem(String name, String state, URL stateImageUrl, @ColorInt int foregroundColor, Drawable background) {
             this.name = name;
             this.state = state;
             this.stateImageUrl = stateImageUrl;
-            this.stateImageColor = stateImageColor;
+            this.foregroundColor = foregroundColor;
+            this.background = background;
         }
 
         @Override
@@ -71,17 +82,24 @@ interface ListItem {
             return stateImageUrl;
         }
 
+        @ColorInt
         public int getStateImageColor() {
-            return stateImageColor;
+            return foregroundColor;
+        }
+
+        public Drawable getBackground() {
+            return background;
         }
     }
 
     class EmptyServerListItem implements ListItem {
 
         private final String message;
+        private final Drawable background;
 
-        public EmptyServerListItem(String message) {
+        public EmptyServerListItem(String message, Drawable background) {
             this.message = message;
+            this.background = background;
         }
 
         @Override
@@ -91,6 +109,10 @@ interface ListItem {
 
         public String getMessage() {
             return message;
+        }
+
+        public Drawable getBackground() {
+            return background;
         }
     }
 

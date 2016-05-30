@@ -80,9 +80,11 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnDeviceClickListener {
+
         void onDeviceClick();
 
         void onDeviceLongClick();
+
     }
 
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
@@ -116,11 +118,14 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         return true;
                     }
                 });
+
+            itemView.setBackground(deviceListItem.getBackground());
             nameLabelWidget.setText(deviceListItem.getName());
             stateLabelWidget.setText(deviceListItem.getState());
             imageLoader.load(deviceListItem.getStateImageUrl(), stateImageWidget);
             stateImageWidget.setColorFilter(deviceListItem.getStateImageColor());
         }
+
     }
 
     public static class ServerViewHolder extends RecyclerView.ViewHolder {
@@ -137,7 +142,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(ListItem.ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
+            itemView.setBackground(serverListItem.getBackground());
         }
+
     }
 
     public static class EmptyServerViewHolder extends RecyclerView.ViewHolder {
@@ -151,6 +158,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(ListItem.EmptyServerListItem listItem) {
             messageWidget.setText(listItem.getMessage());
+            itemView.setBackground(listItem.getBackground());
         }
+
     }
+
 }
