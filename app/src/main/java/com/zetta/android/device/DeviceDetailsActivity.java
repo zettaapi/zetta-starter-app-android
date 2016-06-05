@@ -15,7 +15,7 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.device.events.EventsActivity;
-import com.zetta.android.settings.ApiUrlFetcher;
+import com.zetta.android.settings.SdkProperties;
 
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        deviceDetailsService = new DeviceDetailsService(ApiUrlFetcher.newInstance(this));
+        deviceDetailsService = new DeviceDetailsService(SdkProperties.newInstance(this));
 
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

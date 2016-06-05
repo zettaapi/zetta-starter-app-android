@@ -6,20 +6,20 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.zetta.android.R;
 
-public class ApiUrlFetcher {
+public class SdkProperties {
 
     private final SharedPreferences sharedPreferences;
     private final String apiUrlKey;
     private final String mockResponsesKey;
 
-    public static ApiUrlFetcher newInstance(Context context) {
+    public static SdkProperties newInstance(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String apiUrlKey = context.getString(R.string.key_api_url_with_history);
         String mockResponsesKey = context.getString(R.string.key_mock_responses);
-        return new ApiUrlFetcher(sharedPreferences, apiUrlKey, mockResponsesKey);
+        return new SdkProperties(sharedPreferences, apiUrlKey, mockResponsesKey);
     }
 
-    ApiUrlFetcher(SharedPreferences sharedPreferences, String apiUrlKey, String mockResponsesKey) {
+    SdkProperties(SharedPreferences sharedPreferences, String apiUrlKey, String mockResponsesKey) {
         this.sharedPreferences = sharedPreferences;
         this.apiUrlKey = apiUrlKey;
         this.mockResponsesKey = mockResponsesKey;

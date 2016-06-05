@@ -4,7 +4,7 @@ import android.os.SystemClock;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
-import com.zetta.android.settings.ApiUrlFetcher;
+import com.zetta.android.settings.SdkProperties;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,10 +16,10 @@ import rx.schedulers.Schedulers;
 
 class DeviceDetailsService {
 
-    private final ApiUrlFetcher apiUrlFetcher;
+    private final SdkProperties sdkProperties;
 
-    DeviceDetailsService(ApiUrlFetcher apiUrlFetcher) {
-        this.apiUrlFetcher = apiUrlFetcher;
+    DeviceDetailsService(SdkProperties sdkProperties) {
+        this.sdkProperties = sdkProperties;
     }
 
     public void getDetails(final Callback callback) {
@@ -55,7 +55,7 @@ class DeviceDetailsService {
     }
 
     private Device getDetails() {
-        if (apiUrlFetcher.useMockResponses()) {
+        if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return DeviceDetailsMockService.getDetails();
         } else {

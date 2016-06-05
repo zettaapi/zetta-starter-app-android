@@ -25,7 +25,7 @@ import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.OnActionClickListener;
-import com.zetta.android.settings.ApiUrlFetcher;
+import com.zetta.android.settings.SdkProperties;
 import com.zetta.android.settings.SettingsActivity;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        deviceListService = new DeviceListService(ApiUrlFetcher.newInstance(this));
+        deviceListService = new DeviceListService(SdkProperties.newInstance(this));
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

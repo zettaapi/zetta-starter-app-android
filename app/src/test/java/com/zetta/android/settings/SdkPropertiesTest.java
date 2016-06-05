@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class ApiUrlFetcherTest {
+public class SdkPropertiesTest {
 
     @Test
     public void whenAUrlIsSetThenReturnsTrue() throws Exception {
         SharedPreferences mockPreferences = new MockSharedPreferences("http://any.url");
-        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey", "unusedKey");
+        SdkProperties fetcher = new SdkProperties(mockPreferences, "testKey", "unusedKey");
 
         assertThat(fetcher.hasUrl()).isTrue();
     }
@@ -23,7 +23,7 @@ public class ApiUrlFetcherTest {
     @Test
     public void whenAUrlIsNotSetThenReturnsFalse() throws Exception {
         SharedPreferences mockPreferences = new MockSharedPreferences();
-        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey", "unusedKey");
+        SdkProperties fetcher = new SdkProperties(mockPreferences, "testKey", "unusedKey");
 
         assertThat(fetcher.hasUrl()).isFalse();
     }

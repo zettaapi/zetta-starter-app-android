@@ -4,7 +4,7 @@ import android.os.SystemClock;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
-import com.zetta.android.settings.ApiUrlFetcher;
+import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +17,18 @@ import rx.schedulers.Schedulers;
 
 class DeviceListService {
 
-    private final ApiUrlFetcher apiUrlFetcher;
+    private final SdkProperties sdkProperties;
 
-    DeviceListService(ApiUrlFetcher apiUrlFetcher) {
-        this.apiUrlFetcher = apiUrlFetcher;
+    DeviceListService(SdkProperties sdkProperties) {
+        this.sdkProperties = sdkProperties;
     }
 
     public boolean hasRootUrl() {
-        return apiUrlFetcher.hasUrl();
+        return sdkProperties.hasUrl();
     }
 
     public String getRootUrl() {
-        return apiUrlFetcher.getUrl();
+        return sdkProperties.getUrl();
     }
 
     public void getDeviceList(final Callback callback) {
@@ -66,7 +66,7 @@ class DeviceListService {
     private List<ListItem> getDeviceListItems() {
         String url = getRootUrl();
         final List<ListItem> items = new ArrayList<>();
-        if (apiUrlFetcher.useMockResponses()) {
+        if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
             items.addAll(DeviceListMockService.getListItems(url));
         } else {
