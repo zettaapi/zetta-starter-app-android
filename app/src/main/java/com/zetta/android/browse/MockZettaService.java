@@ -8,14 +8,13 @@ import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import com.zetta.android.ListItem;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -32,98 +31,93 @@ class MockZettaService {
         int detroitForegroundColor = Color.parseColor("#dd3322");
         int stageForegroundColor = Color.parseColor("#008822");
 
-        final List<ListItem> items;
-        try {
-            items = Arrays.asList(
-                new ServerListItem(banglorForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "bangalor"),
-                new DeviceListItem("Door", "closed",
-                                   new URL("http://www.zettaapi.org/icons/door-closed.png"),
-                                   banglorForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Photocell", "ready",
-                                   new URL("http://www.zettaapi.org/icons/photocell-ready.png"),
-                                   banglorForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Security System", "disarmed",
-                                   new URL("http://www.zettaapi.org/icons/security-disarmed.png"),
-                                   banglorForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Window", "closed",
-                                   new URL("http://www.zettaapi.org/icons/window-closed.png"),
-                                   banglorForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new ServerListItem(newOrleansForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "neworleans"),
-                new DeviceListItem("Motion", "no-motion",
-                                   new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   newOrleansForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
-                ),
-                new DeviceListItem("Thermometer", "ready",
-                                   new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   newOrleansForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
-                ),
-                new DeviceListItem("Camera", "ready",
-                                   new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   newOrleansForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
-                ),
-                new ServerListItem(detroitForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "detroit"),
-                new DeviceListItem("Motion1", "no-motion",
-                                   new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Thermometer1", "ready",
-                                   new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Camera1", "ready",
-                                   new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Motion2", "no-motion",
-                                   new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Thermometer2", "ready",
-                                   new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Camera2", "ready",
-                                   new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new DeviceListItem("Motion3", "no-motion",
-                                   new URL("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(Color.parseColor("#236e4e"))
-                ),
-                new DeviceListItem("Thermometer3", "ready",
-                                   new URL("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(Color.parseColor("#111111"))
-                ),
-                new DeviceListItem("Camera3", "ready",
-                                   new URL("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   ColorUtil.getBackgroundDrawableFor(defaultColor)
-                ),
-                new ServerListItem(stageForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "stage"),
-                new EmptyServerListItem("No devices online for this server", ColorUtil.getBackgroundDrawableFor(defaultColor))
-            );
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        final List<ListItem> items = Arrays.asList(
+            new ServerListItem(banglorForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "bangalor"),
+            new DeviceListItem("Door", "closed",
+                               Uri.parse("http://www.zettaapi.org/icons/door-closed.png"),
+                               banglorForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Photocell", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/photocell-ready.png"),
+                               banglorForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Security System", "disarmed",
+                               Uri.parse("http://www.zettaapi.org/icons/security-disarmed.png"),
+                               banglorForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Window", "closed",
+                               Uri.parse("http://www.zettaapi.org/icons/window-closed.png"),
+                               banglorForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new ServerListItem(newOrleansForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "neworleans"),
+            new DeviceListItem("Motion", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               newOrleansForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
+            ),
+            new DeviceListItem("Thermometer", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               newOrleansForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
+            ),
+            new DeviceListItem("Camera", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               newOrleansForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(Color.parseColor("#aaaaff"))
+            ),
+            new ServerListItem(detroitForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "detroit"),
+            new DeviceListItem("Motion1", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Thermometer1", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Camera1", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Motion2", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Thermometer2", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Camera2", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new DeviceListItem("Motion3", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(Color.parseColor("#236e4e"))
+            ),
+            new DeviceListItem("Thermometer3", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(Color.parseColor("#111111"))
+            ),
+            new DeviceListItem("Camera3", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               ColorUtil.getBackgroundDrawableFor(defaultColor)
+            ),
+            new ServerListItem(stageForegroundColor, ColorUtil.getBackgroundDrawableFor(defaultColor), "stage"),
+            new EmptyServerListItem("No devices online for this server", ColorUtil.getBackgroundDrawableFor(defaultColor))
+        );
 
         new Thread(new Runnable() {
             @Override

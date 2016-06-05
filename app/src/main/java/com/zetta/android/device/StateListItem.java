@@ -1,18 +1,18 @@
 package com.zetta.android.device;
 
-import com.zetta.android.ListItem;
+import android.net.Uri;
 
-import java.net.URL;
+import com.zetta.android.ListItem;
 
 class StateListItem implements ListItem {
 
     private final String state;
-    private final URL stateImageUrl;
+    private final Uri stateImageUri;
     private final int foregroundColor;
 
-    public StateListItem(String state, URL stateImageUrl, int foregroundColor) {
+    public StateListItem(String state, Uri stateImageUri, int foregroundColor) {
         this.state = state;
-        this.stateImageUrl = stateImageUrl;
+        this.stateImageUri = stateImageUri;
         this.foregroundColor = foregroundColor;
     }
 
@@ -25,8 +25,8 @@ class StateListItem implements ListItem {
         return state;
     }
 
-    public URL getStateImageUrl() {
-        return stateImageUrl;
+    public Uri getStateImageUri() {
+        return stateImageUri;
     }
 
     public int getStateColor() {
