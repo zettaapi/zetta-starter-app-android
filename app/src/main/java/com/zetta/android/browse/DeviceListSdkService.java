@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-class SdkZettaService {
+class DeviceListSdkService {
 
     public static List<ListItem> getListItems(final String url) {
         return callSdkSynchronously(url);

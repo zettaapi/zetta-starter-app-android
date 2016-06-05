@@ -70,7 +70,7 @@ class DeviceListService {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
             items.addAll(DeviceListMockService.getListItems(url));
         } else {
-            items.addAll(SdkZettaService.getListItems(url));
+            items.addAll(DeviceListSdkService.getListItems(url));
         }
         return items;
     }
