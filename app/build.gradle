@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.zetta.android"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0.0"
@@ -24,6 +24,7 @@ ext {
 }
 
 dependencies {
+    compile "com.apigee:zettakit:0.0.1"
     compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
     compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
     compile "com.android.support:design:${supportLibraryVersion}"

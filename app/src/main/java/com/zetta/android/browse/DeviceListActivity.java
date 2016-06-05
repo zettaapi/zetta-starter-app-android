@@ -128,7 +128,8 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
-            MockZettaService.getListItems(new MockZettaService.Callback() {
+            String url = apiUrlFetcher.getUrl();
+            ZettaService.getListItems(url, new ZettaService.Callback() {
                 @Override
                 public void on(List<ListItem> listItems) {
                     adapter.updateAll(listItems);
@@ -151,7 +152,7 @@ public class DeviceListActivity extends AppCompatActivity {
         Log.d("xxx", "got url " + url);
 
         updateState();
-        MockZettaService.getListItems(new MockZettaService.Callback() {
+        ZettaService.getListItems(url, new ZettaService.Callback() {
             @Override
             public void on(List<ListItem> listItems) {
                 adapter.updateAll(listItems);
