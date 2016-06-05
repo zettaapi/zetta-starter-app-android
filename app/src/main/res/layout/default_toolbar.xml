@@ -12,4 +12,5 @@
   custom:layout_scrollFlags="scroll|enterAlways"
   custom:popupTheme="@style/ThemeOverlay.AppCompat.Light"
   custom:titleTextAppearance="@style/Toolbar.TitleText"
+  custom:subtitleTextAppearance="@style/Toolbar.SubtitleText"
   custom:titleTextColor="@android:color/white" />
