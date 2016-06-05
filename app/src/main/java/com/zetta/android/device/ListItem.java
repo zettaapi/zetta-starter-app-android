@@ -3,15 +3,18 @@ package com.zetta.android.device;
 import android.content.res.ColorStateList;
 
 import java.net.URL;
+import java.util.List;
 
 interface ListItem {
 
     int TYPE_HEADER = 0;
-    int TYPE_ACTION = 1;
-    int TYPE_STREAM = 2;
-    int TYPE_PROPERTY = 3;
-    int TYPE_EVENTS = 4;
-    int TYPE_STATE = 5;
+    int TYPE_ACTION_ON_OFF = 1;
+    int TYPE_ACTION_SINGLE_INPUT = 2;
+    int TYPE_ACTION_MULTIPLE_INPUT = 3;
+    int TYPE_STREAM = 4;
+    int TYPE_PROPERTY = 5;
+    int TYPE_EVENTS = 6;
+    int TYPE_STATE = 7;
 
     int getType();
 
@@ -33,16 +36,16 @@ interface ListItem {
         }
     }
 
-    class ActionListItem implements ListItem {
+    class ActionOnOffListItem implements ListItem {
 
         private final String label;
         private final String action;
         private final ColorStateList foregroundColorList;
         private final ColorStateList backgroundColorList;
 
-        public ActionListItem(String label,
-                              String action,
-                              ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
+        public ActionOnOffListItem(String label,
+                                   String action,
+                                   ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
             this.label = label;
             this.action = action;
             this.foregroundColorList = foregroundColorList;
@@ -51,11 +54,87 @@ interface ListItem {
 
         @Override
         public int getType() {
-            return TYPE_ACTION;
+            return TYPE_ACTION_ON_OFF;
         }
 
         public String getLabel() {
             return label;
+        }
+
+        public String getAction() {
+            return action;
+        }
+
+        public ColorStateList getActionColorList() {
+            return foregroundColorList;
+        }
+
+        public ColorStateList getActionTextColorList() {
+            return backgroundColorList;
+        }
+    }
+
+    class ActionSingleInputListItem implements ListItem {
+
+        private final String label;
+        private final String action;
+        private final ColorStateList foregroundColorList;
+        private final ColorStateList backgroundColorList;
+
+        public ActionSingleInputListItem(String label,
+                                         String action,
+                                         ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
+            this.label = label;
+            this.action = action;
+            this.foregroundColorList = foregroundColorList;
+            this.backgroundColorList = backgroundColorList;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_ACTION_SINGLE_INPUT;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public String getAction() {
+            return action;
+        }
+
+        public ColorStateList getActionColorList() {
+            return foregroundColorList;
+        }
+
+        public ColorStateList getActionTextColorList() {
+            return backgroundColorList;
+        }
+    }
+
+    class ActionMultipleInputListItem implements ListItem {
+
+        private final List<String> labels;
+        private final String action;
+        private final ColorStateList foregroundColorList;
+        private final ColorStateList backgroundColorList;
+
+        public ActionMultipleInputListItem(List<String> labels,
+                                           String action,
+                                           ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
+            this.labels = labels;
+            this.action = action;
+            this.foregroundColorList = foregroundColorList;
+            this.backgroundColorList = backgroundColorList;
+        }
+
+        @Override
+        public int getType() {
+            return TYPE_ACTION_MULTIPLE_INPUT;
+        }
+
+        public List<String> getLabels() {
+            return labels;
         }
 
         public String getAction() {

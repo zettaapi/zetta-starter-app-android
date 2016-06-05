@@ -1,10 +1,13 @@
 package com.zetta.android.device;
 
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +15,9 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -55,9 +60,15 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ListItem.TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_header, parent, false);
             return new HeaderViewHolder(v);
-        } else if (viewType == ListItem.TYPE_ACTION) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action, parent, false);
-            return new ActionViewHolder(v);
+        } else if (viewType == ListItem.TYPE_ACTION_ON_OFF) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_on_off, parent, false);
+            return new ActionOnOffViewHolder(v);
+        } else if (viewType == ListItem.TYPE_ACTION_SINGLE_INPUT) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_input_single, parent, false);
+            return new ActionSingleViewHolder(v);
+        } else if (viewType == ListItem.TYPE_ACTION_MULTIPLE_INPUT) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_input_multiple, parent, false);
+            return new ActionMultipleViewHolder(v);
         } else if (viewType == ListItem.TYPE_STREAM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_stream, parent, false);
             return new StreamViewHolder(v);
@@ -81,9 +92,17 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ListItem.HeaderListItem headerListItem = (ListItem.HeaderListItem) listItems.get(position);
             ((HeaderViewHolder) holder).bind(headerListItem);
             return;
-        } else if (type == ListItem.TYPE_ACTION) {
-            ListItem.ActionListItem actionListItem = (ListItem.ActionListItem) listItems.get(position);
-            ((ActionViewHolder) holder).bind(actionListItem, onActionClickListener);
+        } else if (type == ListItem.TYPE_ACTION_ON_OFF) {
+            ListItem.ActionOnOffListItem actionOnOffListItem = (ListItem.ActionOnOffListItem) listItems.get(position);
+            ((ActionOnOffViewHolder) holder).bind(actionOnOffListItem, onActionClickListener);
+            return;
+        } else if (type == ListItem.TYPE_ACTION_SINGLE_INPUT) {
+            ListItem.ActionSingleInputListItem actionSingleListItem = (ListItem.ActionSingleInputListItem) listItems.get(position);
+            ((ActionSingleViewHolder) holder).bind(actionSingleListItem, onActionClickListener);
+            return;
+        } else if (type == ListItem.TYPE_ACTION_MULTIPLE_INPUT) {
+            ListItem.ActionMultipleInputListItem actionMultipleListItem = (ListItem.ActionMultipleInputListItem) listItems.get(position);
+            ((ActionMultipleViewHolder) holder).bind(actionMultipleListItem, onActionClickListener);
             return;
         } else if (type == ListItem.TYPE_STREAM) {
             ListItem.StreamListItem streamListItem = (ListItem.StreamListItem) listItems.get(position);
@@ -106,7 +125,11 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnActionClickListener {
-        void onActionClick(String label);
+        void onActionClick(String label, boolean on);
+
+        void onActionClick(String label, String input);
+
+        void onActionClick(String label, Map<String, String> inputs);
     }
 
     public interface OnEventsClickListener {
@@ -128,28 +151,108 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public static class ActionViewHolder extends RecyclerView.ViewHolder {
+    public static class ActionOnOffViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView actionLabelWidget;
         private final AppCompatButton actionToggleButton;
 
-        public ActionViewHolder(View itemView) {
+        public ActionOnOffViewHolder(View itemView) {
             super(itemView);
             actionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_action_label);
             actionToggleButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_toggle);
         }
 
-        public void bind(final ListItem.ActionListItem item, final OnActionClickListener onActionClickListener) {
+        public void bind(final ListItem.ActionOnOffListItem item, final OnActionClickListener onActionClickListener) {
             actionLabelWidget.setText(item.getLabel());
             actionToggleButton.setText(item.getAction());
             actionToggleButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onActionClickListener.onActionClick(item.getLabel());
+                    onActionClickListener.onActionClick(item.getLabel(), true); // TODO real input
                 }
             });
             actionToggleButton.setTextColor(item.getActionTextColorList());
             actionToggleButton.setSupportBackgroundTintList(item.getActionColorList());
+        }
+    }
+
+    public static class ActionSingleViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextInputLayout actionHintWidget;
+        private final EditText actionInputWidget;
+        private final AppCompatButton actionButton;
+
+        public ActionSingleViewHolder(View itemView) {
+            super(itemView);
+            actionHintWidget = (TextInputLayout) itemView.findViewById(R.id.list_item_action_input_layout);
+            actionInputWidget = (EditText) itemView.findViewById(R.id.list_item_action_input);
+            actionButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_button);
+        }
+
+        public void bind(final ListItem.ActionSingleInputListItem item, final OnActionClickListener onActionClickListener) {
+            actionHintWidget.setHint(item.getLabel());
+            actionButton.setText(item.getAction());
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String input = actionInputWidget.getText().toString();
+                    onActionClickListener.onActionClick(item.getLabel(), input);
+                    actionInputWidget.getText().clear();
+                    actionInputWidget.clearFocus();
+                }
+            });
+            actionButton.setTextColor(item.getActionTextColorList());
+            actionButton.setSupportBackgroundTintList(item.getActionColorList());
+        }
+    }
+
+    public static class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
+
+        private static final int[] rowIds = {R.id.row_1, R.id.row_2, R.id.row_3, R.id.row_4, R.id.row_5, R.id.row_6};
+
+        private final List<EditText> boundInputRows = new ArrayList<>();
+
+        private final AppCompatButton actionButton;
+
+        public ActionMultipleViewHolder(View itemView) {
+            super(itemView);
+            actionButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_button);
+        }
+
+        public void bind(final ListItem.ActionMultipleInputListItem item, final OnActionClickListener onActionClickListener) {
+            if (item.getLabels().size() > 6) {
+                itemView.setVisibility(View.GONE);
+                Log.e("Zetta", "Sorry demo only supports upto 6 custom input actions. Cannot display " + item.getLabels());
+                return;
+            }
+            final List<String> labels = item.getLabels();
+            for (int i = 0; i < labels.size(); i++) {
+                TextInputLayout rowWidget = (TextInputLayout) itemView.findViewById(rowIds[i]);
+                rowWidget.setVisibility(View.VISIBLE);
+                rowWidget.setHint(labels.get(i));
+
+                EditText actionInputWidget = (EditText) rowWidget.findViewById(R.id.list_item_action_input);
+                boundInputRows.add(actionInputWidget);
+            }
+
+            actionButton.setText(item.getAction());
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Map<String, String> labelledInput = new HashMap<>();
+                    for (int i = 0; i < labels.size(); i++) {
+                        String label = labels.get(i);
+                        EditText actionInputWidget = boundInputRows.get(i);
+                        String inputForLabel = actionInputWidget.getText().toString();
+                        actionInputWidget.getText().clear();
+                        actionInputWidget.clearFocus();
+                        labelledInput.put(label, inputForLabel);
+                    }
+                    onActionClickListener.onActionClick(item.getAction(), labelledInput);
+                }
+            });
+            actionButton.setTextColor(item.getActionTextColorList());
+            actionButton.setSupportBackgroundTintList(item.getActionColorList());
         }
     }
 

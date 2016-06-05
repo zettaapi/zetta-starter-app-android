@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,10 +32,15 @@ class MockZettaService {
                 foregroundColor
             ));
             items.add(new ListItem.HeaderListItem("Actions"));
-            items.add(new ListItem.ActionListItem("color", "set-color", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionSingleInputListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionOnOffListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionOnOffListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
+            items.add(new ListItem.ActionMultipleInputListItem(
+                Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
+                "walk",
+                foregroundColorList, backgroundColorList
+            ));
             items.add(new ListItem.HeaderListItem("Streams"));
             items.add(new ListItem.StreamListItem("state", "on"));
             items.add(new ListItem.HeaderListItem("Properties"));

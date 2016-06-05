@@ -16,6 +16,7 @@ import com.zetta.android.R;
 import com.zetta.android.device.events.EventsActivity;
 
 import java.util.List;
+import java.util.Map;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
@@ -42,8 +43,18 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DetailsListAdapter.OnActionClickListener onActionClickListener = new DetailsListAdapter.OnActionClickListener() {
         @Override
-        public void onActionClick(String label) {
-            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label, Toast.LENGTH_SHORT).show();
+        public void onActionClick(String label, boolean on) {
+            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onActionClick(String label, String input) {
+            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onActionClick(String label, Map<String, String> inputs) {
+            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
         }
     };
 
