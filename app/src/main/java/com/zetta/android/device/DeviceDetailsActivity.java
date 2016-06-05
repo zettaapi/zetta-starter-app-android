@@ -81,17 +81,19 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onResume();
 
         updateState();
-        deviceDetailsService.getDetails(new DeviceDetailsService.Callback() {
-            @Override
-            public void on(DeviceDetailsService.Device device) {
-                ActionBar actionBar = getSupportActionBar();
-                actionBar.setTitle(device.getName());
-                actionBar.setSubtitle(device.getSeverName());
-                adapter.updateAll(device.getListItems());
-                updateState();
-            }
-        });
+        deviceDetailsService.getDetails(onDeviceDetailsLoaded);
     }
+
+    private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
+        @Override
+        public void on(DeviceDetailsService.Device device) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setTitle(device.getName());
+            actionBar.setSubtitle(device.getSeverName());
+            adapter.updateAll(device.getListItems());
+            updateState();
+        }
+    };
 
     private void updateState() {
         if (adapter.isEmpty()) {

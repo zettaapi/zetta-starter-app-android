@@ -32,13 +32,15 @@ public class EventsActivity extends AppCompatActivity {
         deviceListWidget.setHasFixedSize(true);
         deviceListWidget.setLayoutManager(new LinearLayoutManager(this));
 
-        MockZettaService.getEvents(new MockZettaService.Callback() {
-            @Override
-            public void on(List<ListItem> listItems) {
-                adapter.updateAll(listItems);
-            }
-        });
+        MockZettaService.getEvents(onEventsLoaded);
     }
+
+    private final MockZettaService.Callback onEventsLoaded = new MockZettaService.Callback() {
+        @Override
+        public void on(List<ListItem> listItems) {
+            adapter.updateAll(listItems);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

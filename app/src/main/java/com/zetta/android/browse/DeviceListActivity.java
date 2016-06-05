@@ -127,13 +127,7 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
-            deviceListService.getDeviceList(new DeviceListService.Callback() {
-                @Override
-                public void on(List<ListItem> listItems) {
-                    adapter.updateAll(listItems);
-                    pullRefreshWidget.setRefreshing(false);
-                }
-            });
+            deviceListService.getDeviceList(onDeviceListLoaded);
         }
     };
 
@@ -147,15 +141,17 @@ public class DeviceListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateState();
-        deviceListService.getDeviceList(new DeviceListService.Callback() {
-            @Override
-            public void on(List<ListItem> listItems) {
-                adapter.updateAll(listItems);
-                pullRefreshWidget.setRefreshing(false);
-                updateState();
-            }
-        });
+        deviceListService.getDeviceList(onDeviceListLoaded);
     }
+
+    private final DeviceListService.Callback onDeviceListLoaded = new DeviceListService.Callback() {
+        @Override
+        public void on(List<ListItem> listItems) {
+            adapter.updateAll(listItems);
+            pullRefreshWidget.setRefreshing(false);
+            updateState();
+        }
+    };
 
     private void updateState() {
         if (!adapter.isEmpty()) {
