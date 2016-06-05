@@ -15,16 +15,16 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-class ZettaService {
+class DeviceDetailsService {
 
     private final ApiUrlFetcher apiUrlFetcher;
 
-    ZettaService(ApiUrlFetcher apiUrlFetcher) {
+    DeviceDetailsService(ApiUrlFetcher apiUrlFetcher) {
         this.apiUrlFetcher = apiUrlFetcher;
     }
 
     public void getDetails(final Callback callback) {
-        getDeviceListObservable()
+        getDetailsObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(new Subscriber<Device>() {
@@ -45,22 +45,22 @@ class ZettaService {
             });
     }
 
-    private Observable<Device> getDeviceListObservable() {
+    private Observable<Device> getDetailsObservable() {
         return Observable.create(new Observable.OnSubscribe<Device>() {
             @Override
             public void call(Subscriber<? super Device> subscriber) {
-                subscriber.onNext(getDeviceListItems());
+                subscriber.onNext(getDetails());
                 subscriber.onCompleted();
             }
         });
     }
 
-    private Device getDeviceListItems() {
+    private Device getDetails() {
         if (apiUrlFetcher.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
-            return MockZettaService.getDetails();
+            return DeviceDetailsMockService.getDetails();
         } else {
-            // TODO items.addAll(SdkZettaService.getListItems(url));
+            // TODO items.addAll(SdkZettaService.getDetails());
             return new Device() {
                 @Override
                 public String getName() {

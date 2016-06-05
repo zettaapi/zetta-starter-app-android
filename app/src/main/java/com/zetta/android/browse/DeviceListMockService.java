@@ -9,7 +9,7 @@ import com.zetta.android.ListItem;
 import java.util.Arrays;
 import java.util.List;
 
-class MockZettaService {
+class DeviceListMockService {
 
     public static List<ListItem> getListItems(String url) {
         int defaultColor = Color.parseColor("#f2f2f2");

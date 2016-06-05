@@ -87,7 +87,7 @@ class SdkZettaService {
 
             @Override
             public void onError(@NonNull String error) {
-                Log.e("xxx", "Foobar'd in MockZettaService " + error);
+                Log.e("xxx", "Foobar'd in DeviceListMockService " + error);
             }
         });
 

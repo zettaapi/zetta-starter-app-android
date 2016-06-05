@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class DeviceListActivity extends AppCompatActivity {
 
-    private ZettaService zettaService;
+    private DeviceListService deviceListService;
     private DeviceListAdapter adapter;
     private RecyclerView deviceListWidget;
     private EmptyLoadingView emptyLoadingWidget;
@@ -46,7 +46,7 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        zettaService = new ZettaService(ApiUrlFetcher.newInstance(this));
+        deviceListService = new DeviceListService(ApiUrlFetcher.newInstance(this));
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -127,7 +127,7 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
-            zettaService.getDeviceList(new ZettaService.Callback() {
+            deviceListService.getDeviceList(new DeviceListService.Callback() {
                 @Override
                 public void on(List<ListItem> listItems) {
                     adapter.updateAll(listItems);
@@ -147,7 +147,7 @@ public class DeviceListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateState();
-        zettaService.getDeviceList(new ZettaService.Callback() {
+        deviceListService.getDeviceList(new DeviceListService.Callback() {
             @Override
             public void on(List<ListItem> listItems) {
                 adapter.updateAll(listItems);
@@ -161,8 +161,8 @@ public class DeviceListActivity extends AppCompatActivity {
         if (!adapter.isEmpty()) {
             emptyLoadingWidget.setVisibility(View.GONE);
             deviceListWidget.setVisibility(View.VISIBLE);
-        } else if (adapter.isEmpty() && zettaService.hasRootUrl()) {
-            emptyLoadingWidget.setStateLoading(zettaService.getRootUrl());
+        } else if (adapter.isEmpty() && deviceListService.hasRootUrl()) {
+            emptyLoadingWidget.setStateLoading(deviceListService.getRootUrl());
             emptyLoadingWidget.setVisibility(View.VISIBLE);
             deviceListWidget.setVisibility(View.GONE);
         } else {

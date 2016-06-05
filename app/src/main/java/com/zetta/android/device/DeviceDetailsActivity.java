@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
-    private ZettaService zettaService;
+    private DeviceDetailsService deviceDetailsService;
     private EmptyLoadingView emptyLoadingWidget;
     private DetailsListAdapter adapter;
     private RecyclerView detailsListWidget;
@@ -29,7 +29,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        zettaService = new ZettaService(ApiUrlFetcher.newInstance(this));
+        deviceDetailsService = new DeviceDetailsService(ApiUrlFetcher.newInstance(this));
 
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -81,9 +81,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onResume();
 
         updateState();
-        zettaService.getDetails(new ZettaService.Callback() {
+        deviceDetailsService.getDetails(new DeviceDetailsService.Callback() {
             @Override
-            public void on(ZettaService.Device device) {
+            public void on(DeviceDetailsService.Device device) {
                 ActionBar actionBar = getSupportActionBar();
                 actionBar.setTitle(device.getName());
                 actionBar.setSubtitle(device.getSeverName());

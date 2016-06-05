@@ -15,11 +15,11 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-class ZettaService {
+class DeviceListService {
 
     private final ApiUrlFetcher apiUrlFetcher;
 
-    ZettaService(ApiUrlFetcher apiUrlFetcher) {
+    DeviceListService(ApiUrlFetcher apiUrlFetcher) {
         this.apiUrlFetcher = apiUrlFetcher;
     }
 
@@ -68,7 +68,7 @@ class ZettaService {
         final List<ListItem> items = new ArrayList<>();
         if (apiUrlFetcher.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
-            items.addAll(MockZettaService.getListItems(url));
+            items.addAll(DeviceListMockService.getListItems(url));
         } else {
             items.addAll(SdkZettaService.getListItems(url));
         }

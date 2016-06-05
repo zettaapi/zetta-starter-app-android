@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class MockZettaService {
+class DeviceDetailsMockService {
 
-    public static ZettaService.Device getDetails() {
+    public static DeviceDetailsService.Device getDetails() {
         final List<ListItem> items = new ArrayList<>();
 
         int foregroundColor = Color.parseColor("#0000ff");
@@ -51,7 +51,7 @@ class MockZettaService {
         items.add(new ListItem.HeaderListItem("Events"));
         items.add(new EventsListItem("View Events (42)"));
 
-        return new ZettaService.Device() {
+        return new DeviceDetailsService.Device() {
             @Override
             public String getName() {
                 return "Porch Light";
