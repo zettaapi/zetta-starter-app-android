@@ -4,16 +4,16 @@ import android.content.res.ColorStateList;
 
 import com.zetta.android.ListItem;
 
-public class ActionOnOffListItem implements ListItem {
+public class ActionToggleListItem implements ListItem {
 
     private final String label;
     private final String action;
     private final ColorStateList foregroundColorList;
     private final ColorStateList backgroundColorList;
 
-    public ActionOnOffListItem(String label,
-                               String action,
-                               ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
+    public ActionToggleListItem(String label,
+                                String action,
+                                ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
         this.label = label;
         this.action = action;
         this.foregroundColorList = foregroundColorList;
@@ -22,7 +22,7 @@ public class ActionOnOffListItem implements ListItem {
 
     @Override
     public int getType() {
-        return TYPE_ACTION_ON_OFF;
+        return TYPE_ACTION_TOGGLE;
     }
 
     public String getLabel() {

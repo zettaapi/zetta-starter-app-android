@@ -7,18 +7,18 @@ import android.widget.TextView;
 
 import com.zetta.android.R;
 
-public class ActionOnOffViewHolder extends RecyclerView.ViewHolder {
+public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView actionLabelWidget;
     private final AppCompatButton actionToggleButton;
 
-    public ActionOnOffViewHolder(View itemView) {
+    public ActionToggleViewHolder(View itemView) {
         super(itemView);
         actionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_action_label);
         actionToggleButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_toggle);
     }
 
-    public void bind(final ActionOnOffListItem item, final OnActionClickListener onActionClickListener) {
+    public void bind(final ActionToggleListItem item, final OnActionClickListener onActionClickListener) {
         actionLabelWidget.setText(item.getLabel());
         actionToggleButton.setText(item.getAction());
         actionToggleButton.setOnClickListener(new View.OnClickListener() {

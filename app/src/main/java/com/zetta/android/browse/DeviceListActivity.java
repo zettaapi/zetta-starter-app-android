@@ -22,7 +22,7 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.DeviceDetailsActivity;
-import com.zetta.android.device.actions.ActionOnOffListItem;
+import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.settings.ApiUrlFetcher;
@@ -87,7 +87,7 @@ public class DeviceListActivity extends AppCompatActivity {
             int backgroundColor = Color.parseColor("#ffffff");
             ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
             ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
-            items.add(new ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ActionToggleListItem("open", "open", foregroundColorList, backgroundColorList));
             items.add(new ActionSingleInputListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
             quickActionsAdapter.updateAll(items);
 

@@ -6,7 +6,7 @@ public interface ListItem {
     int TYPE_EMPTY_SERVER = 2;
     int TYPE_DEVICE = 1;
     int TYPE_HEADER = 3;
-    int TYPE_ACTION_ON_OFF = 4;
+    int TYPE_ACTION_TOGGLE = 4;
     int TYPE_ACTION_SINGLE_INPUT = 5;
     int TYPE_ACTION_MULTIPLE_INPUT = 6;
     int TYPE_STREAM = 7;

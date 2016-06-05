@@ -12,8 +12,8 @@ import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionMultipleViewHolder;
-import com.zetta.android.device.actions.ActionOnOffListItem;
-import com.zetta.android.device.actions.ActionOnOffViewHolder;
+import com.zetta.android.device.actions.ActionToggleListItem;
+import com.zetta.android.device.actions.ActionToggleViewHolder;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionSingleViewHolder;
 import com.zetta.android.device.actions.OnActionClickListener;
@@ -62,9 +62,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ListItem.TYPE_HEADER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_header, parent, false);
             return new HeaderViewHolder(v);
-        } else if (viewType == ListItem.TYPE_ACTION_ON_OFF) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_on_off, parent, false);
-            return new ActionOnOffViewHolder(v);
+        } else if (viewType == ListItem.TYPE_ACTION_TOGGLE) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_toggle, parent, false);
+            return new ActionToggleViewHolder(v);
         } else if (viewType == ListItem.TYPE_ACTION_SINGLE_INPUT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_input_single, parent, false);
             return new ActionSingleViewHolder(v);
@@ -94,9 +94,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ListItem.HeaderListItem headerListItem = (ListItem.HeaderListItem) listItems.get(position);
             ((HeaderViewHolder) holder).bind(headerListItem);
             return;
-        } else if (type == ListItem.TYPE_ACTION_ON_OFF) {
-            ActionOnOffListItem actionOnOffListItem = (ActionOnOffListItem) listItems.get(position);
-            ((ActionOnOffViewHolder) holder).bind(actionOnOffListItem, onActionClickListener);
+        } else if (type == ListItem.TYPE_ACTION_TOGGLE) {
+            ActionToggleListItem actionToggleListItem = (ActionToggleListItem) listItems.get(position);
+            ((ActionToggleViewHolder) holder).bind(actionToggleListItem, onActionClickListener);
             return;
         } else if (type == ListItem.TYPE_ACTION_SINGLE_INPUT) {
             ActionSingleInputListItem actionSingleListItem = (ActionSingleInputListItem) listItems.get(position);

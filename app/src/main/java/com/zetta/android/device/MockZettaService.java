@@ -8,7 +8,7 @@ import android.os.SystemClock;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
-import com.zetta.android.device.actions.ActionOnOffListItem;
+import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 
 import java.net.MalformedURLException;
@@ -37,10 +37,10 @@ class MockZettaService {
                 foregroundColor
             ));
             items.add(new ListItem.HeaderListItem("Actions"));
-            items.add(new ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ActionToggleListItem("open", "open", foregroundColorList, backgroundColorList));
             items.add(new ActionSingleInputListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
-            items.add(new ActionOnOffListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
-            items.add(new ActionOnOffListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
+            items.add(new ActionToggleListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
+            items.add(new ActionToggleListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
             items.add(new ActionMultipleInputListItem(
                 Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
                 "walk",
