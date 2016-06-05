@@ -22,6 +22,7 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.DeviceDetailsActivity;
+import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.OnActionClickListener;
@@ -29,6 +30,7 @@ import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +91,7 @@ public class DeviceListActivity extends AppCompatActivity {
             ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
             items.add(new ActionToggleListItem("open", "open", foregroundColorList, backgroundColorList));
             items.add(new ActionSingleInputListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
+            items.add(new ActionMultipleInputListItem(Arrays.asList("color", "intensity"), "update-led", foregroundColorList, backgroundColorList));
             quickActionsAdapter.updateAll(items);
 
             // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened
