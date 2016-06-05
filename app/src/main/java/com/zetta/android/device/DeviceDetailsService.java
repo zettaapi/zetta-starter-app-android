@@ -6,7 +6,6 @@ import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.settings.ApiUrlFetcher;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -57,26 +56,10 @@ class DeviceDetailsService {
 
     private Device getDetails() {
         if (apiUrlFetcher.useMockResponses()) {
-            SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
+            SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return DeviceDetailsMockService.getDetails();
         } else {
-            // TODO items.addAll(SdkZettaService.getDetails());
-            return new Device() {
-                @Override
-                public String getName() {
-                    return "Fake Light";
-                }
-
-                @Override
-                public String getSeverName() {
-                    return "my roof";
-                }
-
-                @Override
-                public List<ListItem> getListItems() {
-                    return Arrays.<ListItem>asList(new ListItem.HeaderListItem("Not implemented yet"));
-                }
-            };
+            return DeviceDetailsSdkService.getDetails();
         }
     }
 
