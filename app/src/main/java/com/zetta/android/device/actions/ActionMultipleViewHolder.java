@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.novoda.notils.meta.AndroidUtils;
 import com.zetta.android.R;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
                     String inputForLabel = actionInputWidget.getText().toString();
                     actionInputWidget.getText().clear();
                     actionInputWidget.clearFocus();
+                    AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);
                     labelledInput.put(label, inputForLabel);
                 }
                 onActionClickListener.onActionClick(item.getAction(), labelledInput);

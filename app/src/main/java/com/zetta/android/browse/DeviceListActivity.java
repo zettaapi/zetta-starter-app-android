@@ -22,8 +22,8 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.DeviceDetailsActivity;
-import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
+import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
@@ -105,17 +105,19 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onActionClick(String label, boolean on) {
             Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 
         @Override
         public void onActionClick(String label, String input) {
             Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 
         @Override
         public void onActionClick(String label, Map<String, String> inputs) {
             Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
-
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     };
 

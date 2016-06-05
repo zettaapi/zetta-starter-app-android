@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 
+import com.novoda.notils.meta.AndroidUtils;
 import com.zetta.android.R;
 
 public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
@@ -31,6 +32,7 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
                 onActionClickListener.onActionClick(item.getLabel(), input);
                 actionInputWidget.getText().clear();
                 actionInputWidget.clearFocus();
+                AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);
             }
         });
         actionButton.setTextColor(item.getActionTextColorList());
