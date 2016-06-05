@@ -6,7 +6,6 @@ import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.settings.ApiUrlFetcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,14 +21,6 @@ class ZettaService {
 
     ZettaService(ApiUrlFetcher apiUrlFetcher) {
         this.apiUrlFetcher = apiUrlFetcher;
-    }
-
-    public boolean hasRootUrl() {
-        return apiUrlFetcher.hasUrl();
-    }
-
-    public String getRootUrl() {
-        return apiUrlFetcher.getUrl();
     }
 
     public void getDetails(final Callback callback) {
@@ -65,8 +56,6 @@ class ZettaService {
     }
 
     private Device getDeviceListItems() {
-        String url = getRootUrl();
-        final List<ListItem> items = new ArrayList<>();
         if (apiUrlFetcher.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
             return MockZettaService.getDetails();
