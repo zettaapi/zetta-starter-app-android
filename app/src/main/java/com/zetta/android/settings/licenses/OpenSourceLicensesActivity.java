@@ -22,6 +22,12 @@ public class OpenSourceLicensesActivity extends AppCompatActivity {
         LICENSES.add(new License("Android Support Library", "Google Inc. and the Open Handset Alliance",
                                  "Android is licensed under the Apache License, Version 2.0", "https://android.googlesource.com/"
         ));
+        LICENSES.add(new License("notils", "Novoda Ltd.",
+                                 "notils is licensed under the Apache License, Version 2.0", "https://github.com/novoda/notils/"
+        ));
+        LICENSES.add(new License("ReactiveX", "Netflix Inc.",
+                                 "ReactiveX is licensed under the Apache License, Version 2.0", "http://reactivex.io/"
+        ));
     }
 
     @Override
