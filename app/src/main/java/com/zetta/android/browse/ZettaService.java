@@ -1,15 +1,19 @@
 package com.zetta.android.browse;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 
+import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.settings.ApiUrlFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 class ZettaService {
 
@@ -28,27 +32,47 @@ class ZettaService {
     }
 
     public void getDeviceList(final Callback callback) {
-
-        new Thread(new Runnable() {  // TODO change threading model
-            @Override
-            public void run() {
-                String url = getRootUrl();
-                final List<ListItem> items = new ArrayList<>();
-                if (apiUrlFetcher.useMockResponses()) {
-                    SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
-                    items.addAll(MockZettaService.getListItems(url));
-                } else {
-                    items.addAll(SdkZettaService.getListItems(url));
+        getDeviceListObservable()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(new Subscriber<List<ListItem>>() {
+                @Override
+                public void onCompleted() {
+                    // not used
                 }
 
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.on(items);
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(e, "Something went wrong retrieving list of devices.");
+                }
+
+                @Override
+                public void onNext(List<ListItem> listItems) {
+                    callback.on(listItems);
+                }
+            });
+    }
+
+    private Observable<List<ListItem>> getDeviceListObservable() {
+        return Observable.create(new Observable.OnSubscribe<List<ListItem>>() {
+            @Override
+            public void call(Subscriber<? super List<ListItem>> subscriber) {
+                subscriber.onNext(getDeviceListItems());
+                subscriber.onCompleted();
             }
-        }).start();
+        });
+    }
+
+    private List<ListItem> getDeviceListItems() {
+        String url = getRootUrl();
+        final List<ListItem> items = new ArrayList<>();
+        if (apiUrlFetcher.useMockResponses()) {
+            SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
+            items.addAll(MockZettaService.getListItems(url));
+        } else {
+            items.addAll(SdkZettaService.getListItems(url));
+        }
+        return items;
     }
 
     interface Callback {
