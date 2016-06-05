@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +35,7 @@ import java.util.Map;
 
 public class DeviceListActivity extends AppCompatActivity {
 
-    private ApiUrlFetcher apiUrlFetcher;
+    private ZettaService zettaService;
     private DeviceListAdapter adapter;
     private RecyclerView deviceListWidget;
     private EmptyLoadingView emptyLoadingWidget;
@@ -47,7 +46,7 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        apiUrlFetcher = ApiUrlFetcher.newInstance(this);
+        zettaService = new ZettaService(ApiUrlFetcher.newInstance(this));
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,8 +127,7 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
-            String url = apiUrlFetcher.getUrl();
-            ZettaService.getListItems(url, new ZettaService.Callback() {
+            zettaService.getDeviceList(new ZettaService.Callback() {
                 @Override
                 public void on(List<ListItem> listItems) {
                     adapter.updateAll(listItems);
@@ -148,11 +146,8 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String url = apiUrlFetcher.getUrl();
-        Log.d("xxx", "got url " + url);
-
         updateState();
-        ZettaService.getListItems(url, new ZettaService.Callback() {
+        zettaService.getDeviceList(new ZettaService.Callback() {
             @Override
             public void on(List<ListItem> listItems) {
                 adapter.updateAll(listItems);
@@ -166,8 +161,8 @@ public class DeviceListActivity extends AppCompatActivity {
         if (!adapter.isEmpty()) {
             emptyLoadingWidget.setVisibility(View.GONE);
             deviceListWidget.setVisibility(View.VISIBLE);
-        } else if (adapter.isEmpty() && apiUrlFetcher.hasUrl()) {
-            emptyLoadingWidget.setStateLoading(apiUrlFetcher.getUrl());
+        } else if (adapter.isEmpty() && zettaService.hasRootUrl()) {
+            emptyLoadingWidget.setStateLoading(zettaService.getRootUrl());
             emptyLoadingWidget.setVisibility(View.VISIBLE);
             deviceListWidget.setVisibility(View.GONE);
         } else {

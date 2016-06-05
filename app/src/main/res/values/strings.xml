@@ -2,10 +2,14 @@
   <string name="app_name">Zetta</string>
   <string name="Settings">Settings</string>
   <string name="API_History">API History</string>
+
   <string name="key_api_url_with_history"
     translatable="false">pref_api_url</string>
   <string name="key_app_version"
     translatable="false">pref_app_version</string>
+  <string name="key_mock_responses"
+    translatable="false">pref_mock_responses</string>
+
   <string name="Build_Version">Build Version</string>
   <string name="Support">Support</string>
   <string name="Zetta_Discuss">Zetta Discuss</string>

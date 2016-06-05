@@ -15,7 +15,7 @@ public class ApiUrlFetcherTest {
     @Test
     public void whenAUrlIsSetThenReturnsTrue() throws Exception {
         SharedPreferences mockPreferences = new MockSharedPreferences("http://any.url");
-        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey");
+        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey", "unusedKey");
 
         assertThat(fetcher.hasUrl()).isTrue();
     }
@@ -23,7 +23,7 @@ public class ApiUrlFetcherTest {
     @Test
     public void whenAUrlIsNotSetThenReturnsFalse() throws Exception {
         SharedPreferences mockPreferences = new MockSharedPreferences();
-        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey");
+        ApiUrlFetcher fetcher = new ApiUrlFetcher(mockPreferences, "testKey", "unusedKey");
 
         assertThat(fetcher.hasUrl()).isFalse();
     }

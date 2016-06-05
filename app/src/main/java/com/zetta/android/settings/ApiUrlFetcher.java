@@ -9,17 +9,20 @@ import com.zetta.android.R;
 public class ApiUrlFetcher {
 
     private final SharedPreferences sharedPreferences;
-    private final String key;
+    private final String apiUrlKey;
+    private final String mockResponsesKey;
 
     public static ApiUrlFetcher newInstance(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String key = context.getString(R.string.key_api_url_with_history);
-        return new ApiUrlFetcher(sharedPreferences, key);
+        String apiUrlKey = context.getString(R.string.key_api_url_with_history);
+        String mockResponsesKey = context.getString(R.string.key_mock_responses);
+        return new ApiUrlFetcher(sharedPreferences, apiUrlKey, mockResponsesKey);
     }
 
-    ApiUrlFetcher(SharedPreferences sharedPreferences, String key) {
+    ApiUrlFetcher(SharedPreferences sharedPreferences, String apiUrlKey, String mockResponsesKey) {
         this.sharedPreferences = sharedPreferences;
-        this.key = key;
+        this.apiUrlKey = apiUrlKey;
+        this.mockResponsesKey = mockResponsesKey;
     }
 
     public boolean hasUrl() {
@@ -27,10 +30,14 @@ public class ApiUrlFetcher {
     }
 
     public String getUrl() {
-        String collection = sharedPreferences.getString(key, "");
+        String collection = sharedPreferences.getString(apiUrlKey, "");
         HistoryCollection historyCollection = new HistoryCollection();
         historyCollection.appendTail(collection);
         return historyCollection.getHead();
+    }
+
+    public boolean useMockResponses() {
+        return sharedPreferences.getBoolean(mockResponsesKey, false);
     }
 
 }
