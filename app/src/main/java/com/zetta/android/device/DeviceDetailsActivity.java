@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
+import com.zetta.android.ListItem;
 import com.zetta.android.R;
+import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.device.events.EventsActivity;
 
 import java.util.List;
@@ -41,7 +43,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         detailsListWidget.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private final DetailsListAdapter.OnActionClickListener onActionClickListener = new DetailsListAdapter.OnActionClickListener() {
+    private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
         @Override
         public void onActionClick(String label, boolean on) {
             Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();

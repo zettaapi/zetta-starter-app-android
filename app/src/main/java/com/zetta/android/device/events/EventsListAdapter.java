@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.zetta.android.ListItem;
 import com.zetta.android.R;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ListItem.EventListItem serverListItem = (ListItem.EventListItem) listItems.get(position);
+        EventListItem serverListItem = (EventListItem) listItems.get(position);
         ((EventViewHolder) holder).bind(serverListItem);
     }
 
@@ -49,7 +50,7 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             timeStampLabelWidget = (TextView) itemView.findViewById(R.id.list_item_event_timestamp);
         }
 
-        public void bind(ListItem.EventListItem eventListItem) {
+        public void bind(EventListItem eventListItem) {
             transitionLabelWidget.setText(eventListItem.getTransition());
             timeStampLabelWidget.setText(eventListItem.getTimeStamp());
         }

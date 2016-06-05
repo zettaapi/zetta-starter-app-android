@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.zetta.android.ListItem;
 import com.zetta.android.R;
 
 import java.util.List;

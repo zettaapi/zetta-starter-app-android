@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
+import com.zetta.android.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +65,15 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_SERVER) {
-            ListItem.ServerListItem serverListItem = (ListItem.ServerListItem) listItems.get(position);
+            ServerListItem serverListItem = (ServerListItem) listItems.get(position);
             ((ServerViewHolder) holder).bind(serverListItem);
             return;
         } else if (type == ListItem.TYPE_DEVICE) {
-            ListItem.DeviceListItem deviceListItem = (ListItem.DeviceListItem) listItems.get(position);
+            DeviceListItem deviceListItem = (DeviceListItem) listItems.get(position);
             ((DeviceViewHolder) holder).bind(deviceListItem, onDeviceClickListener);
             return;
         } else if (type == ListItem.TYPE_EMPTY_SERVER) {
-            ListItem.EmptyServerListItem emptyServerListItem = (ListItem.EmptyServerListItem) listItems.get(position);
+            EmptyServerListItem emptyServerListItem = (EmptyServerListItem) listItems.get(position);
             ((EmptyServerViewHolder) holder).bind(emptyServerListItem);
             return;
         }
@@ -102,7 +103,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_device_state_image);
         }
 
-        public void bind(ListItem.DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
+        public void bind(DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
             itemView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -139,7 +140,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             nameLabelWidget = (TextView) itemView.findViewById(R.id.list_item_server_name);
         }
 
-        public void bind(ListItem.ServerListItem serverListItem) {
+        public void bind(ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
             itemView.setBackground(serverListItem.getBackground());
@@ -156,7 +157,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_server_message);
         }
 
-        public void bind(ListItem.EmptyServerListItem listItem) {
+        public void bind(EmptyServerListItem listItem) {
             messageWidget.setText(listItem.getMessage());
             itemView.setBackground(listItem.getBackground());
         }

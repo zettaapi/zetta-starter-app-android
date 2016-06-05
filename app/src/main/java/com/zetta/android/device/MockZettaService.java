@@ -6,6 +6,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 
+import com.zetta.android.ListItem;
+import com.zetta.android.device.actions.ActionMultipleInputListItem;
+import com.zetta.android.device.actions.ActionOnOffListItem;
+import com.zetta.android.device.actions.ActionSingleInputListItem;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,34 +31,34 @@ class MockZettaService {
             int backgroundColor = Color.parseColor("#ffffff");
             ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
             ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
-            items.add(new ListItem.StateListItem(
+            items.add(new StateListItem(
                 "on",
                 new URL("http://www.zettaapi.org/icons/light-on.png"),
                 foregroundColor
             ));
             items.add(new ListItem.HeaderListItem("Actions"));
-            items.add(new ListItem.ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionSingleInputListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionOnOffListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionOnOffListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.ActionMultipleInputListItem(
+            items.add(new ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ActionSingleInputListItem("brightness", "set-brightness", foregroundColorList, backgroundColorList));
+            items.add(new ActionOnOffListItem("blink", "set-blinker", foregroundColorList, backgroundColorList));
+            items.add(new ActionOnOffListItem("turn-off", "turn-off", foregroundColorList, backgroundColorList));
+            items.add(new ActionMultipleInputListItem(
                 Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
                 "walk",
                 foregroundColorList, backgroundColorList
             ));
             items.add(new ListItem.HeaderListItem("Streams"));
-            items.add(new ListItem.StreamListItem("state", "on"));
+            items.add(new StreamListItem("state", "on"));
             items.add(new ListItem.HeaderListItem("Properties"));
-            items.add(new ListItem.PropertyListItem("type", "light"));
-            items.add(new ListItem.PropertyListItem("style", ""));
-            items.add(new ListItem.PropertyListItem("brightness", ""));
-            items.add(new ListItem.PropertyListItem("name", "Porch Light"));
-            items.add(new ListItem.PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2"));
-            items.add(new ListItem.PropertyListItem("state", "on"));
-            items.add(new ListItem.PropertyListItem("color", ""));
-            items.add(new ListItem.PropertyListItem("blink", ""));
+            items.add(new PropertyListItem("type", "light"));
+            items.add(new PropertyListItem("style", ""));
+            items.add(new PropertyListItem("brightness", ""));
+            items.add(new PropertyListItem("name", "Porch Light"));
+            items.add(new PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2"));
+            items.add(new PropertyListItem("state", "on"));
+            items.add(new PropertyListItem("color", ""));
+            items.add(new PropertyListItem("blink", ""));
             items.add(new ListItem.HeaderListItem("Events"));
-            items.add(new ListItem.EventsListItem("View Events (42)"));
+            items.add(new EventsListItem("View Events (42)"));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

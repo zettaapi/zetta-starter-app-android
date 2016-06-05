@@ -19,13 +19,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
+import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.DeviceDetailsActivity;
+import com.zetta.android.device.actions.ActionOnOffListItem;
+import com.zetta.android.device.actions.ActionSingleInputListItem;
+import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.settings.ApiUrlFetcher;
 import com.zetta.android.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DeviceListActivity extends AppCompatActivity {
 
@@ -77,13 +82,13 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onDeviceLongClick() {
             List<ListItem> items = new ArrayList<>();
-            items.add(new ListItem.HeaderQuickActionsListItem("Door"));
+            items.add(new ListItem.HeaderListItem("Door"));
             int foregroundColor = Color.parseColor("#0000ff");
             int backgroundColor = Color.parseColor("#ffffff");
             ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
             ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
-            items.add(new ListItem.QuickActionListItem("open", "open", foregroundColorList, backgroundColorList));
-            items.add(new ListItem.QuickActionListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
+            items.add(new ActionOnOffListItem("open", "open", foregroundColorList, backgroundColorList));
+            items.add(new ActionSingleInputListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
             quickActionsAdapter.updateAll(items);
 
             // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened
@@ -96,10 +101,21 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    private final QuickActionsAdapter.OnActionClickListener onActionClickListener = new QuickActionsAdapter.OnActionClickListener() {
+    private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
         @Override
-        public void onActionClick(String label) {
-            Toast.makeText(DeviceListActivity.this, "TODO " + label, Toast.LENGTH_SHORT).show();
+        public void onActionClick(String label, boolean on) {
+            Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onActionClick(String label, String input) {
+            Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onActionClick(String label, Map<String, String> inputs) {
+            Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
+
         }
     };
 
