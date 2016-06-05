@@ -12,16 +12,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.zetta.android.ImageLoader;
-import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.device.events.EventsActivity;
+import com.zetta.android.settings.ApiUrlFetcher;
 
-import java.util.List;
 import java.util.Map;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
 
+    private ZettaService zettaService;
     private EmptyLoadingView emptyLoadingWidget;
     private DetailsListAdapter adapter;
     private RecyclerView detailsListWidget;
@@ -29,6 +29,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        zettaService = new ZettaService(ApiUrlFetcher.newInstance(this));
+
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,13 +81,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onResume();
 
         updateState();
-        MockZettaService.getDetails(new MockZettaService.Callback() {
+        zettaService.getDetails(new ZettaService.Callback() {
             @Override
-            public void on(String deviceName, String serverName, List<ListItem> listItems) {
+            public void on(ZettaService.Device device) {
                 ActionBar actionBar = getSupportActionBar();
-                actionBar.setTitle(deviceName);
-                actionBar.setSubtitle(serverName);
-                adapter.updateAll(listItems);
+                actionBar.setTitle(device.getName());
+                actionBar.setSubtitle(device.getSeverName());
+                adapter.updateAll(device.getListItems());
                 updateState();
             }
         });
