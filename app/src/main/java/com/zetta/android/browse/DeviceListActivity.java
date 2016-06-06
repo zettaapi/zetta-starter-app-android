@@ -3,6 +3,7 @@ package com.zetta.android.browse;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -84,13 +85,16 @@ public class DeviceListActivity extends AppCompatActivity {
         public void onDeviceLongClick() {
             List<ListItem> items = new ArrayList<>();
             items.add(new ListItem.HeaderListItem("Door"));
-            int foregroundColor = Color.parseColor("#0000ff");
-            int backgroundColor = Color.parseColor("#ffffff");
-            ColorStateList foregroundColorList = ColorStateList.valueOf(foregroundColor);
-            ColorStateList backgroundColorList = ColorStateList.valueOf(backgroundColor);
-            items.add(new ActionToggleListItem("open", "open", foregroundColorList, backgroundColorList));
-            items.add(new ActionSingleInputListItem("image...", "update-state-image", foregroundColorList, backgroundColorList));
-            items.add(new ActionMultipleInputListItem(Arrays.asList("color", "intensity"), "update-led", foregroundColorList, backgroundColorList));
+            int foregroundColor = Color.parseColor("#1111dd");
+            int backgroundColor = Color.parseColor("#d9d9d9");
+            ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
+            items.add(new ActionToggleListItem("open", "open", actionTextColorList, getBackground(foregroundColor)));
+            items.add(new ActionSingleInputListItem("image...", "update-state-image", actionTextColorList, getBackground(foregroundColor)));
+            items.add(new ActionMultipleInputListItem(
+                Arrays.asList("color", "intensity"),
+                "update-led",
+                actionTextColorList, getBackground(foregroundColor)
+            ));
             quickActionsAdapter.updateAll(items);
 
             // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened
@@ -100,6 +104,10 @@ public class DeviceListActivity extends AppCompatActivity {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
             }, 1);
+        }
+
+        private Drawable getBackground(int foregroundColor) {
+            return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
         }
     };
 

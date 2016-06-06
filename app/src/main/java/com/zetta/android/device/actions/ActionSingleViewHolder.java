@@ -35,7 +35,7 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
                 AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);
             }
         });
-        actionButton.setTextColor(item.getActionTextColorList());
-        actionButton.setSupportBackgroundTintList(item.getActionColorList());
+        actionButton.setTextColor(item.getActionTextColor());
+        actionButton.setBackground(item.getActionBackground());
     }
 }

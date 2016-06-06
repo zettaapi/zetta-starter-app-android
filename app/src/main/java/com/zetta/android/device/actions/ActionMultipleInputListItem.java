@@ -1,6 +1,7 @@
 package com.zetta.android.device.actions;
 
 import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 
 import com.zetta.android.ListItem;
 
@@ -11,15 +12,16 @@ public class ActionMultipleInputListItem implements ListItem {
     private final List<String> labels;
     private final String action;
     private final ColorStateList foregroundColorList;
-    private final ColorStateList backgroundColorList;
+    private final Drawable backgroundDrawable;
 
     public ActionMultipleInputListItem(List<String> labels,
                                        String action,
-                                       ColorStateList foregroundColorList, ColorStateList backgroundColorList) {
+                                       ColorStateList foregroundColorList,
+                                       Drawable backgroundDrawable) {
         this.labels = labels;
         this.action = action;
         this.foregroundColorList = foregroundColorList;
-        this.backgroundColorList = backgroundColorList;
+        this.backgroundDrawable = backgroundDrawable;
     }
 
     @Override
@@ -35,11 +37,11 @@ public class ActionMultipleInputListItem implements ListItem {
         return action;
     }
 
-    public ColorStateList getActionColorList() {
+    public ColorStateList getActionTextColor() {
         return foregroundColorList;
     }
 
-    public ColorStateList getActionTextColorList() {
-        return backgroundColorList;
+    public Drawable getActionBackground() {
+        return backgroundDrawable;
     }
 }

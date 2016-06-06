@@ -61,7 +61,7 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
                 onActionClickListener.onActionClick(item.getAction(), labelledInput);
             }
         });
-        actionButton.setTextColor(item.getActionTextColorList());
-        actionButton.setSupportBackgroundTintList(item.getActionColorList());
+        actionButton.setTextColor(item.getActionTextColor());
+        actionButton.setBackground(item.getActionBackground());
     }
 }
