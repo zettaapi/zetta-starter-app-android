@@ -47,33 +47,7 @@ class DeviceListSdkService {
                 zikSession.getServers(root, new ZIKServersCallback() {
                     @Override
                     public void onFinished(@Nullable List<ZIKServer> servers) {
-                        for (ZIKServer server : servers) {
-                            String serverName = server.getName();
-                            ZIKStyle serverStyle = server.getStyle();
-                            if (serverStyle == null) {
-                                items.add(createDefaultServerListItem(serverName));
-                            } else {
-                                items.add(convertToServerListItem(serverName, serverStyle));
-                            }
-
-                            if (server.getDevices().isEmpty()) {
-                                items.add(createEmptyServerListItem());
-                            } else {
-
-                                for (ZIKDevice device : server.getDevices()) {
-                                    String name = device.getName();
-                                    String state = device.getState();
-
-                                    ZIKStyle deviceStyle = device.getStyle();
-
-                                    if (deviceStyle == null) {
-                                        items.add(createDefaultDeviceListItem(name, state));
-                                    } else {
-                                        items.add(convertToDeviceListItem(name, state, deviceStyle));
-                                    }
-                                }
-                            }
-                        }
+                        items.addAll(convertSdkTypes(servers));
                         latch.countDown();
                     }
                 });
@@ -89,6 +63,38 @@ class DeviceListSdkService {
             latch.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             // will just return an empty list
+        }
+        return items;
+    }
+
+    private static List<ListItem> convertSdkTypes(@Nullable List<ZIKServer> servers) {
+        List<ListItem> items = new ArrayList<>();
+        for (ZIKServer server : servers) {
+            String serverName = server.getName();
+            ZIKStyle serverStyle = server.getStyle();
+            if (serverStyle == null) {
+                items.add(createDefaultServerListItem(serverName));
+            } else {
+                items.add(convertToServerListItem(serverName, serverStyle));
+            }
+
+            if (server.getDevices().isEmpty()) {
+                items.add(createEmptyServerListItem());
+            } else {
+
+                for (ZIKDevice device : server.getDevices()) {
+                    String name = device.getName();
+                    String state = device.getState();
+
+                    ZIKStyle deviceStyle = device.getStyle();
+
+                    if (deviceStyle == null) {
+                        items.add(createDefaultDeviceListItem(name, state));
+                    } else {
+                        items.add(convertToDeviceListItem(name, state, deviceStyle));
+                    }
+                }
+            }
         }
         return items;
     }
