@@ -36,11 +36,11 @@ public class ImageLoader {
                 StateListDrawable stateListDrawable = new StateListDrawable();
                 stateListDrawable.addState(
                     new int[]{android.R.attr.state_pressed},
-                    new ColorDrawable(lighten(color, 0.30D))
+                    new ColorDrawable(lightenOrDarken(color, 0.20D))
                 );
                 stateListDrawable.addState(
                     new int[]{android.R.attr.state_focused},
-                    new ColorDrawable(darken(color, 0.30D))
+                    new ColorDrawable(lightenOrDarken(color, 0.40D))
                 );
                 stateListDrawable.addState(
                     new int[]{},
@@ -48,7 +48,7 @@ public class ImageLoader {
                 );
                 return stateListDrawable;
             } else {
-                ColorStateList pressedColor = ColorStateList.valueOf(lighten(color, 50D));
+                ColorStateList pressedColor = ColorStateList.valueOf(lightenOrDarken(color, 0.2D));
                 ColorDrawable defaultColor = new ColorDrawable(color);
                 Drawable rippleColor = getRippleMask(color);
                 return new RippleDrawable(
@@ -68,6 +68,14 @@ public class ImageLoader {
             ShapeDrawable shapeDrawable = new ShapeDrawable(r);
             shapeDrawable.getPaint().setColor(color);
             return shapeDrawable;
+        }
+
+        public static int lightenOrDarken(int color, double fraction) {
+            if (canLighten(color, fraction)) {
+                return lighten(color, fraction);
+            } else {
+                return darken(color, fraction);
+            }
         }
 
         public static int lighten(int color, double fraction) {
@@ -91,6 +99,24 @@ public class ImageLoader {
             int alpha = Color.alpha(color);
 
             return Color.argb(alpha, red, green, blue);
+        }
+
+        private static boolean canLighten(int color, double fraction) {
+            int red = Color.red(color);
+            int green = Color.green(color);
+            int blue = Color.blue(color);
+            return canLightenComponent(red, fraction)
+                && canLightenComponent(green, fraction)
+                && canLightenComponent(blue, fraction);
+        }
+
+        private static boolean canLightenComponent(int colorComponent, double fraction) {
+            int red = Color.red(colorComponent);
+            int green = Color.green(colorComponent);
+            int blue = Color.blue(colorComponent);
+            return red + (red * fraction) < 255
+                && green + (green * fraction) < 255
+                && blue + (blue * fraction) < 255;
         }
 
         private static int darkenColor(int color, double fraction) {
