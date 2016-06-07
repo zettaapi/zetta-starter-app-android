@@ -53,7 +53,10 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        deviceListService = new DeviceListService(SdkProperties.newInstance(this));
+        SdkProperties sdkProperties = SdkProperties.newInstance(this);
+        DeviceListSdkService sdkService = new DeviceListSdkService();
+        DeviceListMockService mockService = new DeviceListMockService();
+        deviceListService = new DeviceListService(sdkProperties, sdkService, mockService);
 
         setContentView(R.layout.device_list_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

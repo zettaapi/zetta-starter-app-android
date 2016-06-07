@@ -20,9 +20,13 @@ import rx.schedulers.Schedulers;
 class DeviceListService {
 
     private final SdkProperties sdkProperties;
+    private final DeviceListSdkService sdkService;
+    private final DeviceListMockService mockService;
 
-    DeviceListService(SdkProperties sdkProperties) {
+    DeviceListService(SdkProperties sdkProperties, DeviceListSdkService sdkService, DeviceListMockService mockService) {
         this.sdkProperties = sdkProperties;
+        this.sdkService = sdkService;
+        this.mockService = mockService;
     }
 
     public boolean hasRootUrl() {
@@ -70,10 +74,10 @@ class DeviceListService {
         final List<ListItem> items = new ArrayList<>();
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
-            items.addAll(DeviceListMockService.getListItems(url));
+            items.addAll(mockService.getListItems(url));
         } else {
             try {
-                items.addAll(DeviceListSdkService.getListItems(url));
+                items.addAll(sdkService.getListItems(url));
             } catch (Exception e) { // TODO remove this, just a temp measure
                 Log.e(e);
                 items.add(new EmptyServerListItem(

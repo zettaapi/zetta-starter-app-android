@@ -32,11 +32,11 @@ class DeviceListSdkService {
     private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
     private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
 
-    public static List<ListItem> getListItems(final String url) {
+    public List<ListItem> getListItems(final String url) {
         return callSdkSynchronously(url);
     }
 
-    private static List<ListItem> callSdkSynchronously(String url) {
+    private List<ListItem> callSdkSynchronously(String url) {
         final List<ListItem> items = new ArrayList<>();
         final CountDownLatch latch = new CountDownLatch(1);
 

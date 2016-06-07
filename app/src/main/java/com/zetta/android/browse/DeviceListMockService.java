@@ -11,7 +11,7 @@ import java.util.List;
 
 class DeviceListMockService {
 
-    public static List<ListItem> getListItems(String url) {
+    public List<ListItem> getListItems(String url) {
         int defaultColor = Color.parseColor("#f2f2f2");
         int banglorForegroundColor = Color.parseColor("#0000ff");
         int newOrleansForegroundColor = Color.parseColor("#dd33ff");
