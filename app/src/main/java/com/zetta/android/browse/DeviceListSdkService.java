@@ -32,6 +32,9 @@ class DeviceListSdkService {
     private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
     private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
 
+    private int hierarchicalOneUpBackgroundColor;
+    private int hierarchicalOneUpForegroundColor;
+
     public List<ListItem> getListItems(final String url) {
         return callSdkSynchronously(url);
     }
@@ -68,7 +71,7 @@ class DeviceListSdkService {
         return items;
     }
 
-    private static List<ListItem> convertSdkTypes(@Nullable List<ZIKServer> servers) {
+    private List<ListItem> convertSdkTypes(@Nullable List<ZIKServer> servers) {
         List<ListItem> items = new ArrayList<>();
         for (ZIKServer server : servers) {
             String serverName = server.getName();
@@ -101,33 +104,39 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private static ServerListItem createDefaultServerListItem(String serverName) {
+    private ServerListItem createDefaultServerListItem(String serverName) {
         int serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
+        hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
 
         int serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+        hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
 
         return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
     }
 
     @NonNull
-    private static ServerListItem convertToServerListItem(String serverName, ZIKStyle serverStyle) {
+    private ServerListItem convertToServerListItem(String serverName, ZIKStyle serverStyle) {
         ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
         int serverForegroundColor;
         if (zikForegroundColor == null) {
             serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
+            hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
         } else {
             String jsonForegroundColor = zikForegroundColor.getHex();
             serverForegroundColor = Color.parseColor(jsonForegroundColor);
+            hierarchicalOneUpForegroundColor = serverForegroundColor;
         }
 
         ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
         int serverBackgroundColor;
         if (zikBackgroundColor == null) {
             serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+            hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         } else {
             String jsonBackgroundColor = zikBackgroundColor.getHex();
             serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
+            hierarchicalOneUpBackgroundColor = serverBackgroundColor;
         }
         Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
 
@@ -141,10 +150,10 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private static DeviceListItem createDefaultDeviceListItem(String name, String state) {
-        int deviceForegroundColor = DEFAULT_FOREGROUND_COLOR;
+    private DeviceListItem createDefaultDeviceListItem(String name, String state) {
+        int deviceForegroundColor = hierarchicalOneUpForegroundColor;
 
-        int deviceBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+        int deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
         Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
 
         Uri stateImageUri = DEFAULT_URI_ICON;
@@ -157,11 +166,11 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private static DeviceListItem convertToDeviceListItem(String name, String state, ZIKStyle deviceStyle) {
+    private DeviceListItem convertToDeviceListItem(String name, String state, ZIKStyle deviceStyle) {
         ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
         int deviceForegroundColor;
         if (zikForegroundColor == null) {
-            deviceForegroundColor = DEFAULT_FOREGROUND_COLOR;
+            deviceForegroundColor = hierarchicalOneUpForegroundColor;
         } else {
             String jsonForegroundColor = zikForegroundColor.getHex();
             deviceForegroundColor = Color.parseColor(jsonForegroundColor);
@@ -170,7 +179,7 @@ class DeviceListSdkService {
         ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
         int deviceBackgroundColor;
         if (zikBackgroundColor == null) {
-            deviceBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+            deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
         } else {
             String jsonBackgroundColor = zikBackgroundColor.getHex();
             deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
