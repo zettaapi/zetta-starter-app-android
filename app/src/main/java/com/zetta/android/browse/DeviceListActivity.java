@@ -88,6 +88,7 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onDeviceClick(ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceListActivity.this, DeviceDetailsActivity.class);
+            intent.putExtra(DeviceDetailsActivity.KEY_DEVICE_ID, deviceId);
             startActivity(intent);
         }
 

@@ -4,6 +4,7 @@ import android.os.SystemClock;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.List;
@@ -24,8 +25,8 @@ class DeviceDetailsService {
         this.sdkService = sdkService;
     }
 
-    public void getDetails(final Callback callback) {
-        getDetailsObservable()
+    public void getDetails(ZettaDeviceId deviceId, final Callback callback) {
+        getDetailsObservable(deviceId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(new Subscriber<Device>() {
@@ -46,22 +47,22 @@ class DeviceDetailsService {
             });
     }
 
-    private Observable<Device> getDetailsObservable() {
+    private Observable<Device> getDetailsObservable(final ZettaDeviceId deviceId) {
         return Observable.create(new Observable.OnSubscribe<Device>() {
             @Override
             public void call(Subscriber<? super Device> subscriber) {
-                subscriber.onNext(getDetails());
+                subscriber.onNext(getDetails(deviceId));
                 subscriber.onCompleted();
             }
         });
     }
 
-    private Device getDetails() {
+    private Device getDetails(ZettaDeviceId deviceId) {
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return DeviceDetailsMockService.getDetails();
         } else {
-            return sdkService.getDetails(sdkProperties.getUrl());
+            return sdkService.getDetails(sdkProperties.getUrl(), deviceId);
         }
     }
 

@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.device.events.EventsActivity;
 import com.zetta.android.settings.SdkProperties;
@@ -20,6 +22,8 @@ import com.zetta.android.settings.SdkProperties;
 import java.util.Map;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
+
+    public static final String KEY_DEVICE_ID = BuildConfig.APPLICATION_ID + "/DEVICE_ID";
 
     private DeviceDetailsService deviceDetailsService;
     private EmptyLoadingView emptyLoadingWidget;
@@ -83,7 +87,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onResume();
 
         updateState();
-        deviceDetailsService.getDetails(onDeviceDetailsLoaded);
+        ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
+        deviceDetailsService.getDetails(deviceId, onDeviceDetailsLoaded);
     }
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
