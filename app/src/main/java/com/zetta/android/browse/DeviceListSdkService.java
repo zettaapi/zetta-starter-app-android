@@ -11,9 +11,10 @@ import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
+import com.apigee.zettakit.ZIKStyle;
+import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.callbacks.ZIKRootCallback;
 import com.apigee.zettakit.callbacks.ZIKServersCallback;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 
@@ -24,6 +25,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 class DeviceListSdkService {
+
+    private static final int DEFAULT_COLOR = Color.parseColor("#f2f2f2");
 
     public static List<ListItem> getListItems(final String url) {
         return callSdkSynchronously(url);
@@ -40,43 +43,30 @@ class DeviceListSdkService {
                 zikSession.getServers(root, new ZIKServersCallback() {
                     @Override
                     public void onFinished(@Nullable List<ZIKServer> servers) {
-                        int defaultColor = Color.parseColor("#f2f2f2");
                         for (ZIKServer server : servers) {
                             String serverName = server.getName();
-//                            Map<String, JsonNode> serverProperties = server.getProperties();
-//                            JsonNode serverStyleProperties = serverProperties.get("style").get("properties");
-                            int foregroundColor = Color.parseColor("#0000ff"); //Color.parseColor(serverStyleProperties.get("foregroundColor").get("hex").asText());
-                            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(defaultColor);
-                            items.add(new ServerListItem(foregroundColor, backgroundDrawable, serverName));
+                            ZIKStyle serverStyle = server.getStyle();
+                            if (serverStyle == null) {
+                                items.add(createDefaultServerListItem(serverName));
+                            } else {
+                                items.add(convertToServerListItem(serverName, serverStyle));
+                            }
 
                             if (server.getDevices().isEmpty()) {
-                                items.add(new EmptyServerListItem("No devices online for this server", backgroundDrawable));
+                                items.add(createEmptyServerListItem());
                             } else {
 
                                 for (ZIKDevice device : server.getDevices()) {
                                     String name = device.getName();
                                     String state = device.getState();
 
-                                    Map<String, JsonNode> deviceProperties = device.getProperties();
-                                    JsonNode deviceStyle = deviceProperties.get("style");
-                                    String jsonForegroundColor = "#ff0000";// deviceStyle.get("foregroundColor").get("hex").asText();
-                                    int deviceForegroundColor = Color.parseColor(jsonForegroundColor);
-                                    String jsonBackgroundColor = "#ffffff"; //deviceStyle.get("backgroundColor").get("hex").asText();
-                                    int deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
-                                    Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+                                    ZIKStyle deviceStyle = device.getStyle();
 
-                                    Uri stateImageUrl;
                                     if (deviceStyle == null) {
-                                        stateImageUrl = Uri.EMPTY;
+                                        items.add(createDefaultDeviceListItem(name, state));
                                     } else {
-                                        String jsonUrl = deviceStyle.get("properties").get("stateImage").get("url").asText();
-                                        stateImageUrl = Uri.parse(jsonUrl);
+                                        items.add(convertToDeviceListItem(name, state, deviceStyle));
                                     }
-                                    items.add(new DeviceListItem(name, state,
-                                                                 stateImageUrl,
-                                                                 deviceForegroundColor,
-                                                                 deviceBackgroundDrawable
-                                    ));
                                 }
                             }
                         }
@@ -97,6 +87,98 @@ class DeviceListSdkService {
             // will just return an empty list
         }
         return items;
+    }
+
+    @NonNull
+    private static ServerListItem createDefaultServerListItem(String serverName) {
+        int serverForegroundColor = Color.parseColor("#000000");
+
+        int serverBackgroundColor = DEFAULT_COLOR;
+        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
+
+        return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
+    }
+
+    @NonNull
+    private static ServerListItem convertToServerListItem(String serverName, ZIKStyle serverStyle) {
+        ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
+        int serverForegroundColor;
+        if (zikForegroundColor == null) {
+            serverForegroundColor = DEFAULT_COLOR;
+        } else {
+            String jsonForegroundColor = zikForegroundColor.getHex();
+            serverForegroundColor = Color.parseColor(jsonForegroundColor);
+        }
+
+        ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
+        int serverBackgroundColor;
+        if (zikBackgroundColor == null) {
+            serverBackgroundColor = DEFAULT_COLOR;
+        } else {
+            String jsonBackgroundColor = zikBackgroundColor.getHex();
+            serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
+        }
+        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
+
+        return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
+    }
+
+    @NonNull
+    private static EmptyServerListItem createEmptyServerListItem() {
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(DEFAULT_COLOR);
+        return new EmptyServerListItem("No devices online for this server", backgroundDrawable);
+    }
+
+    @NonNull
+    private static DeviceListItem createDefaultDeviceListItem(String name, String state) {
+        int deviceForegroundColor = DEFAULT_COLOR;
+
+        int deviceBackgroundColor = DEFAULT_COLOR;
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+
+        Uri stateImageUri = Uri.EMPTY;
+
+        return new DeviceListItem(name, state,
+                                  stateImageUri,
+                                  deviceForegroundColor,
+                                  deviceBackgroundDrawable
+        );
+    }
+
+    @NonNull
+    private static DeviceListItem convertToDeviceListItem(String name, String state, ZIKStyle deviceStyle) {
+        ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
+        int deviceForegroundColor;
+        if (zikForegroundColor == null) {
+            deviceForegroundColor = DEFAULT_COLOR;
+        } else {
+            String jsonForegroundColor = zikForegroundColor.getHex();
+            deviceForegroundColor = Color.parseColor(jsonForegroundColor);
+        }
+
+        ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
+        int deviceBackgroundColor;
+        if (zikBackgroundColor == null) {
+            deviceBackgroundColor = DEFAULT_COLOR;
+        } else {
+            String jsonBackgroundColor = zikBackgroundColor.getHex();
+            deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
+        }
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+
+        Uri stateImageUri;
+        Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
+        if (stateImage == null) {
+            stateImageUri = Uri.EMPTY;
+        } else {
+            String jsonUrl = (String) stateImage.get("url");
+            stateImageUri = Uri.parse(jsonUrl);
+        }
+        return new DeviceListItem(name, state,
+                                  stateImageUri,
+                                  deviceForegroundColor,
+                                  deviceBackgroundDrawable
+        );
     }
 
 }
