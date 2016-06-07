@@ -15,8 +15,10 @@ import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.callbacks.ZIKRootCallback;
 import com.apigee.zettakit.callbacks.ZIKServersCallback;
+import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
+import com.zetta.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,9 @@ import java.util.concurrent.TimeUnit;
 
 class DeviceListSdkService {
 
-    private static final int DEFAULT_COLOR = Color.parseColor("#f2f2f2");
+    private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
+    private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
+    private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
 
     public static List<ListItem> getListItems(final String url) {
         return callSdkSynchronously(url);
@@ -91,9 +95,9 @@ class DeviceListSdkService {
 
     @NonNull
     private static ServerListItem createDefaultServerListItem(String serverName) {
-        int serverForegroundColor = Color.parseColor("#000000");
+        int serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
 
-        int serverBackgroundColor = DEFAULT_COLOR;
+        int serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
 
         return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
@@ -104,7 +108,7 @@ class DeviceListSdkService {
         ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
         int serverForegroundColor;
         if (zikForegroundColor == null) {
-            serverForegroundColor = DEFAULT_COLOR;
+            serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
         } else {
             String jsonForegroundColor = zikForegroundColor.getHex();
             serverForegroundColor = Color.parseColor(jsonForegroundColor);
@@ -113,7 +117,7 @@ class DeviceListSdkService {
         ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
         int serverBackgroundColor;
         if (zikBackgroundColor == null) {
-            serverBackgroundColor = DEFAULT_COLOR;
+            serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         } else {
             String jsonBackgroundColor = zikBackgroundColor.getHex();
             serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
@@ -125,18 +129,18 @@ class DeviceListSdkService {
 
     @NonNull
     private static EmptyServerListItem createEmptyServerListItem() {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(DEFAULT_COLOR);
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(DEFAULT_BACKGROUND_COLOR);
         return new EmptyServerListItem("No devices online for this server", backgroundDrawable);
     }
 
     @NonNull
     private static DeviceListItem createDefaultDeviceListItem(String name, String state) {
-        int deviceForegroundColor = DEFAULT_COLOR;
+        int deviceForegroundColor = DEFAULT_FOREGROUND_COLOR;
 
-        int deviceBackgroundColor = DEFAULT_COLOR;
+        int deviceBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
 
-        Uri stateImageUri = Uri.EMPTY;
+        Uri stateImageUri = DEFAULT_URI_ICON;
 
         return new DeviceListItem(name, state,
                                   stateImageUri,
@@ -150,7 +154,7 @@ class DeviceListSdkService {
         ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
         int deviceForegroundColor;
         if (zikForegroundColor == null) {
-            deviceForegroundColor = DEFAULT_COLOR;
+            deviceForegroundColor = DEFAULT_FOREGROUND_COLOR;
         } else {
             String jsonForegroundColor = zikForegroundColor.getHex();
             deviceForegroundColor = Color.parseColor(jsonForegroundColor);
@@ -159,7 +163,7 @@ class DeviceListSdkService {
         ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
         int deviceBackgroundColor;
         if (zikBackgroundColor == null) {
-            deviceBackgroundColor = DEFAULT_COLOR;
+            deviceBackgroundColor = DEFAULT_BACKGROUND_COLOR;
         } else {
             String jsonBackgroundColor = zikBackgroundColor.getHex();
             deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
@@ -169,7 +173,7 @@ class DeviceListSdkService {
         Uri stateImageUri;
         Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
         if (stateImage == null) {
-            stateImageUri = Uri.EMPTY;
+            stateImageUri = DEFAULT_URI_ICON;
         } else {
             String jsonUrl = (String) stateImage.get("url");
             stateImageUri = Uri.parse(jsonUrl);
