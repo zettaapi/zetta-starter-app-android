@@ -1,8 +1,10 @@
 package com.zetta.android.browse;
 
+import android.graphics.Color;
 import android.os.SystemClock;
 
 import com.novoda.notils.logger.simple.Log;
+import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.settings.SdkProperties;
 
@@ -70,7 +72,15 @@ class DeviceListService {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
             items.addAll(DeviceListMockService.getListItems(url));
         } else {
-            items.addAll(DeviceListSdkService.getListItems(url));
+            try {
+                items.addAll(DeviceListSdkService.getListItems(url));
+            } catch (Exception e) { // TODO remove this, just a temp measure
+                Log.e(e);
+                items.add(new EmptyServerListItem(
+                    "Something went wrong with the SDK.\nDeveloper needs to fix.\nGo into Settings and try 'demo mode' to see something working.\n" + e,
+                    ImageLoader.Drawables.getBackgroundDrawableFor(Color.parseColor("#ffffff"))
+                ));
+            }
         }
         return items;
     }

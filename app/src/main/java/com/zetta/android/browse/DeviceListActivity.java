@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.novoda.notils.logger.simple.Log;
+import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
@@ -35,6 +37,10 @@ import java.util.List;
 import java.util.Map;
 
 public class DeviceListActivity extends AppCompatActivity {
+
+    static {
+        Log.setShowLogs(BuildConfig.DEBUG);
+    }
 
     private DeviceListService deviceListService;
     private DeviceListAdapter adapter;
