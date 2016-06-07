@@ -16,11 +16,12 @@ import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.callbacks.ZIKRootCallback;
 import com.apigee.zettakit.callbacks.ZIKServersCallback;
 import com.zetta.android.BuildConfig;
-import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
+import com.zetta.android.ZettaDeviceId;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,23 +46,30 @@ class DeviceListSdkService {
         final CountDownLatch latch = new CountDownLatch(1);
 
         final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRoot(url, new ZIKRootCallback() {
+        zikSession.getRootAsync(url, new ZIKRootCallback() {
             @Override
             public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServers(root, new ZIKServersCallback() {
+                zikSession.getServersAsync(root, new ZIKServersCallback() {
                     @Override
-                    public void onFinished(@Nullable List<ZIKServer> servers) {
+                    public void onSuccess(@NonNull List<ZIKServer> servers) {
                         items.addAll(convertSdkTypes(servers));
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull IOException exception) {
+                        Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
                         latch.countDown();
                     }
                 });
             }
 
             @Override
-            public void onError(@NonNull String error) {
-                Log.e("xxx", "Foobar'd in DeviceListMockService " + error);
+            public void onFailure(@NonNull IOException exception) {
+                Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
                 latch.countDown();
             }
+
         });
 
         try {

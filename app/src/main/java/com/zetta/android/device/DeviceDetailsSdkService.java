@@ -1,7 +1,6 @@
 package com.zetta.android.device;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
@@ -15,6 +14,7 @@ import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,19 +50,18 @@ class DeviceDetailsSdkService {
         final CountDownLatch latch = new CountDownLatch(1);
 
         final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRoot(url, new ZIKRootCallback() {
+        zikSession.getRootAsync(url, new ZIKRootCallback() {
             @Override
             public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServers(root, new ZIKServersCallback() {
+                zikSession.getServersAsync(root, new ZIKServersCallback() {
                     @Override
-                    public void onFinished(@Nullable List<ZIKServer> servers) {
+                    public void onSuccess(@NonNull List<ZIKServer> servers) {
+                        final ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
                         for (final ZIKServer server : servers) {
-                            zikSession.getDevices(server, new ZIKDevicesCallback() {
-                                ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
-
+                            zikSession.getDevicesAsync(server, new ZIKDevicesCallback() {
                                 @Override
-                                public void onFinished(@Nullable List<ZIKDevice> devices) {
-                                    if (devices == null || devices.isEmpty()) {
+                                public void onSuccess(@NonNull List<ZIKDevice> devices) {
+                                    if (devices.isEmpty()) {
                                         return;
                                     }
                                     for (final ZIKDevice device : devices) {
@@ -95,17 +94,31 @@ class DeviceDetailsSdkService {
                                         }
                                     }
                                 }
+
+                                @Override
+                                public void onFailure(@NonNull IOException exception) {
+                                    Log.e(exception, "Foobar'd in DeviceListMockService");
+                                    latch.countDown();
+                                }
                             });
                         }
                     }
+
+                    @Override
+                    public void onFailure(@NonNull IOException exception) {
+                        Log.e(exception, "Foobar'd in DeviceListMockService");
+                        latch.countDown();
+                    }
+
                 });
             }
 
             @Override
-            public void onError(@NonNull String error) {
-                Log.e(error, "Foobar'd in DeviceListMockService");
+            public void onFailure(@NonNull IOException exception) {
+                Log.e(exception, "Foobar'd in DeviceListMockService");
                 latch.countDown();
             }
+
         });
 
         try {
