@@ -7,7 +7,7 @@ import java.util.List;
 
 class DeviceDetailsSdkService {
 
-    public static DeviceDetailsService.Device getDetails() {
+    public DeviceDetailsService.Device getDetails(String url) {
 
         return new DeviceDetailsService.Device() {
             @Override

@@ -17,9 +17,11 @@ import rx.schedulers.Schedulers;
 class DeviceDetailsService {
 
     private final SdkProperties sdkProperties;
+    private final DeviceDetailsSdkService sdkService;
 
-    DeviceDetailsService(SdkProperties sdkProperties) {
+    DeviceDetailsService(SdkProperties sdkProperties, DeviceDetailsSdkService sdkService) {
         this.sdkProperties = sdkProperties;
+        this.sdkService = sdkService;
     }
 
     public void getDetails(final Callback callback) {
@@ -59,7 +61,7 @@ class DeviceDetailsService {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return DeviceDetailsMockService.getDetails();
         } else {
-            return DeviceDetailsSdkService.getDetails();
+            return sdkService.getDetails(sdkProperties.getUrl());
         }
     }
 

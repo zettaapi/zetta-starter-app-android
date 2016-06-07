@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
-import com.zetta.android.R;
 import com.zetta.android.ListItem;
+import com.zetta.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +83,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnDeviceClickListener {
 
-        void onDeviceClick();
+        void onDeviceClick(ZettaDeviceId deviceId);
 
-        void onDeviceLongClick();
+        void onDeviceLongClick(ZettaDeviceId deviceId);
 
     }
 
@@ -103,19 +104,19 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_device_state_image);
         }
 
-        public void bind(DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
+        public void bind(final DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
             itemView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onDeviceClickListener.onDeviceClick();
+                        onDeviceClickListener.onDeviceClick(deviceListItem.getDeviceId());
                     }
                 });
             itemView.setOnLongClickListener(
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        onDeviceClickListener.onDeviceLongClick();
+                        onDeviceClickListener.onDeviceLongClick(deviceListItem.getDeviceId());
                         return true;
                     }
                 });

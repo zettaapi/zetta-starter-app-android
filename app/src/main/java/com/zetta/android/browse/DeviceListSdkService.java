@@ -16,6 +16,7 @@ import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.callbacks.ZIKRootCallback;
 import com.apigee.zettakit.callbacks.ZIKServersCallback;
 import com.zetta.android.BuildConfig;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
@@ -89,13 +90,13 @@ class DeviceListSdkService {
                 for (ZIKDevice device : server.getDevices()) {
                     String name = device.getName();
                     String state = device.getState();
-
+                    ZettaDeviceId deviceId = new ZettaDeviceId(device.getDeviceId().getUuid());
                     ZIKStyle deviceStyle = device.getStyle();
 
                     if (deviceStyle == null) {
-                        items.add(createDefaultDeviceListItem(name, state));
+                        items.add(createDefaultDeviceListItem(deviceId, name, state));
                     } else {
-                        items.add(convertToDeviceListItem(name, state, deviceStyle));
+                        items.add(convertToDeviceListItem(deviceId, name, state, deviceStyle));
                     }
                 }
             }
@@ -150,7 +151,7 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private DeviceListItem createDefaultDeviceListItem(String name, String state) {
+    private DeviceListItem createDefaultDeviceListItem(ZettaDeviceId deviceId, String name, String state) {
         int deviceForegroundColor = hierarchicalOneUpForegroundColor;
 
         int deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
@@ -158,7 +159,8 @@ class DeviceListSdkService {
 
         Uri stateImageUri = DEFAULT_URI_ICON;
 
-        return new DeviceListItem(name, state,
+        return new DeviceListItem(deviceId,
+                                  name, state,
                                   stateImageUri,
                                   deviceForegroundColor,
                                   deviceBackgroundDrawable
@@ -166,7 +168,7 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private DeviceListItem convertToDeviceListItem(String name, String state, ZIKStyle deviceStyle) {
+    private DeviceListItem convertToDeviceListItem(ZettaDeviceId deviceId, String name, String state, ZIKStyle deviceStyle) {
         ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
         int deviceForegroundColor;
         if (zikForegroundColor == null) {
@@ -194,7 +196,8 @@ class DeviceListSdkService {
             String jsonUrl = (String) stateImage.get("url");
             stateImageUri = Uri.parse(jsonUrl);
         }
-        return new DeviceListItem(name, state,
+        return new DeviceListItem(deviceId,
+                                  name, state,
                                   stateImageUri,
                                   deviceForegroundColor,
                                   deviceBackgroundDrawable

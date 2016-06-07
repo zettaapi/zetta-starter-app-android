@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.BuildConfig;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
@@ -85,13 +86,13 @@ public class DeviceListActivity extends AppCompatActivity {
 
     private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
         @Override
-        public void onDeviceClick() {
+        public void onDeviceClick(ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceListActivity.this, DeviceDetailsActivity.class);
             startActivity(intent);
         }
 
         @Override
-        public void onDeviceLongClick() {
+        public void onDeviceLongClick(ZettaDeviceId deviceId) {
             List<ListItem> items = new ArrayList<>();
             items.add(new ListItem.HeaderListItem("Door"));
             int foregroundColor = Color.parseColor("#1111dd");

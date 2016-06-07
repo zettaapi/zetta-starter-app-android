@@ -29,7 +29,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        deviceDetailsService = new DeviceDetailsService(SdkProperties.newInstance(this));
+        SdkProperties sdkProperties = SdkProperties.newInstance(this);
+        DeviceDetailsSdkService sdkService = new DeviceDetailsSdkService();
+        deviceDetailsService = new DeviceDetailsService(sdkProperties, sdkService);
 
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
