@@ -56,6 +56,7 @@ class DeviceListSdkService {
             @Override
             public void onError(@NonNull String error) {
                 Log.e("xxx", "Foobar'd in DeviceListMockService " + error);
+                latch.countDown();
             }
         });
 
