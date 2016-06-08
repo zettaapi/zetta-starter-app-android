@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 class DeviceListSdkService {
 
@@ -43,23 +41,20 @@ class DeviceListSdkService {
 
     private List<ListItem> callSdkSynchronously(String url) {
         final List<ListItem> items = new ArrayList<>();
-        final CountDownLatch latch = new CountDownLatch(1);
 
         final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRootAsync(url, new ZIKRootCallback() {
+        zikSession.getRootSync(url, new ZIKRootCallback() {
             @Override
             public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServersAsync(root, new ZIKServersCallback() {
+                zikSession.getServersSync(root, new ZIKServersCallback() {
                     @Override
                     public void onSuccess(@NonNull List<ZIKServer> servers) {
                         items.addAll(convertSdkTypes(servers));
-                        latch.countDown();
                     }
 
                     @Override
                     public void onFailure(@NonNull IOException exception) {
                         Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
-                        latch.countDown();
                     }
                 });
             }
@@ -67,16 +62,10 @@ class DeviceListSdkService {
             @Override
             public void onFailure(@NonNull IOException exception) {
                 Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
-                latch.countDown();
             }
 
         });
 
-        try {
-            latch.await(30, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            // will just return an empty list
-        }
         return items;
     }
 
