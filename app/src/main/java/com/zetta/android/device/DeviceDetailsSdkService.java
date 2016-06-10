@@ -10,6 +10,7 @@ import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
+import com.apigee.zettakit.ZIKStream;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.ZIKTransition;
@@ -165,6 +166,12 @@ class DeviceDetailsSdkService {
                                             }
 
                                             listItems.add(new ListItem.HeaderListItem("Streams"));
+
+                                            List<ZIKStream> allStreams = device.getAllStreams();
+                                            for (ZIKStream stream : allStreams) {
+                                                String title = stream.getTitle();
+                                                listItems.add(new StreamListItem(title, ""));
+                                            }
 
                                             listItems.add(new ListItem.HeaderListItem("Properties"));
 
