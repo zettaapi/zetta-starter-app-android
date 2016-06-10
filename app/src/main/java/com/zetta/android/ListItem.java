@@ -1,9 +1,11 @@
 package com.zetta.android;
 
+import android.graphics.drawable.Drawable;
+
 public interface ListItem {
 
     int TYPE_SERVER = 0;
-    int TYPE_EMPTY_SERVER = 2;
+    int TYPE_EMPTY = 2;
     int TYPE_DEVICE = 1;
     int TYPE_HEADER = 3;
     int TYPE_ACTION_TOGGLE = 4;
@@ -35,4 +37,27 @@ public interface ListItem {
         }
     }
 
+    class EmptyListItem implements ListItem {
+
+        private final String message;
+        private final Drawable background;
+
+        public EmptyListItem(String message, Drawable background) {
+            this.message = message;
+            this.background = background;
+        }
+
+        @Override
+        public int getType() {
+            return ListItem.TYPE_EMPTY;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Drawable getBackground() {
+            return background;
+        }
+    }
 }

@@ -55,9 +55,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_DEVICE) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_device, parent, false);
             return new DeviceViewHolder(v, imageLoader);
-        } else if (viewType == ListItem.TYPE_EMPTY_SERVER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_empty_server, parent, false);
-            return new EmptyServerViewHolder(v);
+        } else if (viewType == ListItem.TYPE_EMPTY) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_empty, parent, false);
+            return new EmptyViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -73,9 +73,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DeviceListItem deviceListItem = (DeviceListItem) listItems.get(position);
             ((DeviceViewHolder) holder).bind(deviceListItem, onDeviceClickListener);
             return;
-        } else if (type == ListItem.TYPE_EMPTY_SERVER) {
-            EmptyServerListItem emptyServerListItem = (EmptyServerListItem) listItems.get(position);
-            ((EmptyServerViewHolder) holder).bind(emptyServerListItem);
+        } else if (type == ListItem.TYPE_EMPTY) {
+            ListItem.EmptyListItem emptyListItem = (ListItem.EmptyListItem) listItems.get(position);
+            ((EmptyViewHolder) holder).bind(emptyListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -149,16 +149,16 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-    public static class EmptyServerViewHolder extends RecyclerView.ViewHolder {
+    public static class EmptyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView messageWidget;
 
-        public EmptyServerViewHolder(View itemView) {
+        public EmptyViewHolder(View itemView) {
             super(itemView);
-            messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_server_message);
+            messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_message);
         }
 
-        public void bind(EmptyServerListItem listItem) {
+        public void bind(ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
             itemView.setBackground(listItem.getBackground());
         }

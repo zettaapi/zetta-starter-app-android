@@ -142,9 +142,9 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private static EmptyServerListItem createEmptyServerListItem() {
+    private static ListItem.EmptyListItem createEmptyServerListItem() {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(DEFAULT_BACKGROUND_COLOR);
-        return new EmptyServerListItem("No devices online for this server", backgroundDrawable);
+        return new ListItem.EmptyListItem("No devices online for this server", backgroundDrawable);
     }
 
     @NonNull

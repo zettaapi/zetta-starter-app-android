@@ -105,7 +105,7 @@ class DeviceListMockService {
                                ImageLoader.Drawables.getBackgroundDrawableFor(defaultColor)
             ),
             new ServerListItem(stageForegroundColor, ImageLoader.Drawables.getBackgroundDrawableFor(defaultColor), "stage"),
-            new EmptyServerListItem("No devices online for this server", ImageLoader.Drawables.getBackgroundDrawableFor(defaultColor))
+            new ListItem.EmptyListItem("No devices online for this server", ImageLoader.Drawables.getBackgroundDrawableFor(defaultColor))
         );
     }
 }

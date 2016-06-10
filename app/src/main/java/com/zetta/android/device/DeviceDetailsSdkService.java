@@ -163,7 +163,8 @@ class DeviceDetailsSdkService {
 
                                             }
                                             if (transitions.isEmpty()) {
-                                                listItems.add(new PropertyListItem("No actions for this device.", "")); // TODO create a new list type for empty items EmptyListItem?
+                                                Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+                                                listItems.add(new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable));
                                             }
 
                                             listItems.add(new ListItem.HeaderListItem("Streams"));

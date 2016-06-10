@@ -80,7 +80,7 @@ class DeviceListService {
                 items.addAll(sdkService.getListItems(url));
             } catch (Exception e) { // TODO remove this, just a temp measure
                 Log.e(e);
-                items.add(new EmptyServerListItem(
+                items.add(new ListItem.EmptyListItem(
                     "Something went wrong with the SDK.\nDeveloper needs to fix.\nGo into Settings and try 'demo mode' to see something working.\n" + e,
                     ImageLoader.Drawables.getBackgroundDrawableFor(Color.parseColor("#ffffff"))
                 ));
