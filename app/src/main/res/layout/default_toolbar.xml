@@ -12,8 +12,6 @@
     android:background="@color/colorPrimary"
     android:minHeight="?android:attr/actionBarSize"
     android:theme="@style/ToolbarTheme"
-    custom:contentInsetLeft="0dp"
-    custom:contentInsetStart="0dp"
     custom:layout_scrollFlags="scroll|enterAlways"
     custom:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     custom:subtitleTextAppearance="@style/Toolbar.SubtitleText"
