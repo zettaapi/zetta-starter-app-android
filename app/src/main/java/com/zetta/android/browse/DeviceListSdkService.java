@@ -13,8 +13,7 @@ import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
-import com.apigee.zettakit.callbacks.ZIKRootCallback;
-import com.apigee.zettakit.callbacks.ZIKServersCallback;
+import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
@@ -43,24 +42,24 @@ class DeviceListSdkService {
         final List<ListItem> items = new ArrayList<>();
 
         final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRootSync(url, new ZIKRootCallback() {
+        zikSession.getRootSync(url, new ZIKCallback<ZIKRoot>() {
             @Override
             public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServersSync(root, new ZIKServersCallback() {
+                zikSession.getServersSync(root, new ZIKCallback<List<ZIKServer>>() {
                     @Override
                     public void onSuccess(@NonNull List<ZIKServer> servers) {
                         items.addAll(convertSdkTypes(servers));
                     }
 
                     @Override
-                    public void onFailure(@NonNull IOException exception) {
+                    public void onFailure(@NonNull Exception exception) {
                         Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
                     }
                 });
             }
 
             @Override
-            public void onFailure(@NonNull IOException exception) {
+            public void onFailure(@NonNull Exception exception) {
                 Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
             }
 

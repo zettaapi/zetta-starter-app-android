@@ -13,9 +13,7 @@ import com.apigee.zettakit.ZIKSession;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.ZIKTransition;
-import com.apigee.zettakit.callbacks.ZIKDevicesCallback;
-import com.apigee.zettakit.callbacks.ZIKRootCallback;
-import com.apigee.zettakit.callbacks.ZIKServersCallback;
+import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
@@ -24,7 +22,6 @@ import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -63,10 +60,10 @@ class DeviceDetailsSdkService {
 
         final List<ListItem> listItems = new ArrayList<>();
         final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRootSync(url, new ZIKRootCallback() {
+        zikSession.getRootSync(url, new ZIKCallback<ZIKRoot>() {
             @Override
             public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServersSync(root, new ZIKServersCallback() {
+                zikSession.getServersSync(root, new ZIKCallback<List<ZIKServer>>() {
                     @Override
                     public void onSuccess(@NonNull List<ZIKServer> servers) {
                         final ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
@@ -99,7 +96,7 @@ class DeviceDetailsSdkService {
                                 }
                             }
 
-                            zikSession.getDevicesSync(server, new ZIKDevicesCallback() {
+                            zikSession.getDevicesSync(server, new ZIKCallback<List<ZIKDevice>>() {
                                 @Override
                                 public void onSuccess(@NonNull List<ZIKDevice> devices) {
                                     if (devices.isEmpty()) {
@@ -206,7 +203,7 @@ class DeviceDetailsSdkService {
                                 }
 
                                 @Override
-                                public void onFailure(@NonNull IOException exception) {
+                                public void onFailure(@NonNull Exception exception) {
                                     Log.e(exception, "Foobar'd in DeviceListMockService");
                                 }
                             });
@@ -214,7 +211,7 @@ class DeviceDetailsSdkService {
                     }
 
                     @Override
-                    public void onFailure(@NonNull IOException exception) {
+                    public void onFailure(@NonNull Exception exception) {
                         Log.e(exception, "Foobar'd in DeviceListMockService");
                     }
 
@@ -222,7 +219,7 @@ class DeviceDetailsSdkService {
             }
 
             @Override
-            public void onFailure(@NonNull IOException exception) {
+            public void onFailure(@NonNull Exception exception) {
                 Log.e(exception, "Foobar'd in DeviceListMockService");
             }
 
