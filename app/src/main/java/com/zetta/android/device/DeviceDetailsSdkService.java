@@ -189,6 +189,8 @@ class DeviceDetailsSdkService {
 
                                             listItems.add(new ListItem.HeaderListItem("Events"));
 
+                                            listItems.add(new EventsListItem("View Events (...)"));
+
                                             callbackHack[0] = new DeviceDetailsService.Device() {
                                                 @Override
                                                 public String getName() {
