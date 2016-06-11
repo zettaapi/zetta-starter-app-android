@@ -62,7 +62,7 @@ class DeviceDetailsService {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return DeviceDetailsMockService.getDetails();
         } else {
-            return sdkService.getDetails(sdkProperties.getUrl(), deviceId);
+            return sdkService.getDeviceDetails(deviceId);
         }
     }
 

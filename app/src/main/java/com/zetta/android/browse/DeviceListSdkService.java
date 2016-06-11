@@ -5,22 +5,18 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.apigee.zettakit.ZIKDevice;
-import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
-import com.apigee.zettakit.ZIKSession;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
-import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaSdkApi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,35 +31,13 @@ class DeviceListSdkService {
     private int hierarchicalOneUpForegroundColor;
 
     public List<ListItem> getListItems(final String url) {
-        return callSdkSynchronously(url);
-    }
+        List<ListItem> items = new ArrayList<>();
 
-    private List<ListItem> callSdkSynchronously(String url) {
-        final List<ListItem> items = new ArrayList<>();
-
-        final ZIKSession zikSession = ZIKSession.getSharedSession();
-        zikSession.getRootSync(url, new ZIKCallback<ZIKRoot>() {
-            @Override
-            public void onSuccess(@NonNull ZIKRoot root) {
-                zikSession.getServersSync(root, new ZIKCallback<List<ZIKServer>>() {
-                    @Override
-                    public void onSuccess(@NonNull List<ZIKServer> servers) {
-                        items.addAll(convertSdkTypes(servers));
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.e("xxx", "Foobar'd in DeviceListMockService " + exception);
-            }
-
-        });
+        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
+        zettaSdkApi.registerRoot(url);
+        List<ZIKServer> zikServers = zettaSdkApi.getServers();
+        List<ListItem> listItemServers = convertSdkTypes(zikServers);
+        items.addAll(listItemServers);
 
         return items;
     }
