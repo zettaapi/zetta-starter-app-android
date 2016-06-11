@@ -14,4 +14,24 @@ public class ZettaDeviceId implements Serializable {
     public UUID getUuid() {
         return uuid;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ZettaDeviceId)) {
+            return false;
+        }
+
+        ZettaDeviceId deviceId = (ZettaDeviceId) o;
+
+        return uuid.equals(deviceId.uuid);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
 }

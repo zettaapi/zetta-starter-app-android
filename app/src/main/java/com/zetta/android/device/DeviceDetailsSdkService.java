@@ -9,6 +9,7 @@ import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKStream;
+import com.apigee.zettakit.ZIKStreamEntry;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.ZIKTransition;
@@ -191,4 +192,22 @@ class DeviceDetailsSdkService {
         return new StreamListItem(zettaDeviceId, title, "");
     }
 
+    public void registerForStreamedListItemUpdates(ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
+        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
+        ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
+        zettaSdkApi.startListeningToStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
+            @Override
+            public void updateFor(ZIKDeviceId deviceId, ZIKStreamEntry entry) {
+                ZettaDeviceId zettaDeviceId = new ZettaDeviceId(deviceId.getUuid());
+                String stream = entry.getTitle();
+                String value = String.valueOf(entry.getData());
+                listener.onUpdated(new StreamListItem(zettaDeviceId, stream, value));
+            }
+        });
+    }
+
+    public void unregisterForStreamedListItemUpdates() {
+        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
+        zettaSdkApi.stopListeningToStreams();
+    }
 }

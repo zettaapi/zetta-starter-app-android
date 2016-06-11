@@ -91,7 +91,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         updateState();
         ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
         deviceDetailsService.getDetails(deviceId, onDeviceDetailsLoaded);
-        deviceDetailsService.registerForStreamedUpdates(onStreamedUpdate);
+        deviceDetailsService.registerForStreamedUpdates(deviceId, onStreamedUpdate);
     }
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
@@ -108,6 +108,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {
         @Override
         public void onUpdated(ListItem listItem) {
+            if (detailsListWidget.isComputingLayout() || detailsListWidget.isAnimating()) {
+                return;
+            }
             adapter.update(listItem);
         }
     };

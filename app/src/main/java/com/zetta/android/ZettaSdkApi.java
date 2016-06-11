@@ -8,10 +8,17 @@ import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
+import com.apigee.zettakit.ZIKStream;
+import com.apigee.zettakit.ZIKStreamEntry;
 import com.apigee.zettakit.interfaces.ZIKCallback;
+import com.apigee.zettakit.interfaces.ZIKStreamListener;
 import com.novoda.notils.exception.DeveloperError;
+import com.novoda.notils.logger.simple.Log;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Response;
 
 /**
  * This singleton is not thread safe
@@ -27,6 +34,8 @@ public enum ZettaSdkApi {
     private List<ZIKServer> zikServers;
     @Nullable
     private List<ZIKDevice> zikDevices;
+    @Nullable
+    private List<ZIKStream> deviceAllStreams;
 
     public void registerRoot(String url) {
         this.rootUrl = url;
@@ -131,4 +140,56 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A server should always be found, what did you do?");
     }
 
+    public void startListeningToStreamsFor(final ZIKDeviceId deviceId, final ZikStreamEntryListener listener) {
+        ZIKDevice device = getDevice(deviceId);
+        deviceAllStreams = device.getAllStreams();
+        for (ZIKStream zikStream : deviceAllStreams) {
+            ZIKStream stream = device.stream(zikStream.getTitle());
+            if (stream == null) {
+                return;
+            }
+            stream.resume();
+            stream.setStreamListener(new ZIKStreamListener() {
+                @Override
+                public void onUpdate(Object object) {
+                    ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
+                    listener.updateFor(deviceId, streamEntry);
+                }
+
+                @Override
+                public void onOpen() {
+                    // not used
+                }
+
+                @Override
+                public void onError(IOException exception, Response response) {
+                    Log.e(exception, "error");
+                }
+
+                @Override
+                public void onPong() {
+                    // not used
+                }
+
+                @Override
+                public void onClose() {
+                    // not used
+                }
+            });
+        }
+    }
+
+    public void stopListeningToStreams() {
+        if (deviceAllStreams == null) {
+            Log.e("Attempted to stop when you hadn't started");
+            return;
+        }
+        for (ZIKStream stream : deviceAllStreams) {
+            stream.close();
+        }
+    }
+
+    public interface ZikStreamEntryListener {
+        void updateFor(ZIKDeviceId deviceId, ZIKStreamEntry entry);
+    }
 }
