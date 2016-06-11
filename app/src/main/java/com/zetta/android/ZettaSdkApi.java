@@ -30,6 +30,7 @@ public enum ZettaSdkApi {
 
     public void registerRoot(String url) {
         this.rootUrl = url;
+        getRoot();
     }
 
     public ZIKRoot getRoot() {
@@ -55,7 +56,7 @@ public enum ZettaSdkApi {
     };
 
     public List<ZIKServer> getServers() {
-        if (zikRoot == null) {
+        if (zikRoot == null || !zikRoot.getHref().equals(rootUrl)) {
             getRoot();
         }
         ZIKSession session = ZIKSession.getSharedSession();
