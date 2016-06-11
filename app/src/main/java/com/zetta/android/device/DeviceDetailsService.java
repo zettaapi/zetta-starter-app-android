@@ -19,10 +19,12 @@ class DeviceDetailsService {
 
     private final SdkProperties sdkProperties;
     private final DeviceDetailsSdkService sdkService;
+    private final DeviceDetailsMockService mockService;
 
-    DeviceDetailsService(SdkProperties sdkProperties, DeviceDetailsSdkService sdkService) {
+    DeviceDetailsService(SdkProperties sdkProperties, DeviceDetailsSdkService sdkService, DeviceDetailsMockService mockService) {
         this.sdkProperties = sdkProperties;
         this.sdkService = sdkService;
+        this.mockService = mockService;
     }
 
     public void getDetails(ZettaDeviceId deviceId, final Callback callback) {
@@ -60,9 +62,25 @@ class DeviceDetailsService {
     private Device getDetails(ZettaDeviceId deviceId) {
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
-            return DeviceDetailsMockService.getDetails();
+            return mockService.getDetails();
         } else {
             return sdkService.getDeviceDetails(deviceId);
+        }
+    }
+
+    public void registerForStreamedUpdates(StreamListener listener) {
+        if (sdkProperties.useMockResponses()) {
+            mockService.registerForStreamedListItemUpdates(listener);
+        } else {
+            // TODO sdk library streaming
+        }
+    }
+
+    public void unregisterForStreamedUpdates() {
+        if (sdkProperties.useMockResponses()) {
+            mockService.unregisterForStreamedListItemUpdates();
+        } else {
+            // TODO sdk library streaming
         }
     }
 
@@ -76,5 +94,11 @@ class DeviceDetailsService {
         String getSeverName();
 
         List<ListItem> getListItems();
+    }
+
+    interface StreamListener {
+
+        void onUpdated(ListItem listItem);
+
     }
 }

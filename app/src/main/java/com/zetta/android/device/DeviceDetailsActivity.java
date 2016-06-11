@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
+import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.device.actions.OnActionClickListener;
@@ -35,7 +36,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SdkProperties sdkProperties = SdkProperties.newInstance(this);
         DeviceDetailsSdkService sdkService = new DeviceDetailsSdkService();
-        deviceDetailsService = new DeviceDetailsService(sdkProperties, sdkService);
+        DeviceDetailsMockService mockService = new DeviceDetailsMockService();
+        deviceDetailsService = new DeviceDetailsService(sdkProperties, sdkService, mockService);
 
         setContentView(R.layout.device_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,6 +91,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         updateState();
         ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
         deviceDetailsService.getDetails(deviceId, onDeviceDetailsLoaded);
+        deviceDetailsService.registerForStreamedUpdates(onStreamedUpdate);
     }
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
@@ -102,6 +105,13 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
     };
 
+    private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {
+        @Override
+        public void onUpdated(ListItem listItem) {
+            adapter.update(listItem);
+        }
+    };
+
     private void updateState() {
         if (adapter.isEmpty()) {
             emptyLoadingWidget.setStateLoading();
@@ -112,4 +122,11 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             detailsListWidget.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    protected void onPause() {
+        deviceDetailsService.unregisterForStreamedUpdates();
+        super.onPause();
+    }
+
 }

@@ -130,7 +130,7 @@ class DeviceDetailsSdkService {
 
         List<ZIKStream> allStreams = device.getAllStreams();
         for (ZIKStream stream : allStreams) {
-            listItems.add(convertToStream(stream));
+            listItems.add(convertToStream(device.getDeviceId(), stream));
         }
 
         listItems.add(new ListItem.HeaderListItem("Properties"));
@@ -185,9 +185,10 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private StreamListItem convertToStream(ZIKStream stream) {
+    private StreamListItem convertToStream(ZIKDeviceId zikDeviceId, ZIKStream stream) {
         String title = stream.getTitle();
-        return new StreamListItem(title, "");
+        ZettaDeviceId zettaDeviceId = new ZettaDeviceId(zikDeviceId.getUuid());
+        return new StreamListItem(zettaDeviceId, title, "");
     }
 
 }

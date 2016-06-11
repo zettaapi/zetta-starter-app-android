@@ -4,9 +4,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
@@ -14,10 +17,19 @@ import com.zetta.android.device.actions.ActionToggleListItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 class DeviceDetailsMockService {
 
-    public static DeviceDetailsService.Device getDetails() {
+    private static final ZettaDeviceId DEVICE_ID = new ZettaDeviceId(UUID.fromString("86fee1a0-2fd1-11e6-a818-0002a5d5c51b"));
+
+    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+
+    private RandomStreamGenerator streamGenerator;
+
+    public DeviceDetailsService.Device getDetails() {
         final List<ListItem> items = new ArrayList<>();
 
         int foregroundColor = Color.parseColor("#1111dd");
@@ -28,6 +40,7 @@ class DeviceDetailsMockService {
             Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
             foregroundColor
         ));
+
         items.add(new ListItem.HeaderListItem("Actions"));
         items.add(new ActionToggleListItem("open", "open", actionTextColorList, getBackground(foregroundColor)));
         items.add(new ActionSingleInputListItem("brightness", "set-brightness", actionTextColorList, getBackground(foregroundColor)));
@@ -38,8 +51,10 @@ class DeviceDetailsMockService {
             "walk",
             actionTextColorList, getBackground(foregroundColor)
         ));
+
         items.add(new ListItem.HeaderListItem("Streams"));
-        items.add(new StreamListItem("state", "on"));
+        items.add(new StreamListItem(DEVICE_ID, "state", "on"));
+
         items.add(new ListItem.HeaderListItem("Properties"));
         items.add(new PropertyListItem("type", "light"));
         items.add(new PropertyListItem("style", ""));
@@ -49,6 +64,7 @@ class DeviceDetailsMockService {
         items.add(new PropertyListItem("state", "on"));
         items.add(new PropertyListItem("color", ""));
         items.add(new PropertyListItem("blink", ""));
+
         items.add(new ListItem.HeaderListItem("Events"));
         items.add(new EventsListItem("View Events (42)"));
 
@@ -74,4 +90,35 @@ class DeviceDetailsMockService {
         return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
     }
 
+    public void registerForStreamedListItemUpdates(final DeviceDetailsService.StreamListener listener) {
+        streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
+        mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
+    }
+
+    private static class RandomStreamGenerator implements Runnable {
+
+        private final Random random = new Random();
+
+        private final Handler handler;
+        private final DeviceDetailsService.StreamListener listener;
+
+        private RandomStreamGenerator(Handler handler, DeviceDetailsService.StreamListener listener) {
+            this.handler = handler;
+            this.listener = listener;
+        }
+
+        @Override
+        public void run() {
+            String value = "on";
+            if (random.nextBoolean()) {
+                value = "off";
+            }
+            listener.onUpdated(new StreamListItem(DEVICE_ID, "state", value));
+            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
+        }
+    }
+
+    public void unregisterForStreamedListItemUpdates() {
+        mainThreadHandler.removeCallbacks(streamGenerator);
+    }
 }
