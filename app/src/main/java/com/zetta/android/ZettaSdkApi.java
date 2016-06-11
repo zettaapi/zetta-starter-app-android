@@ -108,6 +108,12 @@ public enum ZettaSdkApi {
                 return device;
             }
         }
+        getDevices(getServerContaining(zikDeviceId));
+        for (ZIKDevice device : zikDevices) {
+            if (zikDeviceId.equals(device.getDeviceId())) {
+                return device;
+            }
+        }
         throw new DeveloperError("A device should always be found, what did you do?");
     }
 
