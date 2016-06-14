@@ -36,9 +36,9 @@ class DeviceDetailsMockService {
         int backgroundColor = Color.parseColor("#d9d9d9");
         ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
         items.add(new StateListItem(
-            "on",
-            Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
-            foregroundColor
+                "on",
+                Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
+                foregroundColor
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
@@ -47,13 +47,13 @@ class DeviceDetailsMockService {
         items.add(new ActionToggleListItem("blink", "set-blinker", actionTextColorList, getBackground(foregroundColor)));
         items.add(new ActionToggleListItem("turn-off", "turn-off", actionTextColorList, getBackground(foregroundColor)));
         items.add(new ActionMultipleInputListItem(
-            Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
-            "walk",
-            actionTextColorList, getBackground(foregroundColor)
+                Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
+                "walk",
+                actionTextColorList, getBackground(foregroundColor)
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));
-        items.add(new StreamListItem(DEVICE_ID, "state", "on"));
+        items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385"));
 
         items.add(new ListItem.HeaderListItem("Properties"));
         items.add(new PropertyListItem("type", "light"));
@@ -90,7 +90,7 @@ class DeviceDetailsMockService {
         return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
     }
 
-    public void registerForStreamedListItemUpdates(final DeviceDetailsService.StreamListener listener) {
+    public void registerForStreamedListItemUpdates(DeviceDetailsService.StreamListener listener) {
         streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
@@ -109,11 +109,8 @@ class DeviceDetailsMockService {
 
         @Override
         public void run() {
-            String value = "on";
-            if (random.nextBoolean()) {
-                value = "off";
-            }
-            listener.onUpdated(new StreamListItem(DEVICE_ID, "state", value));
+            String value = "23." + random.nextInt();
+            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value));
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     }
