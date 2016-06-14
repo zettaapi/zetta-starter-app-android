@@ -77,7 +77,7 @@ class DeviceListService {
             items.addAll(mockService.getListItems(url));
         } else {
             try {
-                items.addAll(sdkService.getListItems());
+                items.addAll(sdkService.getListItems(url));
             } catch (Exception e) { // TODO remove this, just a temp measure
                 Log.e(e);
                 items.add(new ListItem.EmptyListItem(
@@ -111,10 +111,11 @@ class DeviceListService {
     }
 
     private void monitorStreamedUpdates(StreamListener listener) {
+        String url = sdkProperties.getUrl();
         if (sdkProperties.useMockResponses()) {
-            mockService.startMonitorStreamedUpdates(listener);
+            mockService.startMonitorStreamedUpdates(url, listener);
         } else {
-            sdkService.startMonitorStreamedUpdates(listener);
+            sdkService.startMonitorStreamedUpdates(url, listener);
         }
     }
 

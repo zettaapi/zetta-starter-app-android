@@ -25,6 +25,7 @@ import okhttp3.Response;
 public enum ZettaSdkApi {
     INSTANCE;
 
+    private final List<ZIKStream> serverDevicesStreams = new ArrayList<>();
     @Nullable
     private String rootUrl;
     @Nullable
@@ -34,9 +35,13 @@ public enum ZettaSdkApi {
     @Nullable
     private List<ZIKDevice> zikDevices;
     @Nullable
-    private List<ZIKStream> deviceAllStreams;
+    private List<ZIKStream> deviceStreams;
 
     public void registerRoot(String url) {
+        if (url.equals(this.rootUrl)) {
+            // No need to re-register
+            return;
+        }
         this.rootUrl = url;
         getRoot();
     }
@@ -100,56 +105,94 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A server should always be found, what did you do?");
     }
 
-    public void startMonitoringStreamsFor(final ZIKDeviceId deviceId, final ZikStreamEntryListener listener) {
+    public void startMonitoringDeviceStreamsFor(ZIKDeviceId deviceId, ZikStreamEntryListener listener) {
         ZIKDevice device = getDevice(deviceId);
-        deviceAllStreams = device.getAllStreams();
-        for (ZIKStream zikStream : deviceAllStreams) {
+        deviceStreams = device.getAllStreams();
+        for (ZIKStream zikStream : deviceStreams) {
             ZIKStream stream = device.stream(zikStream.getTitle());
             if (stream == null) {
                 return;
             }
-            stream.resume();
-            stream.setStreamListener(new ZIKStreamListener() {
-                @Override
-                public void onUpdate(Object object) {
-                    ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
-                    listener.updateFor(deviceId, streamEntry);
-                }
-
-                @Override
-                public void onOpen() {
-                    // not used
-                }
-
-                @Override
-                public void onError(IOException exception, Response response) {
-                    Log.e(exception, "error");
-                }
-
-                @Override
-                public void onPong() {
-                    // not used
-                }
-
-                @Override
-                public void onClose() {
-                    // not used
-                }
-            });
+            monitor(stream, listener, device);
         }
     }
 
-    public void stopMonitoringStreams() {
-        if (deviceAllStreams == null) {
+    private void monitor(ZIKStream stream, final ZikStreamEntryListener listener, final ZIKDevice device) {
+        ZIKDeviceId deviceId = device.getDeviceId();
+        final ZIKServer server = getServerContaining(deviceId);
+        stream.resume();
+        stream.setStreamListener(new ZIKStreamListener() {
+            @Override
+            public void onUpdate(Object object) {
+                ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
+                listener.updateFor(server, device, streamEntry);
+            }
+
+            @Override
+            public void onOpen() {
+                // not used
+            }
+
+            @Override
+            public void onError(ZIKException exception, Response response) {
+                Log.e(exception, "error");
+            }
+
+            @Override
+            public void onPong() {
+                // not used
+            }
+
+            @Override
+            public void onClose() {
+                // not used
+            }
+        });
+    }
+
+    public void stopMonitoringDeviceStreams() {
+        if (deviceStreams == null) {
             Log.e("Attempted to stop when you hadn't started");
             return;
         }
-        for (ZIKStream stream : deviceAllStreams) {
+        for (ZIKStream stream : deviceStreams) {
             stream.close();
+        }
+        deviceStreams.clear();
+        deviceStreams = null;
+    }
+
+    public void startMonitoringAllServerDeviceStreams(final ZikStreamEntryListener listener) {
+        if (zikServers == null) {
+            getServers();
+        }
+        serverDevicesStreams.clear();
+        for (ZIKServer zikServer : zikServers) {
+            for (final ZIKDevice liteZikDevice : zikServer.getDevices()) {
+                ZIKDevice zikDevice = liteZikDevice.fetchSync();
+                List<ZIKStream> allStreams = zikDevice.getAllStreams();
+                for (ZIKStream zikStream : allStreams) {
+                    if (zikStream.getTitle().equals("logs")) {
+                        continue;
+                    }
+                    Log.d(zikStream.getTitle() + " opening stream");
+                    ZIKStream stream = zikDevice.stream(zikStream.getTitle());
+                    monitor(stream, listener, zikDevice);
+                    serverDevicesStreams.add(stream);
+                }
+            }
         }
     }
 
+    public void stopMonitoringAllServerDeviceStreams() {
+        for (ZIKStream stream : serverDevicesStreams) {
+            Log.d("closing stream");
+            stream.close();
+        }
+        serverDevicesStreams.clear();
+    }
+
     public interface ZikStreamEntryListener {
-        void updateFor(ZIKDeviceId deviceId, ZIKStreamEntry entry);
+        void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry);
     }
 }

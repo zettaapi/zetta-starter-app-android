@@ -119,7 +119,7 @@ class DeviceListMockService {
         );
     }
 
-    public void startMonitorStreamedUpdates(StreamListener listener) {
+    public void startMonitorStreamedUpdates(String url, StreamListener listener) {
         streamGenerator = new ToggleStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
