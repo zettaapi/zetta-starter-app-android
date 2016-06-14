@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 
-import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaDeviceId;
 
 class DeviceListItem implements ListItem {
 
@@ -56,4 +56,22 @@ class DeviceListItem implements ListItem {
         return background;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DeviceListItem that = (DeviceListItem) o;
+
+        return deviceId.equals(that.deviceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return deviceId.hashCode();
+    }
 }

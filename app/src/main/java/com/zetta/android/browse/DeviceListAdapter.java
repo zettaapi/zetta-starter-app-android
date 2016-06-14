@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
@@ -31,6 +32,17 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
+    }
+
+    public void update(ListItem listItem) {
+        int i = listItems.indexOf(listItem);
+        if (i == -1) {
+            Log.e("Not found in list");
+            return;
+        }
+        listItems.remove(i);
+        listItems.add(i, listItem);
+        notifyItemChanged(i);
     }
 
     @Override

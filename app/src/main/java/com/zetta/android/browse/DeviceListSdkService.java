@@ -16,6 +16,7 @@ import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
+import com.zetta.android.browse.DeviceListService.StreamListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,4 +175,11 @@ class DeviceListSdkService {
         );
     }
 
+    public void registerForStreamedListItemUpdates(StreamListener listener) {
+
+    }
+
+    public void unregisterForStreamedListItemUpdates() {
+
+    }
 }

@@ -158,7 +158,18 @@ public class DeviceListActivity extends AppCompatActivity {
         super.onResume();
         updateState();
         deviceListService.getDeviceList(onDeviceListLoaded);
+        deviceListService.registerForStreamedUpdates(onStreamedUpdate);
     }
+
+    private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
+        @Override
+        public void onUpdated(ListItem listItem) {
+            if (deviceListWidget.isComputingLayout() || deviceListWidget.isAnimating()) {
+                return;
+            }
+            adapter.update(listItem);
+        }
+    };
 
     private final DeviceListService.Callback onDeviceListLoaded = new DeviceListService.Callback() {
         @Override
@@ -200,5 +211,11 @@ public class DeviceListActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        deviceListService.unregisterForStreamedUpdates();
+        super.onPause();
     }
 }
