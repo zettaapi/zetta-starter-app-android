@@ -192,10 +192,10 @@ class DeviceDetailsSdkService {
         return new StreamListItem(zettaDeviceId, title, "");
     }
 
-    public void registerForStreamedListItemUpdates(ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
+    public void startMonitorStreamedUpdatesFor(ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
         ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
-        zettaSdkApi.startListeningToStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
+        zettaSdkApi.startMonitoringStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKDeviceId deviceId, ZIKStreamEntry entry) {
                 ZettaDeviceId zettaDeviceId = new ZettaDeviceId(deviceId.getUuid());
@@ -206,8 +206,8 @@ class DeviceDetailsSdkService {
         });
     }
 
-    public void unregisterForStreamedListItemUpdates() {
+    public void stopMonitoringStreamedUpdates() {
         ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
-        zettaSdkApi.stopListeningToStreams();
+        zettaSdkApi.stopMonitoringStreams();
     }
 }

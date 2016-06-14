@@ -158,7 +158,7 @@ public class DeviceListActivity extends AppCompatActivity {
         super.onResume();
         updateState();
         deviceListService.getDeviceList(onDeviceListLoaded);
-        deviceListService.registerForStreamedUpdates(onStreamedUpdate);
+        deviceListService.startMonitoringStreamedUpdates(onStreamedUpdate);
     }
 
     private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
@@ -215,7 +215,7 @@ public class DeviceListActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        deviceListService.unregisterForStreamedUpdates();
+        deviceListService.stopMonitoringStreamedUpdates();
         super.onPause();
     }
 }

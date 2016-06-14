@@ -90,7 +90,7 @@ class DeviceDetailsMockService {
         return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
     }
 
-    public void registerForStreamedListItemUpdates(DeviceDetailsService.StreamListener listener) {
+    public void startMonitorStreamedUpdates(DeviceDetailsService.StreamListener listener) {
         streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
@@ -115,7 +115,7 @@ class DeviceDetailsMockService {
         }
     }
 
-    public void unregisterForStreamedListItemUpdates() {
+    public void stopMonitoringStreamedUpdates() {
         mainThreadHandler.removeCallbacks(streamGenerator);
     }
 }

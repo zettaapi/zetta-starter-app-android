@@ -140,7 +140,7 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A server should always be found, what did you do?");
     }
 
-    public void startListeningToStreamsFor(final ZIKDeviceId deviceId, final ZikStreamEntryListener listener) {
+    public void startMonitoringStreamsFor(final ZIKDeviceId deviceId, final ZikStreamEntryListener listener) {
         ZIKDevice device = getDevice(deviceId);
         deviceAllStreams = device.getAllStreams();
         for (ZIKStream zikStream : deviceAllStreams) {
@@ -179,7 +179,7 @@ public enum ZettaSdkApi {
         }
     }
 
-    public void stopListeningToStreams() {
+    public void stopMonitoringStreams() {
         if (deviceAllStreams == null) {
             Log.e("Attempted to stop when you hadn't started");
             return;

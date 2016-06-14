@@ -119,7 +119,7 @@ class DeviceListMockService {
         );
     }
 
-    public void registerForStreamedListItemUpdates(StreamListener listener) {
+    public void startMonitorStreamedUpdates(StreamListener listener) {
         streamGenerator = new ToggleStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
@@ -162,7 +162,7 @@ class DeviceListMockService {
         }
     }
 
-    public void unregisterForStreamedListItemUpdates() {
+    public void stopMonitoringStreamedUpdates() {
         mainThreadHandler.removeCallbacks(streamGenerator);
     }
 }

@@ -6,7 +6,6 @@ import android.os.SystemClock;
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
-import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ class DeviceListService {
         void on(List<ListItem> listItems);
     }
 
-    public void registerForStreamedUpdates(StreamListener listener) {
+    public void startMonitoringStreamedUpdates(StreamListener listener) {
         getStreamedUpdatesObservable(listener)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -105,25 +104,25 @@ class DeviceListService {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override
             public void call(Subscriber<? super Void> subscriber) {
-                registerForStreamedUpdatesByServer(listener);
+                monitorStreamedUpdates(listener);
                 // never completes - hot observable
             }
         });
     }
 
-    private void registerForStreamedUpdatesByServer(StreamListener listener) {
+    private void monitorStreamedUpdates(StreamListener listener) {
         if (sdkProperties.useMockResponses()) {
-            mockService.registerForStreamedListItemUpdates(listener);
+            mockService.startMonitorStreamedUpdates(listener);
         } else {
-            sdkService.registerForStreamedListItemUpdates(listener);
+            sdkService.startMonitorStreamedUpdates(listener);
         }
     }
 
-    public void unregisterForStreamedUpdates() {
+    public void stopMonitoringStreamedUpdates() {
         if (sdkProperties.useMockResponses()) {
-            mockService.unregisterForStreamedListItemUpdates();
+            mockService.stopMonitoringStreamedUpdates();
         } else {
-            sdkService.unregisterForStreamedListItemUpdates();
+            sdkService.stopMonitoringStreamedUpdates();
         }
     }
 

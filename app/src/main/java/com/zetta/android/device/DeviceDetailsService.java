@@ -68,7 +68,7 @@ class DeviceDetailsService {
         }
     }
 
-    public void registerForStreamedUpdates(ZettaDeviceId deviceId, StreamListener listener) {
+    public void startMonitoringStreamedUpdatesFor(ZettaDeviceId deviceId, StreamListener listener) {
         getStreamedUpdatesObservable(deviceId, listener)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -79,25 +79,25 @@ class DeviceDetailsService {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override
             public void call(Subscriber<? super Void> subscriber) {
-                registerForStreamedUpdatesByServer(deviceId, listener);
+                monitorStreamedUpdates(deviceId, listener);
                 // never completes - hot observable
             }
         });
     }
 
-    private void registerForStreamedUpdatesByServer(ZettaDeviceId deviceId, StreamListener listener) {
+    private void monitorStreamedUpdates(ZettaDeviceId deviceId, StreamListener listener) {
         if (sdkProperties.useMockResponses()) {
-            mockService.registerForStreamedListItemUpdates(listener);
+            mockService.startMonitorStreamedUpdates(listener);
         } else {
-            sdkService.registerForStreamedListItemUpdates(deviceId, listener);
+            sdkService.startMonitorStreamedUpdatesFor(deviceId, listener);
         }
     }
 
-    public void unregisterForStreamedUpdates() {
+    public void stopMonitoringStreamedUpdates() {
         if (sdkProperties.useMockResponses()) {
-            mockService.unregisterForStreamedListItemUpdates();
+            mockService.stopMonitoringStreamedUpdates();
         } else {
-            sdkService.unregisterForStreamedListItemUpdates();
+            sdkService.stopMonitoringStreamedUpdates();
         }
     }
 

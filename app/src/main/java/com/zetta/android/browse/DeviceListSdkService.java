@@ -173,11 +173,11 @@ class DeviceListSdkService {
         );
     }
 
-    public void registerForStreamedListItemUpdates(StreamListener listener) {
+    public void startMonitorStreamedUpdates(StreamListener listener) {
 
     }
 
-    public void unregisterForStreamedListItemUpdates() {
+    public void stopMonitoringStreamedUpdates() {
 
     }
 }

@@ -91,7 +91,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         updateState();
         ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
         deviceDetailsService.getDetails(deviceId, onDeviceDetailsLoaded);
-        deviceDetailsService.registerForStreamedUpdates(deviceId, onStreamedUpdate);
+        deviceDetailsService.startMonitoringStreamedUpdatesFor(deviceId, onStreamedUpdate);
     }
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
@@ -128,7 +128,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        deviceDetailsService.unregisterForStreamedUpdates();
+        deviceDetailsService.stopMonitoringStreamedUpdates();
         super.onPause();
     }
 
