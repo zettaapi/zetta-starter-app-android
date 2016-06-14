@@ -78,7 +78,7 @@ class DeviceListService {
             items.addAll(mockService.getListItems(url));
         } else {
             try {
-                items.addAll(sdkService.getListItems(url));
+                items.addAll(sdkService.getListItems());
             } catch (Exception e) { // TODO remove this, just a temp measure
                 Log.e(e);
                 items.add(new ListItem.EmptyListItem(

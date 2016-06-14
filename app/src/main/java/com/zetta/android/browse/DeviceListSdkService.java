@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKServer;
@@ -31,11 +30,10 @@ class DeviceListSdkService {
     private int hierarchicalOneUpBackgroundColor;
     private int hierarchicalOneUpForegroundColor;
 
-    public List<ListItem> getListItems(final String url) {
+    public List<ListItem> getListItems() {
         List<ListItem> items = new ArrayList<>();
 
         ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
-        zettaSdkApi.registerRoot(url);
         List<ZIKServer> zikServers = zettaSdkApi.getServers();
         List<ListItem> listItemServers = convertSdkTypes(zikServers);
         items.addAll(listItemServers);
@@ -43,7 +41,7 @@ class DeviceListSdkService {
         return items;
     }
 
-    private List<ListItem> convertSdkTypes(@Nullable List<ZIKServer> servers) {
+    private List<ListItem> convertSdkTypes(List<ZIKServer> servers) {
         List<ListItem> items = new ArrayList<>();
         for (ZIKServer server : servers) {
             String serverName = server.getName();
