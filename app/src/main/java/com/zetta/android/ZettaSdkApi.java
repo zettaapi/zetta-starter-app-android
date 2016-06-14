@@ -1,21 +1,20 @@
 package com.zetta.android;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
+import com.apigee.zettakit.ZIKException;
 import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
 import com.apigee.zettakit.ZIKStream;
 import com.apigee.zettakit.ZIKStreamEntry;
-import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.apigee.zettakit.interfaces.ZIKStreamListener;
 import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Response;
@@ -47,66 +46,27 @@ public enum ZettaSdkApi {
             throw new DeveloperError("Call registerRoot(url) before getRoot!");
         }
         final ZIKSession session = ZIKSession.getSharedSession();
-        session.getRootSync(rootUrl, rootZIKCallback);
+        this.zikRoot = session.getRootSync(rootUrl);
         return zikRoot;
     }
 
-    private final ZIKCallback<ZIKRoot> rootZIKCallback = new ZIKCallback<ZIKRoot>() {
-
-        @Override
-        public void onSuccess(@NonNull ZIKRoot zikRoot) {
-            ZettaSdkApi.this.zikRoot = zikRoot;
-        }
-
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-    };
-
     public List<ZIKServer> getServers() {
-        if (zikRoot == null || !zikRoot.getHref().equals(rootUrl)) {
+        if (zikRoot == null || !zikRoot.getSelfLink().getHref().equals(rootUrl)) {
             getRoot();
         }
         ZIKSession session = ZIKSession.getSharedSession();
-        session.getServersSync(zikRoot, serversZIKCallback);
+        this.zikServers = session.getServersSync(zikRoot);
         return zikServers;
     }
-
-    private final ZIKCallback<List<ZIKServer>> serversZIKCallback = new ZIKCallback<List<ZIKServer>>() {
-
-        @Override
-        public void onSuccess(@NonNull List<ZIKServer> zikServers) {
-            ZettaSdkApi.this.zikServers = zikServers;
-        }
-
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-    };
 
     public List<ZIKDevice> getDevices(ZIKServer zikServer) {
         if (zikServers == null) {
             throw new DeveloperError("Ensure getServers is called and completes successfully first!");
         }
         ZIKSession session = ZIKSession.getSharedSession();
-        session.getDevicesSync(zikServer, devicesZIKCallback);
+        this.zikDevices = session.getDevicesSync(zikServer);
         return zikDevices;
     }
-
-    private final ZIKCallback<List<ZIKDevice>> devicesZIKCallback = new ZIKCallback<List<ZIKDevice>>() {
-
-        @Override
-        public void onSuccess(@NonNull List<ZIKDevice> zikDevices) {
-            ZettaSdkApi.this.zikDevices = zikDevices;
-        }
-
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            throw new IllegalStateException(exception);
-        }
-    };
 
     public ZIKDevice getDevice(ZIKDeviceId zikDeviceId) {
         if (zikDevices == null) {
