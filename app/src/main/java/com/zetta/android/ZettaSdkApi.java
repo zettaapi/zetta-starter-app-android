@@ -120,22 +120,16 @@ public enum ZettaSdkApi {
     private void monitor(ZIKStream stream, final ZikStreamEntryListener listener, final ZIKDevice device) {
         ZIKDeviceId deviceId = device.getDeviceId();
         final ZIKServer server = getServerContaining(deviceId);
-        stream.resume();
         stream.setStreamListener(new ZIKStreamListener() {
-            @Override
-            public void onUpdate(Object object) {
-                ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
-                listener.updateFor(server, device, streamEntry);
-            }
-
             @Override
             public void onOpen() {
                 // not used
             }
 
             @Override
-            public void onError(ZIKException exception, Response response) {
-                Log.e(exception, "error");
+            public void onUpdate(Object object) {
+                ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
+                listener.updateFor(server, device, streamEntry);
             }
 
             @Override
@@ -147,7 +141,13 @@ public enum ZettaSdkApi {
             public void onClose() {
                 // not used
             }
+
+            @Override
+            public void onError(ZIKException exception, Response response) {
+                Log.e(exception, "error");
+            }
         });
+        stream.resume();
     }
 
     public void stopMonitoringDeviceStreams() {
@@ -166,7 +166,7 @@ public enum ZettaSdkApi {
         if (zikServers == null) {
             getServers();
         }
-        serverDevicesStreams.clear();
+        stopMonitoringAllServerDeviceStreams();
         for (ZIKServer zikServer : zikServers) {
             for (final ZIKDevice liteZikDevice : zikServer.getDevices()) {
                 ZIKDevice zikDevice = liteZikDevice.fetchSync();
@@ -175,10 +175,8 @@ public enum ZettaSdkApi {
                     if (zikStream.getTitle().equals("logs")) {
                         continue;
                     }
-                    Log.d(zikStream.getTitle() + " opening stream");
-                    ZIKStream stream = zikDevice.stream(zikStream.getTitle());
-                    monitor(stream, listener, zikDevice);
-                    serverDevicesStreams.add(stream);
+                    monitor(zikStream, listener, zikDevice);
+                    serverDevicesStreams.add(zikStream);
                 }
             }
         }
@@ -186,7 +184,6 @@ public enum ZettaSdkApi {
 
     public void stopMonitoringAllServerDeviceStreams() {
         for (ZIKStream stream : serverDevicesStreams) {
-            Log.d("closing stream");
             stream.close();
         }
         serverDevicesStreams.clear();
