@@ -13,6 +13,7 @@ import android.os.Build;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Arrays;
 
@@ -24,6 +25,7 @@ public class ImageLoader {
             .placeholder(R.drawable.device_placeholder)
             .crossFade()
             .error(android.R.drawable.stat_notify_error)
+            .diskCacheStrategy(DiskCacheStrategy.RESULT)
             .into(imageView);
         // TODO find out what is wanted to happen when it fails to load
         // i.e. what is the error image
