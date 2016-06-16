@@ -51,6 +51,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         detailsListWidget.setAdapter(adapter);
         detailsListWidget.setHasFixedSize(true);
         detailsListWidget.setLayoutManager(new LinearLayoutManager(this));
+        detailsListWidget.setItemAnimator(null);
     }
 
     private final OnActionClickListener onActionClickListener = new OnActionClickListener() {

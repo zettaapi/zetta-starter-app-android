@@ -76,6 +76,8 @@ public class DeviceListActivity extends AppCompatActivity {
         deviceQuickActionsWidget.setAdapter(quickActionsAdapter);
         deviceQuickActionsWidget.setHasFixedSize(true);
         deviceQuickActionsWidget.setLayoutManager(new LinearLayoutManager(this));
+        deviceListWidget.setItemAnimator(null);
+
         bottomSheetBehavior = BottomSheetBehavior.from(deviceQuickActionsWidget);
         pullRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.pull_refresh);
         pullRefreshWidget.setOnRefreshListener(onPullRefreshListener);
