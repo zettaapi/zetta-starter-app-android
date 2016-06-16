@@ -185,7 +185,7 @@ public enum ZettaSdkApi {
 
             @Override
             public void onError(ZIKException exception, Response response) {
-                Log.e(exception, "error");
+                Log.e(exception, "Error streaming " + response);
             }
         });
         stream.resume();
