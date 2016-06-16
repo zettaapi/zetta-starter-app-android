@@ -26,6 +26,8 @@ public enum ZettaSdkApi {
     INSTANCE;
 
     private final List<ZIKStream> serverDevicesStreams = new ArrayList<>();
+    private final List<ZIKStream> deviceStreams = new ArrayList<>();
+
     @Nullable
     private String rootUrl;
     @Nullable
@@ -34,8 +36,8 @@ public enum ZettaSdkApi {
     private List<ZIKServer> zikServers;
     @Nullable
     private List<ZIKDevice> zikDevices;
-    @Nullable
-    private List<ZIKStream> deviceStreams;
+
+    private boolean cancelMonitoringSetup;
 
     public void registerRoot(String url) {
         if (url.equals(this.rootUrl)) {
@@ -106,14 +108,53 @@ public enum ZettaSdkApi {
     }
 
     public void startMonitoringDeviceStreamsFor(ZIKDeviceId deviceId, ZikStreamEntryListener listener) {
+        stopMonitoringDeviceStreams();
+        cancelMonitoringSetup = false;
         ZIKDevice device = getDevice(deviceId);
-        deviceStreams = device.getAllStreams();
-        for (ZIKStream zikStream : deviceStreams) {
-            ZIKStream stream = device.stream(zikStream.getTitle());
-            if (stream == null) {
+        monitorNonLogStreams(device, listener, deviceStreams);
+    }
+
+    public void stopMonitoringDeviceStreams() {
+        cancelMonitoringSetup = true;
+        for (ZIKStream stream : deviceStreams) {
+            stream.close();
+        }
+        deviceStreams.clear();
+    }
+
+    public void startMonitoringAllServerDeviceStreams(final ZikStreamEntryListener listener) {
+        if (zikServers == null) {
+            getServers();
+        }
+        stopMonitoringAllServerDeviceStreams();
+        cancelMonitoringSetup = false;
+        for (ZIKServer zikServer : zikServers) {
+            for (final ZIKDevice liteZikDevice : zikServer.getDevices()) {
+                ZIKDevice zikDevice = liteZikDevice.fetchSync();
+                monitorNonLogStreams(zikDevice, listener, serverDevicesStreams);
+            }
+        }
+    }
+
+    public void stopMonitoringAllServerDeviceStreams() {
+        cancelMonitoringSetup = true;
+        for (ZIKStream stream : serverDevicesStreams) {
+            stream.close();
+        }
+        serverDevicesStreams.clear();
+    }
+
+    private void monitorNonLogStreams(ZIKDevice device, ZikStreamEntryListener listener, List<ZIKStream> streamsCache) {
+        List<ZIKStream> allStreams = device.getAllStreams();
+        for (ZIKStream stream : allStreams) {
+            if (cancelMonitoringSetup) {
                 return;
             }
+            if (stream.getTitle().equals("logs")) {
+                continue;
+            }
             monitor(stream, listener, device);
+            streamsCache.add(stream);
         }
     }
 
@@ -150,43 +191,20 @@ public enum ZettaSdkApi {
         stream.resume();
     }
 
-    public void stopMonitoringDeviceStreams() {
-        if (deviceStreams == null) {
-            Log.e("Attempted to stop when you hadn't started");
-            return;
-        }
-        for (ZIKStream stream : deviceStreams) {
-            stream.close();
-        }
-        deviceStreams.clear();
-        deviceStreams = null;
-    }
-
-    public void startMonitoringAllServerDeviceStreams(final ZikStreamEntryListener listener) {
-        if (zikServers == null) {
-            getServers();
-        }
+    /**
+     * For use when somethings FooBar'd and you want to tidy up
+     */
+    public void reset() {
+        cancelMonitoringSetup = true;
+        stopMonitoringDeviceStreams();
         stopMonitoringAllServerDeviceStreams();
-        for (ZIKServer zikServer : zikServers) {
-            for (final ZIKDevice liteZikDevice : zikServer.getDevices()) {
-                ZIKDevice zikDevice = liteZikDevice.fetchSync();
-                List<ZIKStream> allStreams = zikDevice.getAllStreams();
-                for (ZIKStream zikStream : allStreams) {
-                    if (zikStream.getTitle().equals("logs")) {
-                        continue;
-                    }
-                    monitor(zikStream, listener, zikDevice);
-                    serverDevicesStreams.add(zikStream);
-                }
-            }
+        cancelMonitoringSetup = false;
+        if (zikServers != null) {
+            zikServers.clear();
         }
-    }
-
-    public void stopMonitoringAllServerDeviceStreams() {
-        for (ZIKStream stream : serverDevicesStreams) {
-            stream.close();
+        if (zikDevices != null) {
+            zikDevices.clear();
         }
-        serverDevicesStreams.clear();
     }
 
     public interface ZikStreamEntryListener {
