@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.novoda.notils.logger.simple.Log;
-import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
+import com.zetta.android.ZettaDeviceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,11 +133,19 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 });
 
-            itemView.setBackground(deviceListItem.getBackground());
-            nameLabelWidget.setText(deviceListItem.getName());
-            stateLabelWidget.setText(deviceListItem.getState());
-            imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
-            stateImageWidget.setColorFilter(deviceListItem.getStateImageColor());
+            if (deviceListItem.getDeviceId().equals(itemView.getTag())) {
+                // Performance Optimisation which makes an assumption
+                // when an item is updated via a stream only the state label & image is wanting to be updated
+                stateLabelWidget.setText(deviceListItem.getState());
+                imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
+            } else {
+                itemView.setTag(deviceListItem.getDeviceId());
+                itemView.setBackground(deviceListItem.getBackground());
+                nameLabelWidget.setText(deviceListItem.getName());
+                stateLabelWidget.setText(deviceListItem.getState());
+                imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
+                stateImageWidget.setColorFilter(deviceListItem.getStateImageColor());
+            }
         }
 
     }
