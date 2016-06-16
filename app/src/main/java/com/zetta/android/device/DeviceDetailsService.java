@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -68,18 +69,38 @@ class DeviceDetailsService {
         }
     }
 
-    public void startMonitoringStreamedUpdatesFor(ZettaDeviceId deviceId, StreamListener listener) {
+    public void startMonitoringStreamedUpdatesFor(ZettaDeviceId deviceId, final StreamListener listener) {
         getStreamedUpdatesObservable(deviceId, listener)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe();
+            .subscribe(new Observer<ListItem>() {
+                @Override
+                public void onCompleted() {
+                    // never completes - hot observable
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(e, "Something went wrong monitoring device specific streams.");
+                }
+
+                @Override
+                public void onNext(ListItem listItem) {
+                    listener.onUpdated(listItem);
+                }
+            });
     }
 
-    private Observable<Void> getStreamedUpdatesObservable(final ZettaDeviceId deviceId, final StreamListener listener) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+    private Observable<ListItem> getStreamedUpdatesObservable(final ZettaDeviceId deviceId, final StreamListener listener) {
+        return Observable.create(new Observable.OnSubscribe<ListItem>() {
             @Override
-            public void call(Subscriber<? super Void> subscriber) {
-                monitorStreamedUpdates(deviceId, listener);
+            public void call(final Subscriber<? super ListItem> subscriber) {
+                monitorStreamedUpdates(deviceId, new StreamListener() {
+                    @Override
+                    public void onUpdated(ListItem listItem) {
+                        subscriber.onNext(listItem);
+                    }
+                });
                 // never completes - hot observable
             }
         });
