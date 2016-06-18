@@ -111,7 +111,7 @@ class DeviceListService {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return mockService.getQuickActions(deviceId);
         } else {
-            return sdkService.getQuickActions();
+            return sdkService.getQuickActions(deviceId);
         }
     }
 

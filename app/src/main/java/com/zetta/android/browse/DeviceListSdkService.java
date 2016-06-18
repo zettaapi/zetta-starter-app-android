@@ -297,7 +297,7 @@ class DeviceListSdkService {
         ZettaSdkApi.INSTANCE.reset();
     }
 
-    public List<ListItem> getQuickActions() {
+    public List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
         ArrayList<ListItem> listItems = new ArrayList<>();
 
         // device.fetchSync().getTransitions()
