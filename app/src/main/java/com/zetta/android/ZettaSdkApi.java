@@ -192,6 +192,11 @@ public enum ZettaSdkApi {
                 public void call(ZIKStreamEntry zikStreamEntry) {
                     listener.updateFor(zikServer, zikDevice, zikStreamEntry);
                 }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    Log.e(throwable, "Error whilst monitoring.");
+                }
             });
     }
 
