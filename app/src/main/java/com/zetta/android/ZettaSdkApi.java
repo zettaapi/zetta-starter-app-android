@@ -16,8 +16,13 @@ import com.novoda.notils.logger.simple.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * This singleton is not thread safe
@@ -128,12 +133,66 @@ public enum ZettaSdkApi {
         }
         stopMonitoringAllServerDeviceStreams();
         cancelMonitoringSetup = false;
-        for (ZIKServer zikServer : zikServers) {
-            for (final ZIKDevice liteZikDevice : zikServer.getDevices()) {
-                ZIKDevice zikDevice = liteZikDevice.fetchSync();
-                monitorNonLogStreams(zikDevice, listener, serverDevicesStreams);
+        for (final ZIKServer zikServer : zikServers) {
+            for (ZIKDevice liteZikDevice : zikServer.getDevices()) {
+                final ZIKDevice zikDevice = liteZikDevice.fetchSync();
+                for (final ZIKStream stream : zikDevice.getAllStreams()) {
+                    if (cancelMonitoringSetup) {
+                        return;
+                    }
+                    if (stream.getTitle().equals("logs")) {
+                        continue;
+                    }
+                    monitor(stream, zikDevice, zikServer, listener);
+                }
             }
         }
+    }
+
+    private void monitor(final ZIKStream stream, final ZIKDevice zikDevice, final ZIKServer zikServer, final ZikStreamEntryListener listener) {
+        Observable.create(new Observable.OnSubscribe<ZIKStreamEntry>() {
+            @Override
+            public void call(final Subscriber<? super ZIKStreamEntry> subscriber) {
+                stream.setStreamListener(new ZIKStreamListener() {
+                    @Override
+                    public void onUpdate(Object object) {
+                        ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
+                        subscriber.onNext(streamEntry);
+                    }
+
+                    @Override
+                    public void onError(ZIKException exception, Response response) {
+                        subscriber.onError(exception);
+                    }
+
+                    @Override
+                    public void onClose() {
+                        subscriber.onCompleted();
+                    }
+
+                    @Override
+                    public void onOpen() {
+                        // not used
+                    }
+
+                    @Override
+                    public void onPong() {
+                        // not used
+                    }
+                });
+                stream.resume();
+                serverDevicesStreams.add(stream);
+            }
+        })
+            .throttleLast(333, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(new Action1<ZIKStreamEntry>() {
+                @Override
+                public void call(ZIKStreamEntry zikStreamEntry) {
+                    listener.updateFor(zikServer, zikDevice, zikStreamEntry);
+                }
+            });
     }
 
     public void stopMonitoringAllServerDeviceStreams() {

@@ -71,8 +71,8 @@ class DeviceDetailsService {
 
     public void startMonitoringStreamedUpdatesFor(ZettaDeviceId deviceId, final StreamListener listener) {
         getStreamedUpdatesObservable(deviceId, listener)
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<ListItem>() {
                 @Override
                 public void onCompleted() {

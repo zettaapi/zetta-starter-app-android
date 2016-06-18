@@ -15,10 +15,15 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.observables.AsyncOnSubscribe;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 class DeviceListService {
+
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     private final SdkProperties sdkProperties;
     private final DeviceListSdkService sdkService;
@@ -39,7 +44,7 @@ class DeviceListService {
     }
 
     public void getDeviceList(final Callback callback) {
-        getDeviceListObservable()
+        Subscription subscription = getDeviceListObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(new Subscriber<List<ListItem>>() {
@@ -58,6 +63,7 @@ class DeviceListService {
                     callback.on(listItems);
                 }
             });
+        subscriptions.add(subscription);
     }
 
     private Observable<List<ListItem>> getDeviceListObservable() {
@@ -96,13 +102,13 @@ class DeviceListService {
     }
 
     public void startMonitoringStreamedUpdates(final StreamListener listener) {
-        getStreamedUpdatesObservable()
-            .observeOn(AndroidSchedulers.mainThread())
+        Subscription subscription = getStreamedUpdatesObservable()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<ListItem>() {
                 @Override
-                public void onCompleted() {
-                    // never completes - hot observable
+                public void onNext(ListItem listItem) {
+                    listener.onUpdated(listItem);
                 }
 
                 @Override
@@ -111,23 +117,27 @@ class DeviceListService {
                 }
 
                 @Override
-                public void onNext(ListItem listItem) {
-                    listener.onUpdated(listItem);
+                public void onCompleted() {
+                    // not used
                 }
             });
+        subscriptions.add(subscription);
     }
 
     private Observable<ListItem> getStreamedUpdatesObservable() {
-        return Observable.create(new Observable.OnSubscribe<ListItem>() {
+        return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
             @Override
-            public void call(final Subscriber<? super ListItem> subscriber) {
-                monitorStreamedUpdates(new StreamListener() {
-                    @Override
-                    public void onUpdated(ListItem listItem) {
-                        subscriber.onNext(listItem);
-                    }
-                });
-                // never completes - hot observable
+            protected LatestStateListener generateState() {
+                LatestStateListener latestStateListener = new LatestStateListener();
+                monitorStreamedUpdates(latestStateListener);
+                return latestStateListener;
+            }
+
+            @Override
+            protected LatestStateListener next(LatestStateListener state, long requested, Observer<Observable<? extends ListItem>> observer) {
+                ListItem latest = state.getLatest();
+                observer.onNext(Observable.just(latest));
+                return state;
             }
         });
     }
@@ -142,6 +152,7 @@ class DeviceListService {
     }
 
     public void stopMonitoringStreamedUpdates() {
+        subscriptions.clear();
         if (sdkProperties.useMockResponses()) {
             mockService.stopMonitoringStreamedUpdates();
         } else {
@@ -153,6 +164,20 @@ class DeviceListService {
 
         void onUpdated(ListItem listItem);
 
+    }
+
+    private static class LatestStateListener implements StreamListener {
+
+        private ListItem listItem;
+
+        public ListItem getLatest() {
+            return listItem;
+        }
+
+        @Override
+        public void onUpdated(ListItem listItem) {
+            this.listItem = listItem;
+        }
     }
 
 }
