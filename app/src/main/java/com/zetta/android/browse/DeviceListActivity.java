@@ -159,8 +159,10 @@ public class DeviceListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateState();
-        deviceListService.getDeviceList(onDeviceListLoaded);
-        deviceListService.startMonitoringStreamedUpdates(onStreamedUpdate);
+        if (deviceListService.hasRootUrl()) {
+            deviceListService.getDeviceList(onDeviceListLoaded);
+            deviceListService.startMonitoringStreamedUpdates(onStreamedUpdate);
+        }
     }
 
     private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
