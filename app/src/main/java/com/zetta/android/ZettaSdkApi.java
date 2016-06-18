@@ -80,7 +80,7 @@ public enum ZettaSdkApi {
         return zikDevices;
     }
 
-    public ZIKDevice getDevice(ZIKDeviceId zikDeviceId) {
+    public ZIKDevice getLiteDevice(ZIKDeviceId zikDeviceId) {
         if (zikDevices == null) {
             getDevices(getServerContaining(zikDeviceId));
         }
@@ -96,6 +96,10 @@ public enum ZettaSdkApi {
             }
         }
         throw new DeveloperError("A device should always be found, what did you do?");
+    }
+
+    public ZIKDevice getFullDevice(ZIKDeviceId zikDeviceId) {
+        return getLiteDevice(zikDeviceId).fetchSync();
     }
 
     public ZIKServer getServerContaining(ZIKDeviceId zikDeviceId) {
@@ -115,7 +119,7 @@ public enum ZettaSdkApi {
     public void startMonitoringDeviceStreamsFor(ZIKDeviceId deviceId, ZikStreamEntryListener listener) {
         stopMonitoringDeviceStreams();
         cancelMonitoringSetup = false;
-        ZIKDevice device = getDevice(deviceId);
+        ZIKDevice device = getLiteDevice(deviceId);
         monitorNonLogStreams(device, listener, deviceStreams);
     }
 

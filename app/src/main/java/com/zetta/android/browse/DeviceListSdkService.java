@@ -1,15 +1,18 @@
 package com.zetta.android.browse;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.apigee.zettakit.ZIKDevice;
+import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKStreamEntry;
 import com.apigee.zettakit.ZIKStyle;
 import com.apigee.zettakit.ZIKStyleColor;
+import com.apigee.zettakit.ZIKTransition;
 import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
@@ -17,6 +20,9 @@ import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.browse.DeviceListService.StreamListener;
+import com.zetta.android.device.actions.ActionMultipleInputListItem;
+import com.zetta.android.device.actions.ActionSingleInputListItem;
+import com.zetta.android.device.actions.ActionToggleListItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,6 +184,111 @@ class DeviceListSdkService {
         );
     }
 
+    public List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
+        List<ListItem> listItems = new ArrayList<>();
+
+        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
+        ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
+        ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
+        getHierarchicalStyleFrom(zikServer);
+        ZIKDevice zikDevice = zettaSdkApi.getFullDevice(zikDeviceId);
+
+        listItems.add(new ListItem.HeaderListItem(zikDevice.getName()));
+
+        ZIKStyle deviceStyle = zikDevice.getStyle();
+        int deviceForegroundColor;
+        int deviceBackgroundColor;
+        if (deviceStyle == null) {
+            deviceForegroundColor = hierarchicalOneUpForegroundColor;
+            deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
+        } else {
+            ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
+            if (zikForegroundColor == null) {
+                deviceForegroundColor = hierarchicalOneUpForegroundColor;
+            } else {
+                String jsonForegroundColor = zikForegroundColor.getHex();
+                deviceForegroundColor = Color.parseColor(jsonForegroundColor);
+            }
+
+            ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
+            if (zikBackgroundColor == null) {
+                deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
+            } else {
+                String jsonBackgroundColor = zikBackgroundColor.getHex();
+                deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
+            }
+        }
+
+        List<ZIKTransition> transitions = zikDevice.getTransitions();
+        if (transitions.isEmpty()) {
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            listItems.add(new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable));
+        }
+        for (ZIKTransition transition : transitions) {
+            listItems.add(convertToEvent(transition, deviceForegroundColor, deviceBackgroundColor));
+        }
+
+        return listItems;
+    }
+
+    private void getHierarchicalStyleFrom(ZIKServer server) {
+        ZIKStyle serverStyle = server.getStyle();
+
+        if (serverStyle == null) {
+            hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
+            hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+        } else {
+            ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
+            int serverForegroundColor;
+            if (zikForegroundColor == null) {
+                hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
+            } else {
+                String jsonForegroundColor = zikForegroundColor.getHex();
+                serverForegroundColor = Color.parseColor(jsonForegroundColor);
+                hierarchicalOneUpForegroundColor = serverForegroundColor;
+            }
+
+            ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
+            int serverBackgroundColor;
+            if (zikBackgroundColor == null) {
+                hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+            } else {
+                String jsonBackgroundColor = zikBackgroundColor.getHex();
+                serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
+                hierarchicalOneUpBackgroundColor = serverBackgroundColor;
+            }
+        }
+    }
+
+    @NonNull
+    private ListItem convertToEvent(ZIKTransition transition, int deviceForegroundColor, int deviceBackgroundColor) {
+
+        List<Map<String, Object>> eventFields = transition.getFields();
+        if (eventFields.size() == 1) {
+            String action = transition.getName();
+            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            return new ActionToggleListItem(action, action, actionTextColorList, backgroundDrawable);
+        } else if (eventFields.size() == 2) {
+            Map<String, Object> eventField = eventFields.get(0);
+            String label = String.valueOf(eventField.get("name"));
+            String action = transition.getName();
+            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            return new ActionSingleInputListItem(label, action, actionTextColorList, backgroundDrawable);
+        } else {
+            List<String> labels = new ArrayList<>();
+            for (Map<String, Object> eventField : eventFields) {
+                String label = String.valueOf(eventField.get("name"));
+                labels.add(label);
+            }
+            String action = transition.getName();
+            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            return new ActionMultipleInputListItem(labels, action, actionTextColorList, backgroundDrawable);
+        }
+    }
+
     // TODO should streaming be in it's own class?
     // it shares the creation of style objects, so perhaps that should be extracted as well
     public void startMonitorStreamedUpdates(String url, final StreamListener listener) {
@@ -295,14 +406,5 @@ class DeviceListSdkService {
 
     public void reset() {
         ZettaSdkApi.INSTANCE.reset();
-    }
-
-    public List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
-        ArrayList<ListItem> listItems = new ArrayList<>();
-
-        // device.fetchSync().getTransitions()
-
-        listItems.add(new ListItem.EmptyListItem("todo", ImageLoader.Drawables.getBackgroundDrawableFor(Color.parseColor("#dd0000"))));
-        return listItems;
     }
 }

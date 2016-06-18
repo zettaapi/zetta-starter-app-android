@@ -99,10 +99,34 @@ class DeviceListService {
         return items;
     }
 
-    public void getQuickActions(ZettaDeviceId deviceId, Callback callback) {
-        List<ListItem> items = getQuickActions(deviceId);
+    public void getQuickActions(final ZettaDeviceId deviceId, final Callback callback) {
+        Subscription subscription = Observable.create(new Observable.OnSubscribe<List<ListItem>>() {
+            @Override
+            public void call(Subscriber<? super List<ListItem>> subscriber) {
+                List<ListItem> items = getQuickActions(deviceId);
+                subscriber.onNext(items);
+                subscriber.onCompleted();
+            }
+        })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(new Subscriber<List<ListItem>>() {
+                @Override
+                public void onCompleted() {
+                    // not used
+                }
 
-        callback.on(items);
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(e, "Something went wrong retrieving quick actions.");
+                }
+
+                @Override
+                public void onNext(List<ListItem> listItems) {
+                    callback.on(listItems);
+                }
+            });
+        subscriptions.add(subscription);
     }
 
     @NonNull

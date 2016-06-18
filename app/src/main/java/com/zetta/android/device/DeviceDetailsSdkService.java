@@ -42,7 +42,7 @@ class DeviceDetailsSdkService {
         ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         final ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         getHierarchicalStyleFrom(zikServer);
-        final ZIKDevice zikDevice = zettaSdkApi.getDevice(zikDeviceId);
+        final ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
         final List<ListItem> deviceListItems = convertToDeviceListItems(zikServer, zikDevice);
         return new DeviceDetailsService.Device() {
             @Override
