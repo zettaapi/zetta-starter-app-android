@@ -19,14 +19,17 @@ import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.browse.DeviceListService.StreamListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 class DeviceListSdkService {
 
     private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
     private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
     private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
+    private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
 
     private int hierarchicalOneUpBackgroundColor;
     private int hierarchicalOneUpForegroundColor;
@@ -191,7 +194,7 @@ class DeviceListSdkService {
     }
 
     private DeviceListItem createListItem(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
-        ZettaDeviceId zettaDeviceId = new ZettaDeviceId(device.getDeviceId().getUuid());
+        ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String name = device.getName();
         String state = String.valueOf(entry.getData());
 
@@ -271,6 +274,17 @@ class DeviceListSdkService {
                 deviceForegroundColor,
                 deviceBackgroundDrawable
             );
+        }
+    }
+
+    private ZettaDeviceId getDeviceId(ZIKDevice device) {
+        UUID uuid = device.getDeviceId().getUuid();
+        if (zettaDeviceIdCache.containsKey(uuid)) {
+            return zettaDeviceIdCache.get(uuid);
+        } else {
+            ZettaDeviceId zettaDeviceId = new ZettaDeviceId(uuid);
+            zettaDeviceIdCache.put(uuid, zettaDeviceId);
+            return zettaDeviceId;
         }
     }
 
