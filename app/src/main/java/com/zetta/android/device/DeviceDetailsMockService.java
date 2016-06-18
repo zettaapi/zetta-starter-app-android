@@ -53,7 +53,7 @@ class DeviceDetailsMockService {
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));
-        items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385"));
+        items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385", foregroundColor, getBackground(foregroundColor)));
 
         items.add(new ListItem.HeaderListItem("Properties"));
         items.add(new PropertyListItem("type", "light"));
@@ -110,7 +110,8 @@ class DeviceDetailsMockService {
         @Override
         public void run() {
             String value = "23." + random.nextInt();
-            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value));
+            int foregroundColor = Color.parseColor("#1111dd");
+            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value, foregroundColor, getBackground(foregroundColor)));
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     }
