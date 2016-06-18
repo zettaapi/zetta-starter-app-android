@@ -2,10 +2,12 @@ package com.zetta.android.browse;
 
 import android.graphics.Color;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
@@ -95,6 +97,22 @@ class DeviceListService {
             }
         }
         return items;
+    }
+
+    public void getQuickActions(ZettaDeviceId deviceId, Callback callback) {
+        List<ListItem> items = getQuickActions(deviceId);
+
+        callback.on(items);
+    }
+
+    @NonNull
+    private List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
+        if (sdkProperties.useMockResponses()) {
+            SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
+            return mockService.getQuickActions(deviceId);
+        } else {
+            return sdkService.getQuickActions();
+        }
     }
 
     interface Callback {

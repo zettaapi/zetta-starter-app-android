@@ -296,4 +296,13 @@ class DeviceListSdkService {
     public void reset() {
         ZettaSdkApi.INSTANCE.reset();
     }
+
+    public List<ListItem> getQuickActions() {
+        ArrayList<ListItem> listItems = new ArrayList<>();
+
+        // device.fetchSync().getTransitions()
+
+        listItems.add(new ListItem.EmptyListItem("todo", ImageLoader.Drawables.getBackgroundDrawableFor(Color.parseColor("#dd0000"))));
+        return listItems;
+    }
 }

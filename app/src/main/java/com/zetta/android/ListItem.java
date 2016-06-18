@@ -16,6 +16,7 @@ public interface ListItem {
     int TYPE_EVENTS = 9;
     int TYPE_EVENT = 10;
     int TYPE_STATE = 11;
+    int TYPE_LOADING = 12;
 
     int getType();
 
@@ -58,6 +59,14 @@ public interface ListItem {
 
         public Drawable getBackground() {
             return background;
+        }
+    }
+
+    class LoadingListItem implements ListItem {
+
+        @Override
+        public int getType() {
+            return ListItem.TYPE_LOADING;
         }
     }
 }

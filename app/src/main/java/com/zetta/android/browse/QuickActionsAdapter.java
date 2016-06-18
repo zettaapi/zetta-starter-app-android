@@ -53,6 +53,12 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else if (viewType == ListItem.TYPE_ACTION_MULTIPLE_INPUT) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_action_input_multiple, parent, false);
             return new ActionMultipleViewHolder(v);
+        } else if (viewType == ListItem.TYPE_LOADING) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_loading, parent, false);
+            return new LoadingViewHolder(v);
+        } else if (viewType == ListItem.TYPE_EMPTY) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_empty, parent, false);
+            return new EmptyViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -76,6 +82,13 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ActionMultipleInputListItem actionMultipleListItem = (ActionMultipleInputListItem) items.get(position);
             ((ActionMultipleViewHolder) holder).bind(actionMultipleListItem, onActionClickListener);
             return;
+        } else if (type == ListItem.TYPE_LOADING) {
+            ((LoadingViewHolder) holder).bind();
+            return;
+        } else if (type == ListItem.TYPE_EMPTY) {
+            ListItem.EmptyListItem emptyListItem = (ListItem.EmptyListItem) items.get(position);
+            ((EmptyViewHolder) holder).bind(emptyListItem);
+            return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
     }
@@ -85,7 +98,7 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return items.size();
     }
 
-    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView headerTitleWidget;
 
@@ -97,5 +110,32 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void bind(ListItem.HeaderListItem item) {
             headerTitleWidget.setText(item.getTitle());
         }
+    }
+
+    private static class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public void bind() {
+            // nothing to bind
+        }
+    }
+
+    public static class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView messageWidget;
+
+        public EmptyViewHolder(View itemView) {
+            super(itemView);
+            messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_message);
+        }
+
+        public void bind(ListItem.EmptyListItem listItem) {
+            messageWidget.setText(listItem.getMessage());
+            itemView.setBackground(listItem.getBackground());
+        }
+
     }
 }

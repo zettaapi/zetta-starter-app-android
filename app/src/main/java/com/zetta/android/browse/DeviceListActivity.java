@@ -1,9 +1,6 @@
 package com.zetta.android.browse;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,15 +22,11 @@ import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.device.DeviceDetailsActivity;
-import com.zetta.android.device.actions.ActionMultipleInputListItem;
-import com.zetta.android.device.actions.ActionSingleInputListItem;
-import com.zetta.android.device.actions.ActionToggleListItem;
 import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.settings.SdkProperties;
 import com.zetta.android.settings.SettingsActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -94,17 +87,7 @@ public class DeviceListActivity extends AppCompatActivity {
         @Override
         public void onDeviceLongClick(ZettaDeviceId deviceId) {
             List<ListItem> items = new ArrayList<>();
-            items.add(new ListItem.HeaderListItem("Door"));
-            int foregroundColor = Color.parseColor("#1111dd");
-            int backgroundColor = Color.parseColor("#d9d9d9");
-            ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
-            items.add(new ActionToggleListItem("open", "open", actionTextColorList, getBackground(foregroundColor)));
-            items.add(new ActionSingleInputListItem("image...", "update-state-image", actionTextColorList, getBackground(foregroundColor)));
-            items.add(new ActionMultipleInputListItem(
-                Arrays.asList("color", "intensity"),
-                "update-led",
-                actionTextColorList, getBackground(foregroundColor)
-            ));
+            items.add(new ListItem.LoadingListItem());
             quickActionsAdapter.updateAll(items);
 
             // This postDelayed is a hack that fixes an issue with bottom sheet not showing recycler view data when opened
@@ -114,10 +97,8 @@ public class DeviceListActivity extends AppCompatActivity {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
             }, 1);
-        }
 
-        private Drawable getBackground(int foregroundColor) {
-            return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
+            deviceListService.getQuickActions(deviceId, onQuickActionsCallback);
         }
     };
 
@@ -146,6 +127,13 @@ public class DeviceListActivity extends AppCompatActivity {
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
             deviceListService.getDeviceList(onDeviceListLoaded);
+        }
+    };
+
+    private final DeviceListService.Callback onQuickActionsCallback = new DeviceListService.Callback() {
+        @Override
+        public void on(List<ListItem> listItems) {
+            quickActionsAdapter.updateAll(listItems);
         }
     };
 
