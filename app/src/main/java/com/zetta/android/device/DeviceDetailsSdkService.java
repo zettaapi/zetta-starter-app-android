@@ -29,9 +29,11 @@ class DeviceDetailsSdkService {
 
     private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
 
+    private final ZettaSdkApi zettaSdkApi;
     private final ZettaStyleParser zettaStyleParser;
 
     public DeviceDetailsSdkService() {
+        zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaStyleParser = new ZettaStyleParser();
     }
 
@@ -39,7 +41,6 @@ class DeviceDetailsSdkService {
     public DeviceDetailsService.Device getDeviceDetails(ZettaDeviceId deviceId) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
 
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         final ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         final ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
         final List<ListItem> deviceListItems = convertToDeviceListItems(zikServer, zikDevice);
@@ -80,8 +81,7 @@ class DeviceDetailsSdkService {
 
         List<ZIKStream> allStreams = zikDevice.getAllStreams();
         for (ZIKStream stream : allStreams) {
-            String title = stream.getTitle();
-            listItems.add(createStreamListItem(style, zikDevice, title, ""));
+            listItems.add(createInitialStreamListItem(style, zikDevice, stream));
         }
 
         listItems.add(new ListItem.HeaderListItem("Properties"));
@@ -141,7 +141,9 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private StreamListItem createStreamListItem(ZettaStyleParser.Style style, ZIKDevice device, String stream, String value) {
+    private StreamListItem createInitialStreamListItem(ZettaStyleParser.Style style, ZIKDevice device, ZIKStream zikStream) {
+        String stream = zikStream.getTitle();
+        String value = "";
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
@@ -166,7 +168,6 @@ class DeviceDetailsSdkService {
     }
 
     public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
@@ -174,14 +175,28 @@ class DeviceDetailsSdkService {
         zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
-                String stream = entry.getTitle();
-                String value = String.valueOf(entry.getData());
-                StreamListItem listItem = createStreamListItem(style, device, stream, value);
+                ZettaDeviceId zettaDeviceId = DeviceDetailsSdkService.this.getDeviceId(device);
+                StreamListItem listItem = createStreamListItem(style, entry, zettaDeviceId);
                 listener.onUpdated(listItem);
             }
         });
     }
 
+    @NonNull
+    private StreamListItem createStreamListItem(ZettaStyleParser.Style style, ZIKStreamEntry entry, ZettaDeviceId zettaDeviceId) {
+        String stream = entry.getTitle();
+        String value = String.valueOf(entry.getData());
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        return new StreamListItem(
+            zettaDeviceId,
+            stream,
+            value,
+            style.getForegroundColor(),
+            deviceBackgroundDrawable
+        );
+    }
+
+    @NonNull
     private ZettaDeviceId getDeviceId(ZIKDevice device) {
         UUID uuid = device.getDeviceId().getUuid();
         if (zettaDeviceIdCache.containsKey(uuid)) {
@@ -194,7 +209,6 @@ class DeviceDetailsSdkService {
     }
 
     public void stopMonitoringStreamedUpdates() {
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaSdkApi.stopMonitoringDeviceStreams();
     }
 }
