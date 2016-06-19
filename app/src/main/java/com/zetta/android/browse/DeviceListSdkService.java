@@ -1,24 +1,19 @@
 package com.zetta.android.browse;
 
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKStreamEntry;
-import com.apigee.zettakit.ZIKStyle;
-import com.apigee.zettakit.ZIKStyleColor;
 import com.apigee.zettakit.ZIKTransition;
-import com.zetta.android.BuildConfig;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
-import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
+import com.zetta.android.ZettaStyleParser;
 import com.zetta.android.browse.DeviceListService.StreamListener;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
@@ -32,52 +27,39 @@ import java.util.UUID;
 
 class DeviceListSdkService {
 
-    private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
-    private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
-    private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
     private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
 
-    private int hierarchicalOneUpBackgroundColor;
-    private int hierarchicalOneUpForegroundColor;
+    private final ZettaSdkApi zettaSdkApi;
+    private final ZettaStyleParser zettaStyleParser;
 
+    public DeviceListSdkService() {
+        zettaSdkApi = ZettaSdkApi.INSTANCE;
+        zettaStyleParser = new ZettaStyleParser();
+    }
+
+    @NonNull
     public List<ListItem> getListItems(String url) {
-        List<ListItem> items = new ArrayList<>();
-
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaSdkApi.registerRoot(url);
         List<ZIKServer> zikServers = zettaSdkApi.getServers();
-        List<ListItem> listItemServers = convertSdkTypes(zikServers);
-        items.addAll(listItemServers);
-
+        List<ListItem> items = new ArrayList<>();
+        items.addAll(createListItems(zikServers));
         return items;
     }
 
-    private List<ListItem> convertSdkTypes(List<ZIKServer> servers) {
+    @NonNull
+    private List<ListItem> createListItems(List<ZIKServer> servers) {
         List<ListItem> items = new ArrayList<>();
         for (ZIKServer server : servers) {
-            String serverName = server.getName();
-            ZIKStyle serverStyle = server.getStyle();
-            if (serverStyle == null) {
-                items.add(createDefaultServerListItem(serverName));
+            ZettaStyleParser.Style serverStyle = zettaStyleParser.parseStyle(server);
+            items.add(createServerListItem(serverStyle, server));
+
+            List<ZIKDevice> zikDevices = server.getDevices();
+            if (zikDevices.isEmpty()) {
+                items.add(createEmptyServerListItem(serverStyle));
             } else {
-                items.add(convertToServerListItem(serverName, serverStyle));
-            }
-
-            if (server.getDevices().isEmpty()) {
-                items.add(createEmptyServerListItem());
-            } else {
-
-                for (ZIKDevice device : server.getDevices()) {
-                    String name = device.getName();
-                    String state = device.getState();
-                    ZettaDeviceId deviceId = new ZettaDeviceId(device.getDeviceId().getUuid());
-                    ZIKStyle deviceStyle = device.getStyle();
-
-                    if (deviceStyle == null) {
-                        items.add(createDefaultDeviceListItem(deviceId, name, state));
-                    } else {
-                        items.add(convertToDeviceListItem(deviceId, name, state, deviceStyle));
-                    }
+                for (ZIKDevice device : zikDevices) {
+                    ZettaStyleParser.Style deviceStyle = zettaStyleParser.parseStyle(server, device);
+                    items.add(createDeviceListItem(deviceStyle, device));
                 }
             }
         }
@@ -85,185 +67,70 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private ServerListItem createDefaultServerListItem(String serverName) {
-        int serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
-        hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-
-        int serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
-
-        return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
+    private ServerListItem createServerListItem(ZettaStyleParser.Style serverStyle, ZIKServer zikServer) {
+        String serverName = zikServer.getName();
+        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverStyle.getBackgroundColor());
+        return new ServerListItem(serverStyle.getForegroundColor(), serverBackgroundDrawable, serverName);
     }
 
     @NonNull
-    private ServerListItem convertToServerListItem(String serverName, ZIKStyle serverStyle) {
-        ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
-        int serverForegroundColor;
-        if (zikForegroundColor == null) {
-            serverForegroundColor = DEFAULT_FOREGROUND_COLOR;
-            hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-        } else {
-            String jsonForegroundColor = zikForegroundColor.getHex();
-            serverForegroundColor = Color.parseColor(jsonForegroundColor);
-            hierarchicalOneUpForegroundColor = serverForegroundColor;
-        }
-
-        ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
-        int serverBackgroundColor;
-        if (zikBackgroundColor == null) {
-            serverBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-            hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        } else {
-            String jsonBackgroundColor = zikBackgroundColor.getHex();
-            serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
-            hierarchicalOneUpBackgroundColor = serverBackgroundColor;
-        }
-        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverBackgroundColor);
-
-        return new ServerListItem(serverForegroundColor, serverBackgroundDrawable, serverName);
-    }
-
-    @NonNull
-    private static ListItem.EmptyListItem createEmptyServerListItem() {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(DEFAULT_BACKGROUND_COLOR);
+    private ListItem.EmptyListItem createEmptyServerListItem(ZettaStyleParser.Style serverStyle) {
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverStyle.getBackgroundColor());
         return new ListItem.EmptyListItem("No devices online for this server", backgroundDrawable);
     }
 
     @NonNull
-    private DeviceListItem createDefaultDeviceListItem(ZettaDeviceId deviceId, String name, String state) {
-        int deviceForegroundColor = hierarchicalOneUpForegroundColor;
-
-        int deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
-
-        Uri stateImageUri = DEFAULT_URI_ICON;
-
-        return new DeviceListItem(deviceId,
-                                  name, state,
-                                  stateImageUri,
-                                  deviceForegroundColor,
-                                  deviceBackgroundDrawable
+    private DeviceListItem createDeviceListItem(ZettaStyleParser.Style deviceStyle, ZIKDevice device) {
+        String name = device.getName();
+        String state = device.getState();
+        ZettaDeviceId deviceId = getDeviceId(device);
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceStyle.getBackgroundColor());
+        return new DeviceListItem(
+            deviceId,
+            name, state,
+            deviceStyle.getStateImage(),
+            deviceStyle.getForegroundColor(),
+            deviceBackgroundDrawable
         );
     }
 
     @NonNull
-    private DeviceListItem convertToDeviceListItem(ZettaDeviceId deviceId, String name, String state, ZIKStyle deviceStyle) {
-        ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
-        int deviceForegroundColor;
-        if (zikForegroundColor == null) {
-            deviceForegroundColor = hierarchicalOneUpForegroundColor;
-        } else {
-            String jsonForegroundColor = zikForegroundColor.getHex();
-            deviceForegroundColor = Color.parseColor(jsonForegroundColor);
-        }
-
-        ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
-        int deviceBackgroundColor;
-        if (zikBackgroundColor == null) {
-            deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-        } else {
-            String jsonBackgroundColor = zikBackgroundColor.getHex();
-            deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
-        }
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
-
-        Uri stateImageUri;
-        Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
-        if (stateImage == null) {
-            stateImageUri = DEFAULT_URI_ICON;
-        } else {
-            String jsonUrl = (String) stateImage.get("url");
-            stateImageUri = Uri.parse(jsonUrl);
-        }
-        return new DeviceListItem(deviceId,
-                                  name, state,
-                                  stateImageUri,
-                                  deviceForegroundColor,
-                                  deviceBackgroundDrawable
-        );
-    }
-
     public List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
-        List<ListItem> listItems = new ArrayList<>();
-
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
-        getHierarchicalStyleFrom(zikServer);
         ZIKDevice zikDevice = zettaSdkApi.getFullDevice(zikDeviceId);
+        ZettaStyleParser.Style style = zettaStyleParser.parseStyle(zikServer, zikDevice);
 
-        listItems.add(new ListItem.HeaderListItem(zikDevice.getName()));
-
-        ZIKStyle deviceStyle = zikDevice.getStyle();
-        int deviceForegroundColor;
-        int deviceBackgroundColor;
-        if (deviceStyle == null) {
-            deviceForegroundColor = hierarchicalOneUpForegroundColor;
-            deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-        } else {
-            ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
-            if (zikForegroundColor == null) {
-                deviceForegroundColor = hierarchicalOneUpForegroundColor;
-            } else {
-                String jsonForegroundColor = zikForegroundColor.getHex();
-                deviceForegroundColor = Color.parseColor(jsonForegroundColor);
-            }
-
-            ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
-            if (zikBackgroundColor == null) {
-                deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-            } else {
-                String jsonBackgroundColor = zikBackgroundColor.getHex();
-                deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
-            }
-        }
+        List<ListItem> listItems = new ArrayList<>();
+        listItems.add(createDeviceHeaderListItem(zikDevice));
 
         List<ZIKTransition> transitions = zikDevice.getTransitions();
         if (transitions.isEmpty()) {
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
-            listItems.add(new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable));
+            listItems.add(createEmptyQuickActionsListItem(style));
         }
         for (ZIKTransition transition : transitions) {
-            listItems.add(convertToEvent(transition, deviceForegroundColor, deviceBackgroundColor));
+            listItems.add(createActionListItem(style, transition));
         }
 
         return listItems;
     }
 
-    private void getHierarchicalStyleFrom(ZIKServer server) {
-        ZIKStyle serverStyle = server.getStyle();
-
-        if (serverStyle == null) {
-            hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-            hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        } else {
-            ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
-            int serverForegroundColor;
-            if (zikForegroundColor == null) {
-                hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-            } else {
-                String jsonForegroundColor = zikForegroundColor.getHex();
-                serverForegroundColor = Color.parseColor(jsonForegroundColor);
-                hierarchicalOneUpForegroundColor = serverForegroundColor;
-            }
-
-            ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
-            int serverBackgroundColor;
-            if (zikBackgroundColor == null) {
-                hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-            } else {
-                String jsonBackgroundColor = zikBackgroundColor.getHex();
-                serverBackgroundColor = Color.parseColor(jsonBackgroundColor);
-                hierarchicalOneUpBackgroundColor = serverBackgroundColor;
-            }
-        }
+    @NonNull
+    private ListItem.HeaderListItem createDeviceHeaderListItem(ZIKDevice zikDevice) {
+        return new ListItem.HeaderListItem(zikDevice.getName());
     }
 
     @NonNull
-    private ListItem convertToEvent(ZIKTransition transition, int deviceForegroundColor, int deviceBackgroundColor) {
+    private ListItem.EmptyListItem createEmptyQuickActionsListItem(ZettaStyleParser.Style style) {
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
+    }
 
+    @NonNull
+    private ListItem createActionListItem(ZettaStyleParser.Style style, ZIKTransition transition) {
         List<Map<String, Object>> eventFields = transition.getFields();
+        int deviceForegroundColor = style.getForegroundColor();
+        int deviceBackgroundColor = style.getBackgroundColor();
         if (eventFields.size() == 1) {
             String action = transition.getName();
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
@@ -292,100 +159,31 @@ class DeviceListSdkService {
     // TODO should streaming be in it's own class?
     // it shares the creation of style objects, so perhaps that should be extracted as well
     public void startMonitorStreamedUpdates(String url, final StreamListener listener) {
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaSdkApi.registerRoot(url);
-
         zettaSdkApi.startMonitoringAllServerDeviceStreams(new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
-                DeviceListItem listItem = createListItem(server, device, entry);
+                DeviceListItem listItem = createDeviceListItem(server, device, entry);
                 listener.onUpdated(listItem);
             }
         });
     }
 
-    private DeviceListItem createListItem(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
+    private DeviceListItem createDeviceListItem(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String name = device.getName();
         String state = String.valueOf(entry.getData());
+        ZettaStyleParser.Style deviceStyle = zettaStyleParser.parseStyle(server, device);
 
-        ZIKStyle serverStyle = server.getStyle();
-        if (serverStyle == null) {
-            hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-            hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-        } else {
-            ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
-            if (zikForegroundColor == null) {
-                hierarchicalOneUpForegroundColor = DEFAULT_FOREGROUND_COLOR;
-            } else {
-                String jsonForegroundColor = zikForegroundColor.getHex();
-                hierarchicalOneUpForegroundColor = Color.parseColor(jsonForegroundColor);
-            }
-
-            ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
-            if (zikBackgroundColor == null) {
-                hierarchicalOneUpBackgroundColor = DEFAULT_BACKGROUND_COLOR;
-            } else {
-                String jsonBackgroundColor = zikBackgroundColor.getHex();
-                hierarchicalOneUpBackgroundColor = Color.parseColor(jsonBackgroundColor);
-            }
-        }
-
-        ZIKStyle deviceStyle = device.getStyle();
-        if (deviceStyle == null) {
-            int deviceForegroundColor = hierarchicalOneUpForegroundColor;
-
-            int deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-            Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
-
-            Uri stateImageUri = DEFAULT_URI_ICON;
-
-            return new DeviceListItem(
-                zettaDeviceId,
-                name,
-                state,
-                stateImageUri,
-                deviceForegroundColor,
-                deviceBackgroundDrawable
-            );
-        } else {
-            ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
-            int deviceForegroundColor;
-            if (zikForegroundColor == null) {
-                deviceForegroundColor = hierarchicalOneUpForegroundColor;
-            } else {
-                String jsonForegroundColor = zikForegroundColor.getHex();
-                deviceForegroundColor = Color.parseColor(jsonForegroundColor);
-            }
-
-            ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
-            int deviceBackgroundColor;
-            if (zikBackgroundColor == null) {
-                deviceBackgroundColor = hierarchicalOneUpBackgroundColor;
-            } else {
-                String jsonBackgroundColor = zikBackgroundColor.getHex();
-                deviceBackgroundColor = Color.parseColor(jsonBackgroundColor);
-            }
-            Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
-
-            Uri stateImageUri;
-            Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
-            if (stateImage == null) {
-                stateImageUri = DEFAULT_URI_ICON;
-            } else {
-                String jsonUrl = (String) stateImage.get("url");
-                stateImageUri = Uri.parse(jsonUrl);
-            }
-
-            return new DeviceListItem(
-                zettaDeviceId,
-                name,
-                state,
-                stateImageUri,
-                deviceForegroundColor,
-                deviceBackgroundDrawable
-            );
-        }
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceStyle.getBackgroundColor());
+        return new DeviceListItem(
+            zettaDeviceId,
+            name,
+            state,
+            deviceStyle.getStateImage(),
+            deviceStyle.getForegroundColor(),
+            deviceBackgroundDrawable
+        );
     }
 
     private ZettaDeviceId getDeviceId(ZIKDevice device) {
@@ -400,11 +198,10 @@ class DeviceListSdkService {
     }
 
     public void stopMonitoringStreamedUpdates() {
-        ZettaSdkApi zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaSdkApi.stopMonitoringAllServerDeviceStreams();
     }
 
     public void reset() {
-        ZettaSdkApi.INSTANCE.reset();
+        zettaSdkApi.reset();
     }
 }
