@@ -38,7 +38,7 @@ class DeviceListService {
     }
 
     public boolean hasRootUrl() {
-        return sdkProperties.hasUrl();
+        return sdkProperties.hasUrl() || sdkProperties.useMockResponses();
     }
 
     public String getRootUrl() {
