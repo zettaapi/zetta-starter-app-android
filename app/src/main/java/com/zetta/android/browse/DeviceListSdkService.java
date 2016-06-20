@@ -1,6 +1,5 @@
 package com.zetta.android.browse;
 
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
@@ -15,9 +14,7 @@ import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyleParser;
 import com.zetta.android.browse.DeviceListService.StreamListener;
-import com.zetta.android.device.actions.ActionMultipleInputListItem;
-import com.zetta.android.device.actions.ActionSingleInputListItem;
-import com.zetta.android.device.actions.ActionToggleListItem;
+import com.zetta.android.device.actions.ActionListItemParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +28,12 @@ class DeviceListSdkService {
 
     private final ZettaSdkApi zettaSdkApi;
     private final ZettaStyleParser zettaStyleParser;
+    private final ActionListItemParser actionListItemParser;
 
     public DeviceListSdkService() {
         zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaStyleParser = new ZettaStyleParser();
+        actionListItemParser = new ActionListItemParser();
     }
 
     @NonNull
@@ -109,7 +108,7 @@ class DeviceListSdkService {
             listItems.add(createEmptyQuickActionsListItem(style));
         }
         for (ZIKTransition transition : transitions) {
-            listItems.add(createActionListItem(style, transition));
+            listItems.add(actionListItemParser.parseActionListItem(style, transition));
         }
 
         return listItems;
@@ -124,36 +123,6 @@ class DeviceListSdkService {
     private ListItem.EmptyListItem createEmptyQuickActionsListItem(ZettaStyleParser.Style style) {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
-    }
-
-    @NonNull
-    private ListItem createActionListItem(ZettaStyleParser.Style style, ZIKTransition transition) {
-        List<Map<String, Object>> eventFields = transition.getFields();
-        int deviceForegroundColor = style.getForegroundColor();
-        int deviceBackgroundColor = style.getBackgroundColor();
-        if (eventFields.size() == 1) {
-            String action = transition.getName();
-            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionToggleListItem(action, action, actionTextColorList, backgroundDrawable);
-        } else if (eventFields.size() == 2) {
-            Map<String, Object> eventField = eventFields.get(0);
-            String label = String.valueOf(eventField.get("name"));
-            String action = transition.getName();
-            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionSingleInputListItem(label, action, actionTextColorList, backgroundDrawable);
-        } else {
-            List<String> labels = new ArrayList<>();
-            for (Map<String, Object> eventField : eventFields) {
-                String label = String.valueOf(eventField.get("name"));
-                labels.add(label);
-            }
-            String action = transition.getName();
-            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionMultipleInputListItem(labels, action, actionTextColorList, backgroundDrawable);
-        }
     }
 
     // TODO should streaming be in it's own class?
