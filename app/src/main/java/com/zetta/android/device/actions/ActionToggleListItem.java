@@ -9,16 +9,22 @@ public class ActionToggleListItem implements ListItem {
 
     private final String label;
     private final String action;
-    private final ColorStateList actionTextColorList;
+    private final ColorStateList foregroundColorList;
+    private final ColorStateList backgroundColorList;
+    private final Drawable foregroundDrawable;
     private final Drawable backgroundDrawable;
 
     public ActionToggleListItem(String label,
                                 String action,
-                                ColorStateList actionTextColorList,
+                                ColorStateList foregroundColorList,
+                                ColorStateList backgroundColorList,
+                                Drawable foregroundDrawable,
                                 Drawable backgroundDrawable) {
         this.label = label;
         this.action = action;
-        this.actionTextColorList = actionTextColorList;
+        this.foregroundColorList = foregroundColorList;
+        this.backgroundColorList = backgroundColorList;
+        this.foregroundDrawable = foregroundDrawable;
         this.backgroundDrawable = backgroundDrawable;
     }
 
@@ -35,11 +41,19 @@ public class ActionToggleListItem implements ListItem {
         return action;
     }
 
+    public ColorStateList getActionInputTextColor() {
+        return foregroundColorList;
+    }
+
     public ColorStateList getActionTextColor() {
-        return actionTextColorList;
+        return backgroundColorList;
     }
 
     public Drawable getActionBackground() {
+        return foregroundDrawable;
+    }
+
+    public Drawable getBackground() {
         return backgroundDrawable;
     }
 }

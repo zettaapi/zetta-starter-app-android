@@ -10,11 +10,14 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Build;
+import android.support.design.widget.TextInputLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.novoda.notils.logger.simple.Log;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 public class ImageLoader {
@@ -127,6 +130,20 @@ public class ImageLoader {
 
         private static int lightenColor(int color, double fraction) {
             return (int) Math.min(color + (color * fraction), 255);
+        }
+
+        public static void setInputTextLayoutColor(TextInputLayout textInputLayout, ColorStateList colorStateList) {
+            try {
+                Field fDefaultTextColor = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
+                fDefaultTextColor.setAccessible(true);
+                fDefaultTextColor.set(textInputLayout, colorStateList);
+
+                Field fFocusedTextColor = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
+                fFocusedTextColor.setAccessible(true);
+                fFocusedTextColor.set(textInputLayout, colorStateList);
+            } catch (Exception e) {
+                Log.e(e, "TextInputLayout text color unable to be changed.");
+            }
         }
     }
 }

@@ -22,16 +22,20 @@ public class ActionListItemParser {
         int deviceBackgroundColor = style.getBackgroundColor();
         if (eventFields.size() == 1) {
             String action = transition.getName();
+            ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionToggleListItem(action, action, actionTextColorList, backgroundDrawable);
+            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            return new ActionToggleListItem(action, action, actionInputColorList, actionTextColorList, foregroundDrawable, backgroundDrawable);
         } else if (eventFields.size() == 2) {
             Map<String, Object> eventField = eventFields.get(0);
             String label = String.valueOf(eventField.get("name"));
             String action = transition.getName();
+            ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionSingleInputListItem(label, action, actionTextColorList, backgroundDrawable);
+            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            return new ActionSingleInputListItem(label, action, actionInputColorList, actionTextColorList, foregroundDrawable, backgroundDrawable);
         } else {
             List<String> labels = new ArrayList<>();
             for (Map<String, Object> eventField : eventFields) {
@@ -39,9 +43,11 @@ public class ActionListItemParser {
                 labels.add(label);
             }
             String action = transition.getName();
+            ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            return new ActionMultipleInputListItem(labels, action, actionTextColorList, backgroundDrawable);
+            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            return new ActionMultipleInputListItem(labels, action, actionInputColorList, actionTextColorList, foregroundDrawable, backgroundDrawable);
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.novoda.notils.meta.AndroidUtils;
+import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
 
 import java.util.ArrayList;
@@ -39,8 +40,10 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
             TextInputLayout rowWidget = (TextInputLayout) itemView.findViewById(rowIds[i]);
             rowWidget.setVisibility(View.VISIBLE);
             rowWidget.setHint(labels.get(i));
+            ImageLoader.Drawables.setInputTextLayoutColor(rowWidget, item.getActionInputTextColor());
 
             EditText actionInputWidget = (EditText) rowWidget.findViewById(R.id.list_item_action_input);
+            actionInputWidget.setTextColor(item.getActionInputTextColor());
             boundInputRows.add(actionInputWidget);
         }
 
@@ -63,5 +66,7 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
         });
         actionButton.setTextColor(item.getActionTextColor());
         actionButton.setBackground(item.getActionBackground());
+        itemView.setBackground(item.getBackground());
     }
+
 }

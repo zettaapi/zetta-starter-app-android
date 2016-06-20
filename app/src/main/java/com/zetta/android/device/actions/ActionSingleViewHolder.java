@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.novoda.notils.meta.AndroidUtils;
+import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
 
 public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
@@ -24,6 +25,8 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(final ActionSingleInputListItem item, final OnActionClickListener onActionClickListener) {
         actionHintWidget.setHint(item.getLabel());
+        ImageLoader.Drawables.setInputTextLayoutColor(actionHintWidget, item.getActionInputTextColor());
+        actionInputWidget.setTextColor(item.getActionInputTextColor());
         actionButton.setText(item.getAction());
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,5 +40,6 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
         });
         actionButton.setTextColor(item.getActionTextColor());
         actionButton.setBackground(item.getActionBackground());
+        itemView.setBackground(item.getBackground());
     }
 }

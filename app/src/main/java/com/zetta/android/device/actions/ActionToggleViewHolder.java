@@ -20,6 +20,7 @@ public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(final ActionToggleListItem item, final OnActionClickListener onActionClickListener) {
         actionLabelWidget.setText(item.getLabel());
+        actionLabelWidget.setTextColor(item.getActionInputTextColor());
         actionToggleButton.setText(item.getAction());
         actionToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,5 +30,6 @@ public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
         });
         actionToggleButton.setTextColor(item.getActionTextColor());
         actionToggleButton.setBackground(item.getActionBackground());
+        itemView.setBackground(item.getBackground());
     }
 }

@@ -34,22 +34,23 @@ class DeviceDetailsMockService {
 
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
+        ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
         ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
         items.add(new StateListItem(
-                "on",
-                Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
-                foregroundColor
+            "on",
+            Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
+            foregroundColor
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
-        items.add(new ActionToggleListItem("open", "open", actionTextColorList, getBackground(foregroundColor)));
-        items.add(new ActionSingleInputListItem("brightness", "set-brightness", actionTextColorList, getBackground(foregroundColor)));
-        items.add(new ActionToggleListItem("blink", "set-blinker", actionTextColorList, getBackground(foregroundColor)));
-        items.add(new ActionToggleListItem("turn-off", "turn-off", actionTextColorList, getBackground(foregroundColor)));
+        items.add(new ActionToggleListItem("open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionSingleInputListItem("brightness", "set-brightness", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem("blink", "set-blinker", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem("turn-off", "turn-off", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
         items.add(new ActionMultipleInputListItem(
-                Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
-                "walk",
-                actionTextColorList, getBackground(foregroundColor)
+            Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
+            "walk",
+            actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));

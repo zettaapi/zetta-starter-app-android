@@ -11,16 +11,22 @@ public class ActionMultipleInputListItem implements ListItem {
 
     private final List<String> labels;
     private final String action;
+    private final ColorStateList backgroundColorList;
     private final ColorStateList foregroundColorList;
+    private final Drawable foregroundDrawable;
     private final Drawable backgroundDrawable;
 
     public ActionMultipleInputListItem(List<String> labels,
                                        String action,
+                                       ColorStateList backgroundColorList,
                                        ColorStateList foregroundColorList,
+                                       Drawable foregroundDrawable,
                                        Drawable backgroundDrawable) {
         this.labels = labels;
         this.action = action;
+        this.backgroundColorList = backgroundColorList;
         this.foregroundColorList = foregroundColorList;
+        this.foregroundDrawable = foregroundDrawable;
         this.backgroundDrawable = backgroundDrawable;
     }
 
@@ -41,7 +47,15 @@ public class ActionMultipleInputListItem implements ListItem {
         return foregroundColorList;
     }
 
+    public ColorStateList getActionInputTextColor() {
+        return backgroundColorList;
+    }
+
     public Drawable getActionBackground() {
+        return foregroundDrawable;
+    }
+
+    public Drawable getBackground() {
         return backgroundDrawable;
     }
 }

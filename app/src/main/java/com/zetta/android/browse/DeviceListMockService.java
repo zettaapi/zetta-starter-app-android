@@ -37,91 +37,91 @@ class DeviceListMockService {
         int stageForegroundColor = Color.parseColor("#008822");
 
         return Arrays.asList(
-                new ServerListItem(banglorForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "bangalor"),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Door", "closed",
-                                   Uri.parse("http://www.zettaapi.org/icons/door-closed.png"),
-                                   banglorForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Photocell", "ready",
-                                   Uri.parse("http://www.zettaapi.org/icons/photocell-ready.png"),
-                                   banglorForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Security System", "disarmed",
-                                   Uri.parse("http://www.zettaapi.org/icons/security-disarmed.png"),
-                                   banglorForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(DEVICE_ID, "Window", "closed",
-                                   Uri.parse("http://www.zettaapi.org/icons/window-closed.png"),
-                                   banglorForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new ServerListItem(newOrleansForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "neworleans"),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion", "no-motion",
-                                   Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   newOrleansForegroundColor,
-                                   getBackground(Color.parseColor("#aaaaff"))
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer", "ready",
-                                   Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   newOrleansForegroundColor,
-                                   getBackground(Color.parseColor("#aaaaff"))
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera", "ready",
-                                   Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   newOrleansForegroundColor,
-                                   getBackground(Color.parseColor("#aaaaff"))
-                ),
-                new ServerListItem(detroitForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "detroit"),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion1", "no-motion",
-                                   Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer1", "ready",
-                                   Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera1", "ready",
-                                   Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion2", "no-motion",
-                                   Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer2", "ready",
-                                   Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera2", "ready",
-                                   Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion3", "no-motion",
-                                   Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
-                                   detroitForegroundColor,
-                                   getBackground(Color.parseColor("#236e4e"))
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer3", "ready",
-                                   Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
-                                   detroitForegroundColor,
-                                   getBackground(Color.parseColor("#111111"))
-                ),
-                new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera3", "ready",
-                                   Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
-                                   detroitForegroundColor,
-                                   getBackground(DEFAULT_BACKGROUND_COLOR)
-                ),
-                new ServerListItem(stageForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "stage"),
-                new ListItem.EmptyListItem("No devices online for this server", getBackground(DEFAULT_BACKGROUND_COLOR))
+            new ServerListItem(banglorForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "bangalor"),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Door", "closed",
+                               Uri.parse("http://www.zettaapi.org/icons/door-closed.png"),
+                               banglorForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Photocell", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/photocell-ready.png"),
+                               banglorForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Security System", "disarmed",
+                               Uri.parse("http://www.zettaapi.org/icons/security-disarmed.png"),
+                               banglorForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(DEVICE_ID, "Window", "closed",
+                               Uri.parse("http://www.zettaapi.org/icons/window-closed.png"),
+                               banglorForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new ServerListItem(newOrleansForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "neworleans"),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               newOrleansForegroundColor,
+                               getBackground(Color.parseColor("#aaaaff"))
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               newOrleansForegroundColor,
+                               getBackground(Color.parseColor("#aaaaff"))
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               newOrleansForegroundColor,
+                               getBackground(Color.parseColor("#aaaaff"))
+            ),
+            new ServerListItem(detroitForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "detroit"),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion1", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer1", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera1", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion2", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer2", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera2", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion3", "no-motion",
+                               Uri.parse("http://www.zettaapi.org/icons/motion-no-motion.png"),
+                               detroitForegroundColor,
+                               getBackground(Color.parseColor("#236e4e"))
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Thermometer3", "ready",
+                               Uri.parse("http://www.zettaapi.org/icons/thermometer-ready.png"),
+                               detroitForegroundColor,
+                               getBackground(Color.parseColor("#111111"))
+            ),
+            new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Camera3", "ready",
+                               Uri.parse("http://www.zettaapi.org/public/demo/detroit.jpg"),
+                               detroitForegroundColor,
+                               getBackground(DEFAULT_BACKGROUND_COLOR)
+            ),
+            new ServerListItem(stageForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "stage"),
+            new ListItem.EmptyListItem("No devices online for this server", getBackground(DEFAULT_BACKGROUND_COLOR))
         );
     }
 
@@ -135,13 +135,14 @@ class DeviceListMockService {
         items.add(new ListItem.HeaderListItem("Door"));
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
+        ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
         ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
-        items.add(new ActionToggleListItem("open", "open", actionTextColorList, getBackground(foregroundColor)));
-        items.add(new ActionSingleInputListItem("image...", "update-state-image", actionTextColorList, getBackground(foregroundColor)));
+        items.add(new ActionToggleListItem("open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionSingleInputListItem("image...", "update-state-image", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
         items.add(new ActionMultipleInputListItem(
             Arrays.asList("color", "intensity"),
             "update-led",
-            actionTextColorList, getBackground(foregroundColor)
+            actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)
         ));
         return items;
     }
@@ -176,14 +177,14 @@ class DeviceListMockService {
                 state = "open";
             }
             listener.onUpdated(
-                    new DeviceListItem(
-                            DEVICE_ID,
-                            "Window",
-                            state,
-                            icon,
-                            Color.parseColor("#0000ff"),
-                            getBackground(DEFAULT_BACKGROUND_COLOR)
-                    ));
+                new DeviceListItem(
+                    DEVICE_ID,
+                    "Window",
+                    state,
+                    icon,
+                    Color.parseColor("#0000ff"),
+                    getBackground(DEFAULT_BACKGROUND_COLOR)
+                ));
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     }
