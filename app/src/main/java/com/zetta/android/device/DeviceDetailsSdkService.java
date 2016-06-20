@@ -175,15 +175,15 @@ class DeviceDetailsSdkService {
         zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
-                ZettaDeviceId zettaDeviceId = DeviceDetailsSdkService.this.getDeviceId(device);
-                StreamListItem listItem = createStreamListItem(style, entry, zettaDeviceId);
+                StreamListItem listItem = createStreamListItem(style, device, entry);
                 listener.onUpdated(listItem);
             }
         });
     }
 
     @NonNull
-    private StreamListItem createStreamListItem(ZettaStyleParser.Style style, ZIKStreamEntry entry, ZettaDeviceId zettaDeviceId) {
+    private StreamListItem createStreamListItem(ZettaStyleParser.Style style, ZIKDevice device, ZIKStreamEntry entry) {
+        ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());
         Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
