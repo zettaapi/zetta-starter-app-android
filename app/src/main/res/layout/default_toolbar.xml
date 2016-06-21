@@ -9,12 +9,10 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
     android:minHeight="?android:attr/actionBarSize"
     android:theme="@style/ToolbarTheme"
     custom:layout_scrollFlags="scroll|enterAlways"
     custom:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     custom:subtitleTextAppearance="@style/Toolbar.SubtitleText"
-    custom:titleTextAppearance="@style/Toolbar.TitleText"
-    custom:titleTextColor="@android:color/white" />
+    custom:titleTextAppearance="@style/Toolbar.TitleText" />
 </android.support.design.widget.AppBarLayout>

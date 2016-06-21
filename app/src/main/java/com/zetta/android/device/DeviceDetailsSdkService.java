@@ -83,6 +83,11 @@ class DeviceDetailsSdkService {
             public List<ListItem> getListItems() {
                 return deviceListItems;
             }
+
+            @Override
+            public int getTintColor() {
+                return zettaStyle.getForegroundColor();
+            }
         };
     }
 

@@ -102,6 +102,11 @@ class DeviceDetailsMockService {
             public List<ListItem> getListItems() {
                 return items;
             }
+
+            @Override
+            public int getTintColor() {
+                return foregroundColor;
+            }
         };
     }
 

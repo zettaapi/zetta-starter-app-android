@@ -2,6 +2,7 @@ package com.zetta.android.device;
 
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.support.annotation.ColorInt;
 import android.text.Spannable;
 
 import com.novoda.notils.logger.simple.Log;
@@ -136,6 +137,9 @@ class DeviceDetailsService {
         Drawable getBackground();
 
         List<ListItem> getListItems();
+
+        @ColorInt
+        int getTintColor();
     }
 
     interface StreamListener {

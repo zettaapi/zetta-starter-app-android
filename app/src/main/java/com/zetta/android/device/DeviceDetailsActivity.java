@@ -1,7 +1,10 @@
 package com.zetta.android.device;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,10 +43,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         deviceDetailsService = new DeviceDetailsService(sdkProperties, sdkService, mockService);
 
         setContentView(R.layout.device_details_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_details_empty_view);
         adapter = new DetailsListAdapter(new ImageLoader(), onActionClickListener, onEventsClickListener);
@@ -98,10 +97,19 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
         @Override
         public void on(DeviceDetailsService.Device device) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(device.getName());
             actionBar.setSubtitle(device.getSeverName());
             actionBar.setBackgroundDrawable(device.getBackground());
+
+            Drawable upArrow = ContextCompat.getDrawable(DeviceDetailsActivity.this, R.drawable.ic_back_arrow);
+            upArrow.setColorFilter(device.getTintColor(), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
             adapter.updateAll(device.getListItems());
             updateState();
         }
