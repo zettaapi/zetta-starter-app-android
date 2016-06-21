@@ -156,13 +156,13 @@ class DeviceDetailsSdkService {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
             zettaDeviceId,
             stream,
             value,
             style.getForegroundColor(),
-            deviceBackgroundDrawable
+            backgroundDrawable
         );
     }
 
