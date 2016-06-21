@@ -1,6 +1,8 @@
 package com.zetta.android.device;
 
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.text.Spannable;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
@@ -127,9 +129,11 @@ class DeviceDetailsService {
     }
 
     interface Device {
-        String getName();
+        Spannable getName();
 
-        String getSeverName();
+        Spannable getSeverName();
+
+        Drawable getBackground();
 
         List<ListItem> getListItems();
     }

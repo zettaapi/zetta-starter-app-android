@@ -6,6 +6,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
@@ -32,8 +37,8 @@ class DeviceDetailsMockService {
     public DeviceDetailsService.Device getDetails() {
         final List<ListItem> items = new ArrayList<>();
 
-        int foregroundColor = Color.parseColor("#1111dd");
-        int backgroundColor = Color.parseColor("#d9d9d9");
+        final int foregroundColor = Color.parseColor("#1111dd");
+        final int backgroundColor = Color.parseColor("#d9d9d9");
         ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
         ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
         items.add(new StateListItem(
@@ -71,13 +76,26 @@ class DeviceDetailsMockService {
 
         return new DeviceDetailsService.Device() {
             @Override
-            public String getName() {
-                return "Porch Light";
+            public Spannable getName() {
+                Spannable name = new SpannableString("Porch Light");
+                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
+                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
             }
 
             @Override
-            public String getSeverName() {
-                return "neworleans";
+            public Spannable getSeverName() {
+                Spannable name = new SpannableString("neworleans");
+                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
+                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
+            }
+
+            @Override
+            public Drawable getBackground() {
+                return DeviceDetailsMockService.getBackground(backgroundColor);
             }
 
             @Override
@@ -87,8 +105,8 @@ class DeviceDetailsMockService {
         };
     }
 
-    private static Drawable getBackground(int foregroundColor) {
-        return ImageLoader.Drawables.getBackgroundDrawableFor(foregroundColor);
+    private static Drawable getBackground(int color) {
+        return ImageLoader.Drawables.getBackgroundDrawableFor(color);
     }
 
     public void startMonitorStreamedUpdates(DeviceDetailsService.StreamListener listener) {

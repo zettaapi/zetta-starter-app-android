@@ -2,6 +2,11 @@ package com.zetta.android.device;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
@@ -42,16 +47,36 @@ class DeviceDetailsSdkService {
 
         final ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         final ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
+        final ZettaStyle zettaStyle = zettaStyleParser.parseStyle(zikServer, zikDevice);
         final List<ListItem> deviceListItems = convertToDeviceListItems(zikServer, zikDevice);
         return new DeviceDetailsService.Device() {
             @Override
-            public String getName() {
-                return zikServer.getName();
+            public Spannable getName() {
+                Spannable name = new SpannableString(zikDevice.getName());
+                int backgroundColor = zettaStyle.getBackgroundColor();
+                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                int foregroundColor = zettaStyle.getForegroundColor();
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
+                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
             }
 
             @Override
-            public String getSeverName() {
-                return zikDevice.getName();
+            public Spannable getSeverName() {
+                Spannable name = new SpannableString(zikServer.getName());
+                int backgroundColor = zettaStyle.getBackgroundColor();
+                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(backgroundColor);
+                name.setSpan(backgroundColorSpan, 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                int foregroundColor = zettaStyle.getForegroundColor();
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
+                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
+            }
+
+            @Override
+            public Drawable getBackground() {
+                int backgroundColor = zettaStyle.getBackgroundColor();
+                return ImageLoader.Drawables.getBackgroundDrawableFor(backgroundColor);
             }
 
             @Override

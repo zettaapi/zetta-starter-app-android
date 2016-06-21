@@ -101,6 +101,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle(device.getName());
             actionBar.setSubtitle(device.getSeverName());
+            actionBar.setBackgroundDrawable(device.getBackground());
             adapter.updateAll(device.getListItems());
             updateState();
         }
