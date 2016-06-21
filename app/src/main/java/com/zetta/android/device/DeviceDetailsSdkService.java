@@ -90,7 +90,7 @@ class DeviceDetailsSdkService {
             if (propertyName.equals("style")) {
                 continue;
             }
-            listItems.add(createPropertyListItem(deviceProperties, propertyName));
+            listItems.add(createPropertyListItem(style, deviceProperties, propertyName));
         }
         if (deviceProperties.isEmpty()) {
             listItems.add(createEmptyPropertiesListItem(style));
@@ -131,9 +131,10 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private PropertyListItem createPropertyListItem(Map<String, Object> deviceProperties, String propertyName) {
+    private PropertyListItem createPropertyListItem(ZettaStyleParser.Style style, Map<String, Object> deviceProperties, String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
-        return new PropertyListItem(propertyName, propertyValue);
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        return new PropertyListItem(propertyName, propertyValue, backgroundDrawable, style.getForegroundColor());
     }
 
     public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {

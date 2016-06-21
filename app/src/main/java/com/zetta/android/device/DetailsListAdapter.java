@@ -197,7 +197,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(PropertyListItem item) {
             propertyLabelWidget.setText(item.getProperty());
+            propertyLabelWidget.setTextColor(item.getForegroundColor());
             valueLabelWidget.setText(item.getValue());
+            valueLabelWidget.setTextColor(item.getForegroundColor());
+            itemView.setBackground(item.getBackgroundDrawable());
         }
     }
 
