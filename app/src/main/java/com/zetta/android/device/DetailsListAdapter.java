@@ -215,12 +215,14 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(EventsListItem item, final OnEventsClickListener onEventsClickListener) {
             eventsLabelWidget.setText(item.getDescription());
+            eventsLabelWidget.setTextColor(item.getForegroundColor());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onEventsClickListener.onEventsClick();
                 }
             });
+            itemView.setBackground(item.getBackground());
         }
     }
 

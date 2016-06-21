@@ -98,7 +98,7 @@ class DeviceDetailsSdkService {
 
         listItems.add(new ListItem.HeaderListItem("Events"));
 
-        listItems.add(new EventsListItem("View Events (...)"));
+        listItems.add(createEventsListItem(style));
 
         return listItems;
     }
@@ -135,6 +135,12 @@ class DeviceDetailsSdkService {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new PropertyListItem(propertyName, propertyValue, backgroundDrawable, style.getForegroundColor());
+    }
+
+    @NonNull
+    private EventsListItem createEventsListItem(ZettaStyleParser.Style style) {
+        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        return new EventsListItem("View Events (...)", backgroundDrawable, style.getForegroundColor());
     }
 
     public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
