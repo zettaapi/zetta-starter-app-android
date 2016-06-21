@@ -13,7 +13,7 @@ import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
-import com.zetta.android.ZettaStyleParser;
+import com.zetta.android.ZettaStyle;
 import com.zetta.android.device.actions.ActionListItemParser;
 
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ class DeviceDetailsSdkService {
     private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
 
     private final ZettaSdkApi zettaSdkApi;
-    private final ZettaStyleParser zettaStyleParser;
+    private final ZettaStyle.Parser zettaStyleParser;
     private final ActionListItemParser actionListItemParser;
 
     public DeviceDetailsSdkService() {
         zettaSdkApi = ZettaSdkApi.INSTANCE;
-        zettaStyleParser = new ZettaStyleParser();
+        zettaStyleParser = new ZettaStyle.Parser();
         actionListItemParser = new ActionListItemParser();
     }
 
@@ -66,7 +66,7 @@ class DeviceDetailsSdkService {
         List<ListItem> listItems = new ArrayList<>();
         listItems.add(new ListItem.HeaderListItem("Actions"));
 
-        ZettaStyleParser.Style style = zettaStyleParser.parseStyle(zikServer, zikDevice);
+        ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
 
         List<ZIKTransition> transitions = zikDevice.getTransitions();
         if (transitions.isEmpty()) {
@@ -104,13 +104,13 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private ListItem.EmptyListItem createEmptyActionsListItem(ZettaStyleParser.Style style) {
+    private ListItem.EmptyListItem createEmptyActionsListItem(ZettaStyle style) {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
     }
 
     @NonNull
-    private StreamListItem createInitialStreamListItem(ZettaStyleParser.Style style, ZIKDevice device, ZIKStream zikStream) {
+    private StreamListItem createInitialStreamListItem(ZettaStyle style, ZIKDevice device, ZIKStream zikStream) {
         String stream = zikStream.getTitle();
         String value = "";
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
@@ -125,20 +125,20 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private ListItem.EmptyListItem createEmptyPropertiesListItem(ZettaStyleParser.Style style) {
+    private ListItem.EmptyListItem createEmptyPropertiesListItem(ZettaStyle style) {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No properties for this device.", backgroundDrawable);
     }
 
     @NonNull
-    private PropertyListItem createPropertyListItem(ZettaStyleParser.Style style, Map<String, Object> deviceProperties, String propertyName) {
+    private PropertyListItem createPropertyListItem(ZettaStyle style, Map<String, Object> deviceProperties, String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new PropertyListItem(propertyName, propertyValue, backgroundDrawable, style.getForegroundColor());
     }
 
     @NonNull
-    private EventsListItem createEventsListItem(ZettaStyleParser.Style style) {
+    private EventsListItem createEventsListItem(ZettaStyle style) {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new EventsListItem("View Events (...)", backgroundDrawable, style.getForegroundColor());
     }
@@ -147,7 +147,7 @@ class DeviceDetailsSdkService {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
-        final ZettaStyleParser.Style style = zettaStyleParser.parseStyle(zikServer, zikDevice);
+        final ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
         zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
@@ -158,7 +158,7 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private StreamListItem createStreamListItem(ZettaStyleParser.Style style, ZIKDevice device, ZIKStreamEntry entry) {
+    private StreamListItem createStreamListItem(ZettaStyle style, ZIKDevice device, ZIKStreamEntry entry) {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());

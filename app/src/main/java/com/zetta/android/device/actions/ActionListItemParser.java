@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 import com.apigee.zettakit.ZIKTransition;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
-import com.zetta.android.ZettaStyleParser;
+import com.zetta.android.ZettaStyle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class ActionListItemParser {
 
     @NonNull
-    public ListItem parseActionListItem(ZettaStyleParser.Style style, ZIKTransition transition) {
+    public ListItem parseActionListItem(ZettaStyle style, ZIKTransition transition) {
         List<Map<String, Object>> eventFields = transition.getFields();
         int deviceForegroundColor = style.getForegroundColor();
         int deviceBackgroundColor = style.getBackgroundColor();
