@@ -108,7 +108,7 @@ class DeviceDetailsSdkService {
             listItems.add(createEmptyActionsListItem(style));
         }
         for (ZIKTransition transition : transitions) {
-            listItems.add(actionListItemParser.parseActionListItem(style, transition));
+            listItems.add(actionListItemParser.parseActionListItem(getDeviceId(zikDevice), style, transition));
         }
 
         listItems.add(new ListItem.HeaderListItem("Streams"));
