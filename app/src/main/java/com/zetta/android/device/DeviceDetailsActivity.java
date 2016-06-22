@@ -54,10 +54,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     }
 
     private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
-        @Override
-        public void onActionClick(String label, boolean on) {
-            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();
-        }
 
         @Override
         public void onActionClick(String label, String input) {

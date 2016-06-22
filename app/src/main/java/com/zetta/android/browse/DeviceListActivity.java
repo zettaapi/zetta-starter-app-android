@@ -103,11 +103,6 @@ public class DeviceListActivity extends AppCompatActivity {
     };
 
     private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
-        @Override
-        public void onActionClick(String label, boolean on) {
-            Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + on, Toast.LENGTH_SHORT).show();
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }
 
         @Override
         public void onActionClick(String label, String input) {

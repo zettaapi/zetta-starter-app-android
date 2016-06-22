@@ -25,7 +25,7 @@ public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
         actionToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionClickListener.onActionClick(item.getLabel(), true); // TODO real input
+                onActionClickListener.onActionClick(item.getLabel(), item.getAction());
             }
         });
         actionToggleButton.setTextColor(item.getActionTextColor());
