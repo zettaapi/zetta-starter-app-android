@@ -4,11 +4,13 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaDeviceId;
 
 import java.util.List;
 
 public class ActionMultipleInputListItem implements ListItem {
 
+    private final ZettaDeviceId deviceId;
     private final List<String> labels;
     private final String action;
     private final ColorStateList backgroundColorList;
@@ -16,18 +18,24 @@ public class ActionMultipleInputListItem implements ListItem {
     private final Drawable foregroundDrawable;
     private final Drawable backgroundDrawable;
 
-    public ActionMultipleInputListItem(List<String> labels,
+    public ActionMultipleInputListItem(ZettaDeviceId deviceId,
+                                       List<String> labels,
                                        String action,
                                        ColorStateList backgroundColorList,
                                        ColorStateList foregroundColorList,
                                        Drawable foregroundDrawable,
                                        Drawable backgroundDrawable) {
+        this.deviceId = deviceId;
         this.labels = labels;
         this.action = action;
         this.backgroundColorList = backgroundColorList;
         this.foregroundColorList = foregroundColorList;
         this.foregroundDrawable = foregroundDrawable;
         this.backgroundDrawable = backgroundDrawable;
+    }
+
+    public ZettaDeviceId getDeviceId() {
+        return deviceId;
     }
 
     @Override

@@ -32,7 +32,8 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 String input = actionInputWidget.getText().toString();
-                onActionClickListener.onActionClick(item.getLabel(), input);
+                String label = item.getLabel();
+                onActionClickListener.onActionClick(item.getDeviceId(), label, input);
                 actionInputWidget.getText().clear();
                 actionInputWidget.clearFocus();
                 AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);

@@ -1,10 +1,12 @@
 package com.zetta.android.device.actions;
 
+import com.zetta.android.ZettaDeviceId;
+
 import java.util.Map;
 
 public interface OnActionClickListener {
 
-    void onActionClick(String label, String input);
+    void onActionClick(ZettaDeviceId deviceId, String label, String input);
 
-    void onActionClick(String label, Map<String, String> inputs);
+    void onActionClick(ZettaDeviceId deviceId, String label, Map<String, String> inputs);
 }

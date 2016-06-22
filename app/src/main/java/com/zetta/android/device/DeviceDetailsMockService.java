@@ -48,12 +48,12 @@ class DeviceDetailsMockService {
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
-        items.add(new ActionToggleListItem("open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionSingleInputListItem("brightness", "set-brightness", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionToggleListItem("blink", "set-blinker", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionToggleListItem("turn-off", "turn-off", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem(DEVICE_ID, "open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionSingleInputListItem(DEVICE_ID, "brightness", "set-brightness", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem(DEVICE_ID, "blink", "set-blinker", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem(DEVICE_ID, "turn-off", "turn-off", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
         items.add(new ActionMultipleInputListItem(
-            Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
+            DEVICE_ID, Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
             "walk",
             actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)
         ));

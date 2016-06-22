@@ -108,7 +108,7 @@ class DeviceListSdkService {
             listItems.add(createEmptyQuickActionsListItem(style));
         }
         for (ZIKTransition transition : transitions) {
-            listItems.add(actionListItemParser.parseActionListItem(style, transition));
+            listItems.add(actionListItemParser.parseActionListItem(deviceId, style, transition));
         }
 
         return listItems;

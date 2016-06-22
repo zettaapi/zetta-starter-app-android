@@ -61,7 +61,7 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
                     AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);
                     labelledInput.put(label, inputForLabel);
                 }
-                onActionClickListener.onActionClick(item.getAction(), labelledInput);
+                onActionClickListener.onActionClick(item.getDeviceId(), item.getAction(), labelledInput);
             }
         });
         actionButton.setTextColor(item.getActionTextColor());
