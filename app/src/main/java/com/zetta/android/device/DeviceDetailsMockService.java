@@ -107,6 +107,11 @@ class DeviceDetailsMockService {
             public int getTintColor() {
                 return foregroundColor;
             }
+
+            @Override
+            public int getBackgroundColor() {
+                return backgroundColor;
+            }
         };
     }
 

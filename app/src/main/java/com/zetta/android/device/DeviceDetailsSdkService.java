@@ -88,6 +88,11 @@ class DeviceDetailsSdkService {
             public int getTintColor() {
                 return zettaStyle.getForegroundColor();
             }
+
+            @Override
+            public int getBackgroundColor() {
+                return zettaStyle.getBackgroundColor();
+            }
         };
     }
 

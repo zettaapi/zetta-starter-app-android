@@ -140,6 +140,9 @@ class DeviceDetailsService {
 
         @ColorInt
         int getTintColor();
+
+        @ColorInt
+        int getBackgroundColor();
     }
 
     interface StreamListener {
