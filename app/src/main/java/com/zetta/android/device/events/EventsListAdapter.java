@@ -57,7 +57,10 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(EventListItem eventListItem) {
             transitionLabelWidget.setText(eventListItem.getTransition());
+            transitionLabelWidget.setTextColor(eventListItem.getForegroundColor());
             timeStampLabelWidget.setText(eventListItem.getTimeStamp());
+            timeStampLabelWidget.setTextColor(eventListItem.getForegroundColor());
+            itemView.setBackgroundColor(eventListItem.getBackgroundColor());
         }
     }
 

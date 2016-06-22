@@ -1,5 +1,6 @@
 package com.zetta.android.device.events;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +9,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 class EventsMockService {
+
+    private static final int FOREGROUND_COLOR = Color.parseColor("#1111dd");
+    private static final int BACKGROUND_COLOR = Color.parseColor("#d9d9d9");
 
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
@@ -44,9 +48,9 @@ class EventsMockService {
             listener.onUpdated(
                 new EventListItem(
                     transition,
-                    new Date(System.currentTimeMillis()).toString()
-//                    Color.parseColor("#0000ff"),
-//                    getBackground(DEFAULT_BACKGROUND_COLOR)
+                    new Date(System.currentTimeMillis()).toString(),
+                    FOREGROUND_COLOR,
+                    BACKGROUND_COLOR
                 ));
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
