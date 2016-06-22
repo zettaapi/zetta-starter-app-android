@@ -133,7 +133,7 @@ class DeviceDetailsSdkService {
 
         listItems.add(new ListItem.HeaderListItem("Events"));
 
-        listItems.add(createEventsListItem(style));
+        listItems.add(createEventsListItem(style, zikDevice));
 
         return listItems;
     }
@@ -173,9 +173,9 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private EventsListItem createEventsListItem(ZettaStyle style) {
+    private EventsListItem createEventsListItem(ZettaStyle style, ZIKDevice device) {
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
-        return new EventsListItem("View Events (...)", backgroundDrawable, style.getForegroundColor());
+        return new EventsListItem(getDeviceId(device), "View Events (...)", backgroundDrawable, style.getForegroundColor());
     }
 
     public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {

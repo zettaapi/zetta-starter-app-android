@@ -11,6 +11,7 @@ import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
+import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionMultipleViewHolder;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
@@ -146,7 +147,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnEventsClickListener {
-        void onEventsClick();
+        void onEventsClick(ZettaDeviceId deviceId);
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -213,13 +214,13 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             eventsLabelWidget = (TextView) itemView.findViewById(R.id.list_item_events_label);
         }
 
-        public void bind(EventsListItem item, final OnEventsClickListener onEventsClickListener) {
+        public void bind(final EventsListItem item, final OnEventsClickListener onEventsClickListener) {
             eventsLabelWidget.setText(item.getDescription());
             eventsLabelWidget.setTextColor(item.getForegroundColor());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onEventsClickListener.onEventsClick();
+                    onEventsClickListener.onEventsClick(item.getDeviceId());
                 }
             });
             itemView.setBackground(item.getBackground());

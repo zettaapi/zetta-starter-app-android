@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKException;
+import com.apigee.zettakit.ZIKLogStreamEntry;
 import com.apigee.zettakit.ZIKRoot;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
@@ -41,6 +42,8 @@ public enum ZettaSdkApi {
     private List<ZIKServer> zikServers;
     @Nullable
     private List<ZIKDevice> zikDevices;
+    @Nullable
+    private ZIKStream logStream;
 
     private boolean cancelMonitoringSetup;
 
@@ -259,6 +262,56 @@ public enum ZettaSdkApi {
         stream.resume();
     }
 
+    public void startMonitoringLogStreamFor(ZIKDeviceId deviceId, ZikLogStreamEntryListener listener) {
+        ZIKDevice device = getLiteDevice(deviceId);
+        monitorLogStreams(device, listener);
+    }
+
+    private void monitorLogStreams(ZIKDevice device, ZikLogStreamEntryListener listener) {
+        logStream = device.stream("logs");
+        monitorLog(logStream, listener, device);
+    }
+
+    private void monitorLog(ZIKStream stream, final ZikLogStreamEntryListener listener, final ZIKDevice device) {
+        ZIKDeviceId deviceId = device.getDeviceId();
+        final ZIKServer server = getServerContaining(deviceId);
+        stream.setStreamListener(new ZIKStreamListener() {
+            @Override
+            public void onOpen() {
+                // not used
+            }
+
+            @Override
+            public void onUpdate(Object object) {
+                ZIKLogStreamEntry streamEntry = (ZIKLogStreamEntry) object;
+                listener.updateFor(server, device, streamEntry);
+            }
+
+            @Override
+            public void onPong() {
+                // not used
+            }
+
+            @Override
+            public void onClose() {
+                // not used
+            }
+
+            @Override
+            public void onError(ZIKException exception, Response response) {
+                Log.e(exception, "Error streaming " + response);
+            }
+        });
+        stream.resume();
+    }
+
+    public void stopMonitoringLogStream() {
+        if (logStream == null) {
+            return;
+        }
+        logStream.close();
+    }
+
     /**
      * For use when somethings FooBar'd and you want to tidy up
      */
@@ -266,6 +319,7 @@ public enum ZettaSdkApi {
         cancelMonitoringSetup = true;
         stopMonitoringDeviceStreams();
         stopMonitoringAllServerDeviceStreams();
+        stopMonitoringLogStream();
         cancelMonitoringSetup = false;
         if (zikServers != null) {
             zikServers.clear();
@@ -277,5 +331,9 @@ public enum ZettaSdkApi {
 
     public interface ZikStreamEntryListener {
         void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry);
+    }
+
+    public interface ZikLogStreamEntryListener {
+        void updateFor(ZIKServer server, ZIKDevice device, ZIKLogStreamEntry entry);
     }
 }

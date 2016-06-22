@@ -72,7 +72,7 @@ class DeviceDetailsMockService {
         items.add(new PropertyListItem("blink", "", getBackground(backgroundColor), foregroundColor));
 
         items.add(new ListItem.HeaderListItem("Events"));
-        items.add(new EventsListItem("View Events (42)", getBackground(backgroundColor), foregroundColor));
+        items.add(new EventsListItem(DEVICE_ID, "View Events (42)", getBackground(backgroundColor), foregroundColor));
 
         return new DeviceDetailsService.Device() {
             @Override

@@ -16,6 +16,11 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ListItem> listItems = new ArrayList<>();
 
+    public void update(ListItem listItem) {
+        this.listItems.add(listItem);
+        notifyDataSetChanged();
+    }
+
     public void updateAll(List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);

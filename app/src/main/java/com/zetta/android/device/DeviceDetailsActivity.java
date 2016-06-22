@@ -71,8 +71,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DetailsListAdapter.OnEventsClickListener onEventsClickListener = new DetailsListAdapter.OnEventsClickListener() {
         @Override
-        public void onEventsClick() {
+        public void onEventsClick(ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceDetailsActivity.this, EventsActivity.class);
+            intent.putExtra(EventsActivity.KEY_DEVICE_ID, deviceId);
             startActivity(intent);
         }
     };
