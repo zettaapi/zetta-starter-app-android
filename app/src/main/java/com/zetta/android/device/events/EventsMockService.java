@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 class EventsMockService {
@@ -43,7 +44,7 @@ class EventsMockService {
             listener.onUpdated(
                 new EventListItem(
                     transition,
-                    String.valueOf(System.currentTimeMillis())
+                    new Date(System.currentTimeMillis()).toString()
 //                    Color.parseColor("#0000ff"),
 //                    getBackground(DEFAULT_BACKGROUND_COLOR)
                 ));

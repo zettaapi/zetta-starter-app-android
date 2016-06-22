@@ -12,6 +12,8 @@ import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyle;
 
+import java.util.Date;
+
 class EventsSdkService {
 
     private final ZettaSdkApi zettaSdkApi;
@@ -39,7 +41,7 @@ class EventsSdkService {
     @NonNull
     private EventListItem createEventListItem(ZettaStyle style, ZIKDevice device, ZIKLogStreamEntry entry) {
         String transition = entry.getTransition();
-        String timestamp = String.valueOf(entry.getTimeStamp());
+        String timestamp = new Date(entry.getTimeStamp()).toString();
         Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
         return new EventListItem(
             transition,
