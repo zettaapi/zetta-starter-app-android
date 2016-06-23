@@ -109,7 +109,6 @@ public class DeviceDetailsActivity extends AppCompatActivity {
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(device.getBackgroundColor());
-                window.setNavigationBarColor(device.getBackgroundColor());
             }
 
             Drawable upArrow = ContextCompat.getDrawable(DeviceDetailsActivity.this, R.drawable.ic_back_arrow);
