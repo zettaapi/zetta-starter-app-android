@@ -108,13 +108,12 @@ public class ZettaStyle {
         }
 
         private Uri parseStateImage(ZettaStyle serverStyle, ZIKStyle deviceStyle) {
-            Uri stateImageUri;
             Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
             if (stateImage == null) {
-                stateImageUri = serverStyle.getStateImage();
+                return serverStyle.getStateImage();
             } else {
                 String jsonUrl = (String) stateImage.get("url");
-                stateImageUri = Uri.parse(jsonUrl);
+                return Uri.parse(jsonUrl);
             }
             return stateImageUri;
         }
