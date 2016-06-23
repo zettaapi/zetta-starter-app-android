@@ -27,6 +27,10 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public boolean isEmpty() {
+        return listItems.isEmpty();
+    }
+
     @Override
     public int getItemCount() {
         return listItems.size();
