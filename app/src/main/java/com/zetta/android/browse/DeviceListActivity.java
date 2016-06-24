@@ -120,7 +120,7 @@ public class DeviceListActivity extends AppCompatActivity {
     private final SwipeRefreshLayout.OnRefreshListener onPullRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            Toast.makeText(DeviceListActivity.this, "TODO Refresh list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DeviceListActivity.this, "Refreshing...", Toast.LENGTH_SHORT).show();
             deviceListService.getDeviceList(onDeviceListLoaded);
         }
     };
