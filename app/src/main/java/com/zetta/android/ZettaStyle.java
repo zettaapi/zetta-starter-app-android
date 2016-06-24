@@ -1,5 +1,6 @@
 package com.zetta.android;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -36,8 +37,24 @@ public class ZettaStyle {
         return foregroundColor;
     }
 
+    public ColorStateList getForegroundColorList() {
+        return ColorStateList.valueOf(foregroundColor);
+    }
+
+    public Drawable createForegroundDrawable() {
+        return ImageLoader.Drawables.getSelectableDrawableFor(foregroundColor);
+    }
+
     public int getBackgroundColor() {
         return backgroundColor;
+    }
+
+    public ColorStateList getBackgroundColorList() {
+        return ColorStateList.valueOf(backgroundColor);
+    }
+
+    public Drawable createBackgroundDrawable() {
+        return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
     }
 
     public Uri getStateImage() {
@@ -50,10 +67,6 @@ public class ZettaStyle {
         } else {
             return foregroundColor;
         }
-    }
-
-    public Drawable createBackground() {
-        return ImageLoader.Drawables.getBackgroundDrawableFor(backgroundColor);
     }
 
     public static class Parser {

@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 
 import java.util.List;
 
@@ -13,25 +14,13 @@ public class ActionMultipleInputListItem implements ListItem {
     private final ZettaDeviceId deviceId;
     private final List<String> labels;
     private final String action;
-    private final ColorStateList backgroundColorList;
-    private final ColorStateList foregroundColorList;
-    private final Drawable foregroundDrawable;
-    private final Drawable backgroundDrawable;
+    private final ZettaStyle style;
 
-    public ActionMultipleInputListItem(ZettaDeviceId deviceId,
-                                       List<String> labels,
-                                       String action,
-                                       ColorStateList backgroundColorList,
-                                       ColorStateList foregroundColorList,
-                                       Drawable foregroundDrawable,
-                                       Drawable backgroundDrawable) {
+    public ActionMultipleInputListItem(ZettaDeviceId deviceId, List<String> labels, String action, ZettaStyle style) {
         this.deviceId = deviceId;
         this.labels = labels;
         this.action = action;
-        this.backgroundColorList = backgroundColorList;
-        this.foregroundColorList = foregroundColorList;
-        this.foregroundDrawable = foregroundDrawable;
-        this.backgroundDrawable = backgroundDrawable;
+        this.style = style;
     }
 
     public ZettaDeviceId getDeviceId() {
@@ -52,18 +41,18 @@ public class ActionMultipleInputListItem implements ListItem {
     }
 
     public ColorStateList getActionTextColor() {
-        return foregroundColorList;
+        return style.getBackgroundColorList();
     }
 
     public ColorStateList getActionInputTextColor() {
-        return backgroundColorList;
+        return style.getForegroundColorList();
     }
 
-    public Drawable getActionBackground() {
-        return foregroundDrawable;
+    public Drawable createActionBackground() {
+        return style.createForegroundDrawable();
     }
 
-    public Drawable getBackground() {
-        return backgroundDrawable;
+    public Drawable createBackground() {
+        return style.createBackgroundDrawable();
     }
 }

@@ -36,7 +36,7 @@ public class ImageLoader {
 
     public static class Drawables {
 
-        public static Drawable getBackgroundDrawableFor(int color) {
+        public static Drawable getSelectableDrawableFor(int color) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 StateListDrawable stateListDrawable = new StateListDrawable();
                 stateListDrawable.addState(

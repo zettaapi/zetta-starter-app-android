@@ -15,6 +15,7 @@ import android.text.style.ForegroundColorSpan;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
@@ -55,7 +56,7 @@ class DeviceDetailsMockService {
         items.add(new ActionMultipleInputListItem(
             DEVICE_ID, Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
             "walk",
-            actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)
+            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));
@@ -116,7 +117,7 @@ class DeviceDetailsMockService {
     }
 
     private static Drawable getBackground(int color) {
-        return ImageLoader.Drawables.getBackgroundDrawableFor(color);
+        return ImageLoader.Drawables.getSelectableDrawableFor(color);
     }
 
     public void startMonitorStreamedUpdates(DeviceDetailsService.StreamListener listener) {

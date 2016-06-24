@@ -191,13 +191,13 @@ class DeviceListMockService {
         items.add(new ActionMultipleInputListItem(
             deviceId, Arrays.asList("color", "intensity"),
             "update-led",
-            actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)
+            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
         ));
         return items;
     }
 
     private static Drawable getBackground(int color) {
-        return ImageLoader.Drawables.getBackgroundDrawableFor(color);
+        return ImageLoader.Drawables.getSelectableDrawableFor(color);
     }
 
     private static class ToggleStreamGenerator implements Runnable {

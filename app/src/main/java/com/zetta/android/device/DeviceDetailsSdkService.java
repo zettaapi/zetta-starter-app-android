@@ -76,7 +76,7 @@ class DeviceDetailsSdkService {
             @Override
             public Drawable getBackground() {
                 int backgroundColor = zettaStyle.getBackgroundColor();
-                return ImageLoader.Drawables.getBackgroundDrawableFor(backgroundColor);
+                return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
             }
 
             @Override
@@ -140,7 +140,7 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyActionsListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
     }
 
@@ -149,7 +149,7 @@ class DeviceDetailsSdkService {
         String stream = zikStream.getTitle();
         String value = "";
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
             zettaDeviceId,
             stream,
@@ -161,20 +161,20 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyPropertiesListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No properties for this device.", backgroundDrawable);
     }
 
     @NonNull
     private PropertyListItem createPropertyListItem(ZettaStyle style, Map<String, Object> deviceProperties, String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new PropertyListItem(propertyName, propertyValue, backgroundDrawable, style.getForegroundColor());
     }
 
     @NonNull
     private EventsListItem createEventsListItem(ZettaStyle style, ZIKDevice device) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new EventsListItem(getDeviceId(device), "View Events (...)", backgroundDrawable, style.getForegroundColor());
     }
 
@@ -197,7 +197,7 @@ class DeviceDetailsSdkService {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
             zettaDeviceId,
             stream,

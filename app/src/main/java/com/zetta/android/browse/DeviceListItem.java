@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 
-import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
@@ -50,7 +49,7 @@ class DeviceListItem implements ListItem {
     }
 
     public Drawable createBackground() {
-        return style.createBackground();
+        return style.createBackgroundDrawable();
     }
 
     @Override

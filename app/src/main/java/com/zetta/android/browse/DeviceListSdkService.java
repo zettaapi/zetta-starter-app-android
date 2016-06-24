@@ -68,13 +68,13 @@ class DeviceListSdkService {
     @NonNull
     private ServerListItem createServerListItem(ZettaStyle serverStyle, ZIKServer zikServer) {
         String serverName = zikServer.getName();
-        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverStyle.getBackgroundColor());
+        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(serverStyle.getBackgroundColor());
         return new ServerListItem(serverStyle.getForegroundColor(), serverBackgroundDrawable, serverName);
     }
 
     @NonNull
     private ListItem.EmptyListItem createEmptyServerListItem(ZettaStyle serverStyle) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(serverStyle.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(serverStyle.getBackgroundColor());
         return new ListItem.EmptyListItem("No devices online for this server", backgroundDrawable);
     }
 
@@ -119,7 +119,7 @@ class DeviceListSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyQuickActionsListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(style.getBackgroundColor());
+        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
     }
 

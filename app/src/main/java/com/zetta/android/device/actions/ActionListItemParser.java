@@ -25,8 +25,8 @@ public class ActionListItemParser {
             String action = transition.getName();
             ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            Drawable foregroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceForegroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceBackgroundColor);
             return new ActionToggleListItem(
                 deviceId,
                 action,
@@ -42,8 +42,8 @@ public class ActionListItemParser {
             String action = transition.getName();
             ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
             ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
+            Drawable foregroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceForegroundColor);
+            Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceBackgroundColor);
             return new ActionSingleInputListItem(
                 deviceId,
                 label,
@@ -60,18 +60,11 @@ public class ActionListItemParser {
                 labels.add(label);
             }
             String action = transition.getName();
-            ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
-            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable foregroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceForegroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceBackgroundColor);
             return new ActionMultipleInputListItem(
                 deviceId,
                 labels,
                 action,
-                actionInputColorList,
-                actionTextColorList,
-                foregroundDrawable,
-                backgroundDrawable
+                style
             );
         }
     }
