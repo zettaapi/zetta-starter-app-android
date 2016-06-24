@@ -143,13 +143,11 @@ class DeviceDetailsSdkService {
         String stream = zikStream.getTitle();
         String value = "";
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
             zettaDeviceId,
             stream,
             value,
-            style.getForegroundColor(),
-            deviceBackgroundDrawable
+            style
         );
     }
 
@@ -190,13 +188,11 @@ class DeviceDetailsSdkService {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
         return new StreamListItem(
             zettaDeviceId,
             stream,
             value,
-            style.getForegroundColor(),
-            backgroundDrawable
+            style
         );
     }
 

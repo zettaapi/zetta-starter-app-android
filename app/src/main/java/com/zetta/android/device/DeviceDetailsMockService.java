@@ -74,7 +74,7 @@ class DeviceDetailsMockService {
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));
-        items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385", foregroundColor, getBackground(foregroundColor)));
+        items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385", style));
 
         items.add(new ListItem.HeaderListItem("Properties"));
         items.add(new PropertyListItem("type", "light", getBackground(backgroundColor), foregroundColor));
@@ -155,7 +155,11 @@ class DeviceDetailsMockService {
         public void run() {
             String value = "23." + random.nextInt();
             int foregroundColor = Color.parseColor("#1111dd");
-            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value, foregroundColor, getBackground(foregroundColor)));
+            int backgroundColor = Color.parseColor("#d9d9d9");
+            Uri image = Uri.EMPTY;
+            ZettaStyle.TintMode tintMode = ZettaStyle.TintMode.ORIGINAL;
+            ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, image, tintMode);
+            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value, style));
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     }
