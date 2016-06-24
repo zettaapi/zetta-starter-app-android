@@ -119,29 +119,27 @@ class DeviceListSdkService {
     }
 
     // TODO should streaming be in it's own class?
-    // it shares the creation of style objects, so perhaps that should be extracted as well
     public void startMonitorStreamedUpdates(String url, final StreamListener listener) {
         zettaSdkApi.registerRoot(url);
         zettaSdkApi.startMonitoringAllServerDeviceStreams(new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
-                DeviceListItem listItem = createDeviceListItem(server, device, entry);
+                ZettaStyle style = zettaStyleParser.parseStyle(server, device);
+                DeviceListItem listItem = createDeviceListItem(style, device, entry);
                 listener.onUpdated(listItem);
             }
         });
     }
 
-    private DeviceListItem createDeviceListItem(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
+    private DeviceListItem createDeviceListItem(ZettaStyle style, ZIKDevice device, ZIKStreamEntry entry) {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String name = device.getName();
         String state = String.valueOf(entry.getData());
-        ZettaStyle deviceStyle = zettaStyleParser.parseStyle(server, device);
-
         return new DeviceListItem(
             zettaDeviceId,
             name,
             state,
-            deviceStyle
+            style
         );
     }
 
