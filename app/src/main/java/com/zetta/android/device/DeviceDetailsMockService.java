@@ -77,14 +77,14 @@ class DeviceDetailsMockService {
         items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385", style));
 
         items.add(new ListItem.HeaderListItem("Properties"));
-        items.add(new PropertyListItem("type", "light", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("style", "", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("brightness", "", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("name", "Porch Light", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("state", "on", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("color", "", getBackground(backgroundColor), foregroundColor));
-        items.add(new PropertyListItem("blink", "", getBackground(backgroundColor), foregroundColor));
+        items.add(new PropertyListItem("type", "light", style));
+        items.add(new PropertyListItem("style", "", style));
+        items.add(new PropertyListItem("brightness", "", style));
+        items.add(new PropertyListItem("name", "Porch Light", style));
+        items.add(new PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2", style));
+        items.add(new PropertyListItem("state", "on", style));
+        items.add(new PropertyListItem("color", "", style));
+        items.add(new PropertyListItem("blink", "", style));
 
         items.add(new ListItem.HeaderListItem("Events"));
         items.add(new EventsListItem(DEVICE_ID, "View Events (42)", getBackground(backgroundColor), foregroundColor));

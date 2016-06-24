@@ -159,8 +159,7 @@ class DeviceDetailsSdkService {
     @NonNull
     private PropertyListItem createPropertyListItem(ZettaStyle style, Map<String, Object> deviceProperties, String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
-        return new PropertyListItem(propertyName, propertyValue, backgroundDrawable, style.getForegroundColor());
+        return new PropertyListItem(propertyName, propertyValue, style);
     }
 
     @NonNull

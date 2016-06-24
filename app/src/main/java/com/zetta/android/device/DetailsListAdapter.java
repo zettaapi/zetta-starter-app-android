@@ -201,7 +201,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             propertyLabelWidget.setTextColor(item.getForegroundColor());
             valueLabelWidget.setText(item.getValue());
             valueLabelWidget.setTextColor(item.getForegroundColor());
-            itemView.setBackground(item.getBackgroundDrawable());
+            itemView.setBackground(item.createBackgroundDrawable());
         }
     }
 
