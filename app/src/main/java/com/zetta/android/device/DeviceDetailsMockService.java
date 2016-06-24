@@ -8,8 +8,6 @@ import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
@@ -36,8 +34,8 @@ class DeviceDetailsMockService {
     public DeviceDetailsService.Device getDetails() {
         final List<ListItem> items = new ArrayList<>();
 
-        final int foregroundColor = Color.parseColor("#1111dd");
-        final int backgroundColor = Color.parseColor("#d9d9d9");
+        int foregroundColor = Color.parseColor("#1111dd");
+        int backgroundColor = Color.parseColor("#d9d9d9");
         final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         items.add(new StateListItem(
             "on",
@@ -92,18 +90,16 @@ class DeviceDetailsMockService {
             @Override
             public Spannable getName() {
                 Spannable name = new SpannableString("Porch Light");
-                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
-                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 return name;
             }
 
             @Override
             public Spannable getSeverName() {
                 Spannable name = new SpannableString("neworleans");
-                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
-                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 return name;
             }
 
