@@ -5,31 +5,23 @@ import android.graphics.drawable.Drawable;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 
 public class ActionSingleInputListItem implements ListItem {
 
     private final ZettaDeviceId deviceId;
     private final String label;
     private final String action;
-    private final ColorStateList foregroundColorList;
-    private final ColorStateList backgroundColorList;
-    private final Drawable foregroundDrawable;
-    private final Drawable backgroundDrawable;
+    private final ZettaStyle zettaStyle;
 
     public ActionSingleInputListItem(ZettaDeviceId deviceId,
                                      String label,
                                      String action,
-                                     ColorStateList foregroundColorList,
-                                     ColorStateList backgroundColorList,
-                                     Drawable foregroundDrawable,
-                                     Drawable backgroundDrawable) {
+                                     ZettaStyle zettaStyle) {
         this.deviceId = deviceId;
         this.label = label;
         this.action = action;
-        this.foregroundColorList = foregroundColorList;
-        this.backgroundColorList = backgroundColorList;
-        this.foregroundDrawable = foregroundDrawable;
-        this.backgroundDrawable = backgroundDrawable;
+        this.zettaStyle = zettaStyle;
     }
 
     public ZettaDeviceId getDeviceId() {
@@ -50,18 +42,18 @@ public class ActionSingleInputListItem implements ListItem {
     }
 
     public ColorStateList getActionTextColor() {
-        return backgroundColorList;
+        return zettaStyle.getBackgroundColorList();
     }
 
     public ColorStateList getActionInputTextColor() {
-        return foregroundColorList;
+        return zettaStyle.getForegroundColorList();
     }
 
     public Drawable getActionBackground() {
-        return foregroundDrawable;
+        return zettaStyle.createForegroundDrawable();
     }
 
     public Drawable getBackground() {
-        return backgroundDrawable;
+        return zettaStyle.createBackgroundDrawable();
     }
 }

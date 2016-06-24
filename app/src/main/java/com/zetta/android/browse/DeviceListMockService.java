@@ -187,7 +187,12 @@ class DeviceListMockService {
         ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
         ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
         items.add(new ActionToggleListItem(deviceId, "open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionSingleInputListItem(deviceId, "image...", "update-state-image", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionSingleInputListItem(
+            deviceId,
+            "image...",
+            "update-state-image",
+            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+        ));
         items.add(new ActionMultipleInputListItem(
             deviceId, Arrays.asList("color", "intensity"),
             "update-led",

@@ -50,7 +50,11 @@ class DeviceDetailsMockService {
 
         items.add(new ListItem.HeaderListItem("Actions"));
         items.add(new ActionToggleListItem(DEVICE_ID, "open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionSingleInputListItem(DEVICE_ID, "brightness", "set-brightness", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionSingleInputListItem(
+            DEVICE_ID,
+            "brightness", "set-brightness",
+            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+        ));
         items.add(new ActionToggleListItem(DEVICE_ID, "blink", "set-blinker", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
         items.add(new ActionToggleListItem(DEVICE_ID, "turn-off", "turn-off", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
         items.add(new ActionMultipleInputListItem(

@@ -40,18 +40,11 @@ public class ActionListItemParser {
             Map<String, Object> eventField = eventFields.get(0);
             String label = String.valueOf(eventField.get("name"));
             String action = transition.getName();
-            ColorStateList actionInputColorList = ColorStateList.valueOf(deviceForegroundColor);
-            ColorStateList actionTextColorList = ColorStateList.valueOf(deviceBackgroundColor);
-            Drawable foregroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceForegroundColor);
-            Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(deviceBackgroundColor);
             return new ActionSingleInputListItem(
                 deviceId,
                 label,
                 action,
-                actionInputColorList,
-                actionTextColorList,
-                foregroundDrawable,
-                backgroundDrawable
+                style
             );
         } else {
             List<String> labels = new ArrayList<>();
