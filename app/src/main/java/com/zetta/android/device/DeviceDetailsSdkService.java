@@ -69,7 +69,7 @@ class DeviceDetailsSdkService {
             }
 
             @Override
-            public Drawable getBackground() {
+            public Drawable createBackground() {
                 int backgroundColor = zettaStyle.getBackgroundColor();
                 return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
             }
@@ -164,8 +164,7 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private EventsListItem createEventsListItem(ZettaStyle style, ZIKDevice device) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
-        return new EventsListItem(getDeviceId(device), "View Events (...)", backgroundDrawable, style.getForegroundColor());
+        return new EventsListItem(getDeviceId(device), "View Events (...)", style);
     }
 
     public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {

@@ -4,19 +4,18 @@ import android.graphics.drawable.Drawable;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 
 class EventsListItem implements ListItem {
 
     private final ZettaDeviceId deviceId;
     private final String description;
-    private final Drawable background;
-    private final int foregroundColor;
+    private final ZettaStyle style;
 
-    public EventsListItem(ZettaDeviceId deviceId, String description, Drawable background, int foregroundColor) {
+    public EventsListItem(ZettaDeviceId deviceId, String description, ZettaStyle style) {
         this.deviceId = deviceId;
         this.description = description;
-        this.background = background;
-        this.foregroundColor = foregroundColor;
+        this.style = style;
     }
 
     public ZettaDeviceId getDeviceId() {
@@ -32,11 +31,11 @@ class EventsListItem implements ListItem {
         return description;
     }
 
-    public Drawable getBackground() {
-        return background;
+    public Drawable createBackground() {
+        return style.createBackgroundDrawable();
     }
 
     public int getForegroundColor() {
-        return foregroundColor;
+        return style.getForegroundColor();
     }
 }

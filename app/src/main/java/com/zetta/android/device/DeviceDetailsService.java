@@ -134,7 +134,7 @@ class DeviceDetailsService {
 
         Spannable getSeverName();
 
-        Drawable getBackground();
+        Drawable createBackground();
 
         List<ListItem> getListItems();
 

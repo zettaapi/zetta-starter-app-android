@@ -11,7 +11,6 @@ import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 
-import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
@@ -39,7 +38,7 @@ class DeviceDetailsMockService {
 
         final int foregroundColor = Color.parseColor("#1111dd");
         final int backgroundColor = Color.parseColor("#d9d9d9");
-        ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
+        final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         items.add(new StateListItem(
             "on",
             Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
@@ -87,7 +86,7 @@ class DeviceDetailsMockService {
         items.add(new PropertyListItem("blink", "", style));
 
         items.add(new ListItem.HeaderListItem("Events"));
-        items.add(new EventsListItem(DEVICE_ID, "View Events (42)", getBackground(backgroundColor), foregroundColor));
+        items.add(new EventsListItem(DEVICE_ID, "View Events (42)", style));
 
         return new DeviceDetailsService.Device() {
             @Override
@@ -109,8 +108,8 @@ class DeviceDetailsMockService {
             }
 
             @Override
-            public Drawable getBackground() {
-                return DeviceDetailsMockService.getBackground(backgroundColor);
+            public Drawable createBackground() {
+                return style.createBackgroundDrawable();
             }
 
             @Override
@@ -120,18 +119,14 @@ class DeviceDetailsMockService {
 
             @Override
             public int getTintColor() {
-                return foregroundColor;
+                return style.getTintColor();
             }
 
             @Override
             public int getBackgroundColor() {
-                return backgroundColor;
+                return style.getBackgroundColor();
             }
         };
-    }
-
-    private static Drawable getBackground(int color) {
-        return ImageLoader.Drawables.getSelectableDrawableFor(color);
     }
 
     public void startMonitorStreamedUpdates(DeviceDetailsService.StreamListener listener) {

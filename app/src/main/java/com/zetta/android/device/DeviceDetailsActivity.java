@@ -105,7 +105,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(device.getName());
             actionBar.setSubtitle(device.getSeverName());
-            actionBar.setBackgroundDrawable(device.getBackground());
+            actionBar.setBackgroundDrawable(device.createBackground());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

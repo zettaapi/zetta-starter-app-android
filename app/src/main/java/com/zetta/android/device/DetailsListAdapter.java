@@ -223,7 +223,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     onEventsClickListener.onEventsClick(item.getDeviceId());
                 }
             });
-            itemView.setBackground(item.getBackground());
+            itemView.setBackground(item.createBackground());
         }
     }
 
