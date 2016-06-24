@@ -44,20 +44,16 @@ class DeviceDetailsSdkService {
     @NonNull
     public DeviceDetailsService.Device getDeviceDetails(ZettaDeviceId deviceId) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
+        ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
+        ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
+        ZettaStyle zettaStyle = zettaStyleParser.parseStyle(zikServer, zikDevice);
+        List<ListItem> deviceListItems = convertToDeviceListItems(zikServer, zikDevice);
+        return convertToDevice(zikServer, zikDevice, zettaStyle, deviceListItems);
+    }
 
-        final ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
-        final ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
-        final ZettaStyle zettaStyle = zettaStyleParser.parseStyle(zikServer, zikDevice);
-        final List<ListItem> deviceListItems = convertToDeviceListItems(zikServer, zikDevice);
+    @NonNull
+    private DeviceDetailsService.Device convertToDevice(final ZIKServer zikServer, final ZIKDevice zikDevice, final ZettaStyle zettaStyle, final List<ListItem> deviceListItems) {
         return new DeviceDetailsService.Device() {
-            @Override
-            public Spannable getName() {
-                Spannable name = new SpannableString(zikDevice.getName());
-                name.setSpan(zettaStyle.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                name.setSpan(zettaStyle.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return name;
-            }
-
             @Override
             public Spannable getSeverName() {
                 Spannable name = new SpannableString(zikServer.getName());
@@ -69,14 +65,22 @@ class DeviceDetailsSdkService {
             }
 
             @Override
-            public Drawable createBackground() {
-                int backgroundColor = zettaStyle.getBackgroundColor();
-                return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
+            public Spannable getName() {
+                Spannable name = new SpannableString(zikDevice.getName());
+                name.setSpan(zettaStyle.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(zettaStyle.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
             }
 
             @Override
             public List<ListItem> getListItems() {
                 return deviceListItems;
+            }
+
+            @Override
+            public Drawable createBackground() {
+                int backgroundColor = zettaStyle.getBackgroundColor();
+                return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
             }
 
             @Override
