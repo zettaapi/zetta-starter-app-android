@@ -16,6 +16,7 @@ import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,13 +27,13 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * This singleton is not thread safe
+ * This singleton is not _fully_ thread safe
  */
 public enum ZettaSdkApi {
     INSTANCE;
 
-    private final List<ZIKStream> serverDevicesStreams = new ArrayList<>();
-    private final List<ZIKStream> deviceStreams = new ArrayList<>();
+    private final List<ZIKStream> serverDevicesStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
+    private final List<ZIKStream> deviceStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
 
     @Nullable
     private String rootUrl;
@@ -128,8 +129,10 @@ public enum ZettaSdkApi {
 
     public void stopMonitoringDeviceStreams() {
         cancelMonitoringSetup = true;
-        for (ZIKStream stream : deviceStreams) {
-            stream.close();
+        synchronized (deviceStreams) {
+            for (ZIKStream stream : deviceStreams) {
+                stream.close();
+            }
         }
         deviceStreams.clear();
     }
@@ -209,8 +212,10 @@ public enum ZettaSdkApi {
 
     public void stopMonitoringAllServerDeviceStreams() {
         cancelMonitoringSetup = true;
-        for (ZIKStream stream : serverDevicesStreams) {
-            stream.close();
+        synchronized (serverDevicesStreams) {
+            for (ZIKStream stream : serverDevicesStreams) {
+                stream.close();
+            }
         }
         serverDevicesStreams.clear();
     }
