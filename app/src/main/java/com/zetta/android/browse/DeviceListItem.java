@@ -4,26 +4,23 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.ColorInt;
 
+import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 
 class DeviceListItem implements ListItem {
 
     private final ZettaDeviceId deviceId;
     private final String name;
     private final String state;
-    private final Uri stateImageUri;
-    @ColorInt
-    private final int foregroundColor;
-    private final Drawable background;
+    private final ZettaStyle style;
 
-    public DeviceListItem(ZettaDeviceId deviceId, String name, String state, Uri stateImageUri, @ColorInt int foregroundColor, Drawable background) {
-        this.deviceId = deviceId;
+    public DeviceListItem(ZettaDeviceId zettaDeviceId, String name, String state, ZettaStyle style) {
+        deviceId = zettaDeviceId;
         this.name = name;
         this.state = state;
-        this.stateImageUri = stateImageUri;
-        this.foregroundColor = foregroundColor;
-        this.background = background;
+        this.style = style;
     }
 
     public ZettaDeviceId getDeviceId() {
@@ -44,16 +41,16 @@ class DeviceListItem implements ListItem {
     }
 
     public Uri getStateImageUri() {
-        return stateImageUri;
+        return style.getStateImage();
     }
 
     @ColorInt
-    public int getStateImageColor() {
-        return foregroundColor;
+    public int getImageColorFilter() {
+        return style.getTintColor();
     }
 
-    public Drawable getBackground() {
-        return background;
+    public Drawable createBackground() {
+        return style.createBackground();
     }
 
     @Override

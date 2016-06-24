@@ -83,13 +83,11 @@ class DeviceListSdkService {
         String name = device.getName();
         String state = device.getState();
         ZettaDeviceId deviceId = getDeviceId(device);
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceStyle.getBackgroundColor());
         return new DeviceListItem(
             deviceId,
-            name, state,
-            deviceStyle.getStateImage(),
-            deviceStyle.getForegroundColor(),
-            deviceBackgroundDrawable
+            name,
+            state,
+            deviceStyle
         );
     }
 
@@ -144,14 +142,11 @@ class DeviceListSdkService {
         String state = String.valueOf(entry.getData());
         ZettaStyle deviceStyle = zettaStyleParser.parseStyle(server, device);
 
-        Drawable deviceBackgroundDrawable = ImageLoader.Drawables.getBackgroundDrawableFor(deviceStyle.getBackgroundColor());
         return new DeviceListItem(
             zettaDeviceId,
             name,
             state,
-            deviceStyle.getStateImage(),
-            deviceStyle.getForegroundColor(),
-            deviceBackgroundDrawable
+            deviceStyle
         );
     }
 

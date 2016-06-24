@@ -140,11 +140,11 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
             } else {
                 itemView.setTag(deviceListItem.getDeviceId());
-                itemView.setBackground(deviceListItem.getBackground());
+                itemView.setBackground(deviceListItem.createBackground());
                 nameLabelWidget.setText(deviceListItem.getName());
                 stateLabelWidget.setText(deviceListItem.getState());
                 imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
-                stateImageWidget.setColorFilter(deviceListItem.getStateImageColor());
+                stateImageWidget.setColorFilter(deviceListItem.getImageColorFilter());
             }
         }
 
