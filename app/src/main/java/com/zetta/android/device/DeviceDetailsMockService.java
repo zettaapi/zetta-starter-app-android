@@ -1,6 +1,5 @@
 package com.zetta.android.device;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -40,8 +39,7 @@ class DeviceDetailsMockService {
 
         final int foregroundColor = Color.parseColor("#1111dd");
         final int backgroundColor = Color.parseColor("#d9d9d9");
-        ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
-        ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
+        ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         items.add(new StateListItem(
             "on",
             Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
@@ -49,18 +47,30 @@ class DeviceDetailsMockService {
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
-        items.add(new ActionToggleListItem(DEVICE_ID, "open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem(
+            DEVICE_ID,
+            "open", "open",
+            style
+        ));
         items.add(new ActionSingleInputListItem(
             DEVICE_ID,
             "brightness", "set-brightness",
-            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+            style
         ));
-        items.add(new ActionToggleListItem(DEVICE_ID, "blink", "set-blinker", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
-        items.add(new ActionToggleListItem(DEVICE_ID, "turn-off", "turn-off", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        items.add(new ActionToggleListItem(
+            DEVICE_ID,
+            "blink", "set-blinker",
+            style
+        ));
+        items.add(new ActionToggleListItem(
+            DEVICE_ID,
+            "turn-off", "turn-off",
+            style
+        ));
         items.add(new ActionMultipleInputListItem(
             DEVICE_ID, Arrays.asList("direction", "speed", "duration", "walking style", "warning message"),
             "walk",
-            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+            style
         ));
 
         items.add(new ListItem.HeaderListItem("Streams"));

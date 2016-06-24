@@ -29,7 +29,7 @@ public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
             }
         });
         actionToggleButton.setTextColor(item.getActionTextColor());
-        actionToggleButton.setBackground(item.getActionBackground());
-        itemView.setBackground(item.getBackground());
+        actionToggleButton.setBackground(item.createActionBackground());
+        itemView.setBackground(item.createBackground());
     }
 }

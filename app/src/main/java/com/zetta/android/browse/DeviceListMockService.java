@@ -1,6 +1,5 @@
 package com.zetta.android.browse;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -184,19 +183,23 @@ class DeviceListMockService {
         items.add(new ListItem.HeaderListItem("Door"));
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
-        ColorStateList actionInputColorList = ColorStateList.valueOf(foregroundColor);
-        ColorStateList actionTextColorList = ColorStateList.valueOf(backgroundColor);
-        items.add(new ActionToggleListItem(deviceId, "open", "open", actionInputColorList, actionTextColorList, getBackground(foregroundColor), getBackground(backgroundColor)));
+        ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
+        items.add(new ActionToggleListItem(
+            deviceId,
+            "open",
+            "open",
+            style
+        ));
         items.add(new ActionSingleInputListItem(
             deviceId,
             "image...",
             "update-state-image",
-            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+            style
         ));
         items.add(new ActionMultipleInputListItem(
             deviceId, Arrays.asList("color", "intensity"),
             "update-led",
-            new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
+            style
         ));
         return items;
     }
