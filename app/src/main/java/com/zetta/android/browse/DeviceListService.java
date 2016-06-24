@@ -1,13 +1,14 @@
 package com.zetta.android.browse;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
-import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
+import com.zetta.android.ZettaStyle;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ class DeviceListService {
                 sdkService.reset();
                 items.add(new ListItem.EmptyListItem(
                     "Something went wrong with the SDK.\nDeveloper needs to fix.\nGo into Settings and try 'demo mode' to see something working.\n" + e,
-                    ImageLoader.Drawables.getSelectableDrawableFor(Color.parseColor("#ffffff"))
+                    new ZettaStyle(Color.parseColor("#ffffff"), Color.parseColor("f2f2f2"), Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
                 ));
             }
         }

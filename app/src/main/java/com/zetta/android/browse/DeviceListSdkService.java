@@ -1,6 +1,5 @@
 package com.zetta.android.browse;
 
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import com.apigee.zettakit.ZIKDevice;
@@ -8,7 +7,6 @@ import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKStreamEntry;
 import com.apigee.zettakit.ZIKTransition;
-import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
@@ -66,16 +64,14 @@ class DeviceListSdkService {
     }
 
     @NonNull
-    private ServerListItem createServerListItem(ZettaStyle serverStyle, ZIKServer zikServer) {
+    private ServerListItem createServerListItem(ZettaStyle style, ZIKServer zikServer) {
         String serverName = zikServer.getName();
-        Drawable serverBackgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(serverStyle.getBackgroundColor());
-        return new ServerListItem(serverStyle.getForegroundColor(), serverBackgroundDrawable, serverName);
+        return new ServerListItem(serverName, style);
     }
 
     @NonNull
-    private ListItem.EmptyListItem createEmptyServerListItem(ZettaStyle serverStyle) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(serverStyle.getBackgroundColor());
-        return new ListItem.EmptyListItem("No devices online for this server", backgroundDrawable);
+    private ListItem.EmptyListItem createEmptyServerListItem(ZettaStyle style) {
+        return new ListItem.EmptyListItem("No devices online for this server", style);
     }
 
     @NonNull
@@ -119,8 +115,7 @@ class DeviceListSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyQuickActionsListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
-        return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
+        return new ListItem.EmptyListItem("No actions for this device.", style);
     }
 
     // TODO should streaming be in it's own class?

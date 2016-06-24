@@ -1,12 +1,11 @@
 package com.zetta.android.browse;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
-import com.zetta.android.ImageLoader;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
@@ -25,6 +24,8 @@ class DeviceListMockService {
 
     private static final ZettaDeviceId DEVICE_ID = new ZettaDeviceId(UUID.fromString("86fee1a0-2fd1-11e6-a818-0002a5d5c51b"));
     private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
+    private static final int DEFAULT_FOREGROUND_COLOR = Color.parseColor("#000000");
+    private static final ZettaStyle DEFAULT_STYLE = new ZettaStyle(DEFAULT_FOREGROUND_COLOR, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
 
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
@@ -37,7 +38,7 @@ class DeviceListMockService {
         int stageForegroundColor = Color.parseColor("#008822");
 
         return Arrays.asList(
-            new ServerListItem(banglorForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "bangalor"),
+            new ServerListItem("bangalor", getServerListItemStyle(banglorForegroundColor)),
             new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Door", "closed",
                                new ZettaStyle(
                                    banglorForegroundColor,
@@ -70,7 +71,7 @@ class DeviceListMockService {
                                    ZettaStyle.TintMode.TINTED
                                )
             ),
-            new ServerListItem(newOrleansForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "neworleans"),
+            new ServerListItem("neworleans", getServerListItemStyle(newOrleansForegroundColor)),
             new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion", "no-motion",
                                new ZettaStyle(
                                    newOrleansForegroundColor,
@@ -95,7 +96,7 @@ class DeviceListMockService {
                                    ZettaStyle.TintMode.ORIGINAL
                                )
             ),
-            new ServerListItem(detroitForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "detroit"),
+            new ServerListItem("detroit", getServerListItemStyle(detroitForegroundColor)),
             new DeviceListItem(new ZettaDeviceId(UUID.randomUUID()), "Motion1", "no-motion",
                                new ZettaStyle(
                                    detroitForegroundColor,
@@ -168,9 +169,14 @@ class DeviceListMockService {
                                    ZettaStyle.TintMode.TINTED
                                )
             ),
-            new ServerListItem(stageForegroundColor, getBackground(DEFAULT_BACKGROUND_COLOR), "stage"),
-            new ListItem.EmptyListItem("No devices online for this server", getBackground(DEFAULT_BACKGROUND_COLOR))
+            new ServerListItem("stage", getServerListItemStyle(stageForegroundColor)),
+            new ListItem.EmptyListItem("No devices online for this server", DEFAULT_STYLE)
         );
+    }
+
+    @NonNull
+    private ZettaStyle getServerListItemStyle(int foregounrColor) {
+        return new ZettaStyle(foregounrColor, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
     }
 
     public void startMonitorStreamedUpdates(String url, StreamListener listener) {
@@ -202,10 +208,6 @@ class DeviceListMockService {
             style
         ));
         return items;
-    }
-
-    private static Drawable getBackground(int color) {
-        return ImageLoader.Drawables.getSelectableDrawableFor(color);
     }
 
     private static class ToggleStreamGenerator implements Runnable {

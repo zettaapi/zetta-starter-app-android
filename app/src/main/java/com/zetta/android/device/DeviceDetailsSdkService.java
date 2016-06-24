@@ -140,8 +140,7 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyActionsListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
-        return new ListItem.EmptyListItem("No actions for this device.", backgroundDrawable);
+        return new ListItem.EmptyListItem("No actions for this device.", style);
     }
 
     @NonNull
@@ -161,8 +160,7 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private ListItem.EmptyListItem createEmptyPropertiesListItem(ZettaStyle style) {
-        Drawable backgroundDrawable = ImageLoader.Drawables.getSelectableDrawableFor(style.getBackgroundColor());
-        return new ListItem.EmptyListItem("No properties for this device.", backgroundDrawable);
+        return new ListItem.EmptyListItem("No properties for this device.", style);
     }
 
     @NonNull

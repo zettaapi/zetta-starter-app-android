@@ -4,18 +4,17 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaStyle;
 
 class ServerListItem implements ListItem {
 
     @ColorInt
-    private final int swatchColor;
-    private final Drawable background;
     private final String name;
+    private final ZettaStyle style;
 
-    public ServerListItem(@ColorInt int foregroundColor, Drawable background, String name) {
-        this.swatchColor = foregroundColor;
-        this.background = background;
+    public ServerListItem(String name, ZettaStyle style) {
         this.name = name;
+        this.style = style;
     }
 
     @Override
@@ -25,14 +24,14 @@ class ServerListItem implements ListItem {
 
     @ColorInt
     public int getSwatchColor() {
-        return swatchColor;
+        return style.getForegroundColor();
     }
 
     public String getName() {
         return name;
     }
 
-    public Drawable getBackground() {
-        return background;
+    public Drawable createBackground() {
+        return style.createBackgroundDrawable();
     }
 }

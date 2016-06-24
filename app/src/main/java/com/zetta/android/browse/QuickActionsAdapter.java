@@ -134,7 +134,7 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public void bind(ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
-            itemView.setBackground(listItem.getBackground());
+            itemView.setBackground(listItem.createBackground());
         }
 
     }

@@ -164,7 +164,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
-            itemView.setBackground(serverListItem.getBackground());
+            itemView.setBackground(serverListItem.createBackground());
         }
 
     }
@@ -180,7 +180,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
-            itemView.setBackground(listItem.getBackground());
+            itemView.setBackground(listItem.createBackground());
         }
 
     }

@@ -41,11 +41,11 @@ public interface ListItem {
     class EmptyListItem implements ListItem {
 
         private final String message;
-        private final Drawable background;
+        private final ZettaStyle style;
 
-        public EmptyListItem(String message, Drawable background) {
+        public EmptyListItem(String message, ZettaStyle style) {
             this.message = message;
-            this.background = background;
+            this.style = style;
         }
 
         @Override
@@ -57,8 +57,8 @@ public interface ListItem {
             return message;
         }
 
-        public Drawable getBackground() {
-            return background;
+        public Drawable createBackground() {
+            return style.createBackgroundDrawable();
         }
     }
 
