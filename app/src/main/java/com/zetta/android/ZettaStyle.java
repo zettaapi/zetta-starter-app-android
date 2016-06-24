@@ -4,6 +4,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKServer;
@@ -49,12 +51,20 @@ public class ZettaStyle {
         return backgroundColor;
     }
 
+    public ForegroundColorSpan createForegroundColorSpan() {
+        return new ForegroundColorSpan(foregroundColor);
+    }
+
     public ColorStateList getBackgroundColorList() {
         return ColorStateList.valueOf(backgroundColor);
     }
 
     public Drawable createBackgroundDrawable() {
         return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
+    }
+
+    public BackgroundColorSpan createBackgroundColorSpan() {
+        return new BackgroundColorSpan(backgroundColor);
     }
 
     public Uri getStateImage() {

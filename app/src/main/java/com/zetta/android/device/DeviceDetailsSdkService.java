@@ -53,22 +53,17 @@ class DeviceDetailsSdkService {
             @Override
             public Spannable getName() {
                 Spannable name = new SpannableString(zikDevice.getName());
-                int backgroundColor = zettaStyle.getBackgroundColor();
-                name.setSpan(new BackgroundColorSpan(backgroundColor), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                int foregroundColor = zettaStyle.getForegroundColor();
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
-                name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(zettaStyle.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(zettaStyle.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 return name;
             }
 
             @Override
             public Spannable getSeverName() {
                 Spannable name = new SpannableString(zikServer.getName());
-                int backgroundColor = zettaStyle.getBackgroundColor();
-                BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(backgroundColor);
+                BackgroundColorSpan backgroundColorSpan = zettaStyle.createBackgroundColorSpan();
                 name.setSpan(backgroundColorSpan, 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                int foregroundColor = zettaStyle.getForegroundColor();
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(foregroundColor);
+                ForegroundColorSpan foregroundColorSpan = zettaStyle.createForegroundColorSpan();
                 name.setSpan(foregroundColorSpan, 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 return name;
             }
