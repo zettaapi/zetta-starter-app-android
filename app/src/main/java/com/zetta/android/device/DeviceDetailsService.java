@@ -17,6 +17,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.observables.AsyncOnSubscribe;
 import rx.schedulers.Schedulers;
 
 class DeviceDetailsService {
@@ -78,8 +79,8 @@ class DeviceDetailsService {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<ListItem>() {
                 @Override
-                public void onCompleted() {
-                    // never completes - hot observable
+                public void onNext(ListItem listItem) {
+                    listener.onUpdated(listItem);
                 }
 
                 @Override
@@ -88,23 +89,26 @@ class DeviceDetailsService {
                 }
 
                 @Override
-                public void onNext(ListItem listItem) {
-                    listener.onUpdated(listItem);
+                public void onCompleted() {
+                    // never completes - hot observable
                 }
             });
     }
 
     private Observable<ListItem> getStreamedUpdatesObservable(final ZettaDeviceId deviceId) {
-        return Observable.create(new Observable.OnSubscribe<ListItem>() {
+        return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
             @Override
-            public void call(final Subscriber<? super ListItem> subscriber) {
-                monitorStreamedUpdates(deviceId, new StreamListener() {
-                    @Override
-                    public void onUpdated(ListItem listItem) {
-                        subscriber.onNext(listItem);
-                    }
-                });
-                // never completes - hot observable
+            protected LatestStateListener generateState() {
+                LatestStateListener latestStateListener = new LatestStateListener();
+                monitorStreamedUpdates(deviceId, latestStateListener);
+                return latestStateListener;
+            }
+
+            @Override
+            protected LatestStateListener next(LatestStateListener state, long requested, Observer<Observable<? extends ListItem>> observer) {
+                ListItem latest = state.getLatest();
+                observer.onNext(Observable.just(latest));
+                return state;
             }
         });
     }
@@ -149,5 +153,19 @@ class DeviceDetailsService {
 
         void onUpdated(ListItem listItem);
 
+    }
+
+    private static class LatestStateListener implements StreamListener {
+
+        private ListItem listItem;
+
+        public ListItem getLatest() {
+            return listItem;
+        }
+
+        @Override
+        public void onUpdated(ListItem listItem) {
+            this.listItem = listItem;
+        }
     }
 }
