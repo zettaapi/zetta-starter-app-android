@@ -49,7 +49,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void update(@NonNull ListItem listItem) {
         int i = listItems.indexOf(listItem);
         if (i == -1) {
-            Log.e("Not found in list");
+            Log.v("Not found in list");
             return;
         }
         listItems.remove(i);
