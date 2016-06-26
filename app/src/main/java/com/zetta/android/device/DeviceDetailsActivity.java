@@ -120,6 +120,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             adapter.updateAll(device.getListItems());
             updateState();
         }
+
+        @Override
+        public void onDeviceLoadError() {
+            Toast.makeText(DeviceDetailsActivity.this, "Unrecoverable error", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     };
 
     private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {

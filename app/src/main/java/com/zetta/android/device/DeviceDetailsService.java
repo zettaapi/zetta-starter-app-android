@@ -48,6 +48,7 @@ class DeviceDetailsService {
                 @Override
                 public void onError(Throwable e) {
                     Log.e(e, "Something went wrong retrieving device specifics.");
+                    callback.onDeviceLoadError();
                 }
 
                 @Override
@@ -139,6 +140,8 @@ class DeviceDetailsService {
 
     interface Callback {
         void on(@NonNull Device device);
+
+        void onDeviceLoadError();
     }
 
     interface Device {
