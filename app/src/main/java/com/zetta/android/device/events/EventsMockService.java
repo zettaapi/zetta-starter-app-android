@@ -1,9 +1,9 @@
 package com.zetta.android.device.events;
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -13,23 +13,23 @@ class EventsMockService {
     private static final int FOREGROUND_COLOR = Color.parseColor("#1111dd");
     private static final int BACKGROUND_COLOR = Color.parseColor("#d9d9d9");
 
-    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+    @NonNull private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private ToggleStreamGenerator streamGenerator;
 
-    public void startMonitorLogUpdates(EventsService.StreamListener listener) {
+    public void startMonitorLogUpdates(@NonNull EventsService.StreamListener listener) {
         streamGenerator = new ToggleStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
 
     private static class ToggleStreamGenerator implements Runnable {
 
-        private final Handler handler;
-        private final EventsService.StreamListener listener;
+        @NonNull private final Handler handler;
+        @NonNull private final EventsService.StreamListener listener;
 
         private boolean toggle;
 
-        private ToggleStreamGenerator(Handler handler, EventsService.StreamListener listener) {
+        private ToggleStreamGenerator(@NonNull Handler handler, @NonNull EventsService.StreamListener listener) {
             this.handler = handler;
             this.listener = listener;
         }
@@ -37,7 +37,6 @@ class EventsMockService {
         @Override
         public void run() {
             String transition;
-            Uri icon;
             if (toggle) {
                 toggle = false;
                 transition = "closed";

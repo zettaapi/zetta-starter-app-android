@@ -1,5 +1,6 @@
 package com.zetta.android.device;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,27 +26,27 @@ import java.util.List;
 
 class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ListItem> listItems = new ArrayList<>();
+    @NonNull private final List<ListItem> listItems = new ArrayList<>();
 
-    private final ImageLoader imageLoader;
-    private final OnActionClickListener onActionClickListener;
-    private final OnEventsClickListener onEventsClickListener;
+    @NonNull private final ImageLoader imageLoader;
+    @NonNull private final OnActionClickListener onActionClickListener;
+    @NonNull private final OnEventsClickListener onEventsClickListener;
 
-    public DetailsListAdapter(ImageLoader imageLoader,
-                              OnActionClickListener onActionClickListener,
-                              OnEventsClickListener onEventsClickListener) {
+    public DetailsListAdapter(@NonNull ImageLoader imageLoader,
+                              @NonNull OnActionClickListener onActionClickListener,
+                              @NonNull OnEventsClickListener onEventsClickListener) {
         this.imageLoader = imageLoader;
         this.onActionClickListener = onActionClickListener;
         this.onEventsClickListener = onEventsClickListener;
     }
 
-    public void updateAll(List<ListItem> listItems) {
+    public void updateAll(@NonNull List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
     }
 
-    public void update(ListItem listItem) {
+    public void update(@NonNull ListItem listItem) {
         int i = listItems.indexOf(listItem);
         if (i == -1) {
             Log.e("Not found in list");
@@ -147,19 +148,19 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface OnEventsClickListener {
-        void onEventsClick(ZettaDeviceId deviceId);
+        void onEventsClick(@NonNull ZettaDeviceId deviceId);
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView headerWidget;
+        @NonNull private final TextView headerWidget;
 
-        public HeaderViewHolder(View itemView) {
+        public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             headerWidget = (TextView) itemView.findViewById(R.id.list_item_header_label);
         }
 
-        public void bind(ListItem.HeaderListItem headerListItem) {
+        public void bind(@NonNull ListItem.HeaderListItem headerListItem) {
             String title = headerListItem.getTitle();
             headerWidget.setText(title);
         }
@@ -167,16 +168,16 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class StreamViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView streamLabelWidget;
-        private final TextView valueLabelWidget;
+        @NonNull private final TextView streamLabelWidget;
+        @NonNull private final TextView valueLabelWidget;
 
-        public StreamViewHolder(View itemView) {
+        public StreamViewHolder(@NonNull View itemView) {
             super(itemView);
             streamLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_label);
             valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_stream_value_label);
         }
 
-        public void bind(StreamListItem item) {
+        public void bind(@NonNull StreamListItem item) {
             streamLabelWidget.setText(item.getStream());
             streamLabelWidget.setTextColor(item.getForegroundColor());
             valueLabelWidget.setText(item.getValue());
@@ -187,16 +188,16 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class PropertyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView propertyLabelWidget;
-        private final TextView valueLabelWidget;
+        @NonNull private final TextView propertyLabelWidget;
+        @NonNull private final TextView valueLabelWidget;
 
-        public PropertyViewHolder(View itemView) {
+        public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
             propertyLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_label);
             valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_property_value_label);
         }
 
-        public void bind(PropertyListItem item) {
+        public void bind(@NonNull PropertyListItem item) {
             propertyLabelWidget.setText(item.getProperty());
             propertyLabelWidget.setTextColor(item.getForegroundColor());
             valueLabelWidget.setText(item.getValue());
@@ -207,14 +208,14 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class EventsViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView eventsLabelWidget;
+        @NonNull private final TextView eventsLabelWidget;
 
-        public EventsViewHolder(View itemView) {
+        public EventsViewHolder(@NonNull View itemView) {
             super(itemView);
             eventsLabelWidget = (TextView) itemView.findViewById(R.id.list_item_events_label);
         }
 
-        public void bind(final EventsListItem item, final OnEventsClickListener onEventsClickListener) {
+        public void bind(@NonNull final EventsListItem item, @NonNull final OnEventsClickListener onEventsClickListener) {
             eventsLabelWidget.setText(item.getDescription());
             eventsLabelWidget.setTextColor(item.getForegroundColor());
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -229,36 +230,35 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class StateViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageLoader imageLoader;
-        private final TextView stateLabelWidget;
-        private final ImageView stateImageWidget;
+        @NonNull private final ImageLoader imageLoader;
+        @NonNull private final TextView stateLabelWidget;
+        @NonNull private final ImageView stateImageWidget;
 
-        public StateViewHolder(View itemView, ImageLoader imageLoader) {
+        public StateViewHolder(@NonNull View itemView, @NonNull ImageLoader imageLoader) {
             super(itemView);
             this.imageLoader = imageLoader;
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_state_image);
             stateLabelWidget = (TextView) itemView.findViewById(R.id.list_item_state_label);
         }
 
-        public void bind(StateListItem item) {
+        public void bind(@NonNull StateListItem item) {
             imageLoader.load(item.getStateImageUri(), stateImageWidget);
             stateImageWidget.setColorFilter(item.getStateColor());
             stateLabelWidget.setText(item.getState());
             stateLabelWidget.setTextColor(item.getStateColor());
-
         }
     }
 
     public static class EmptyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView messageWidget;
+        @NonNull private final TextView messageWidget;
 
-        public EmptyViewHolder(View itemView) {
+        public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
             messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_message);
         }
 
-        public void bind(ListItem.EmptyListItem listItem) {
+        public void bind(@NonNull ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
             itemView.setBackground(listItem.createBackground());
         }

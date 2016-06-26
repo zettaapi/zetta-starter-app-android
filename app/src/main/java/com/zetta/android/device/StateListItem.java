@@ -1,16 +1,17 @@
 package com.zetta.android.device;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.zetta.android.ListItem;
 
 class StateListItem implements ListItem {
 
-    private final String state;
-    private final Uri stateImageUri;
+    @NonNull private final String state;
+    @NonNull private final Uri stateImageUri;
     private final int foregroundColor;
 
-    public StateListItem(String state, Uri stateImageUri, int foregroundColor) {
+    public StateListItem(@NonNull String state, @NonNull Uri stateImageUri, int foregroundColor) {
         this.state = state;
         this.stateImageUri = stateImageUri;
         this.foregroundColor = foregroundColor;
@@ -21,10 +22,12 @@ class StateListItem implements ListItem {
         return TYPE_STATE;
     }
 
+    @NonNull
     public String getState() {
         return state;
     }
 
+    @NonNull
     public Uri getStateImageUri() {
         return stateImageUri;
     }

@@ -1,6 +1,7 @@
 package com.zetta.android.device;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
@@ -8,12 +9,15 @@ import com.zetta.android.ZettaStyle;
 
 class StreamListItem implements ListItem {
 
-    private final ZettaDeviceId deviceId;
-    private final String stream;
-    private final String value;
-    private final ZettaStyle style;
+    @NonNull private final ZettaDeviceId deviceId;
+    @NonNull private final String stream;
+    @NonNull private final String value;
+    @NonNull private final ZettaStyle style;
 
-    public StreamListItem(ZettaDeviceId deviceId, String stream, String value, ZettaStyle style) {
+    public StreamListItem(@NonNull ZettaDeviceId deviceId,
+                          @NonNull String stream,
+                          @NonNull String value,
+                          @NonNull ZettaStyle style) {
         this.deviceId = deviceId;
         this.stream = stream;
         this.value = value;
@@ -25,14 +29,17 @@ class StreamListItem implements ListItem {
         return TYPE_STREAM;
     }
 
+    @NonNull
     public String getStream() {
         return stream;
     }
 
+    @NonNull
     public String getValue() {
         return value;
     }
 
+    @NonNull
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
     }

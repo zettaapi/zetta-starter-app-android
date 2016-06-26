@@ -31,9 +31,9 @@ class DeviceDetailsSdkService {
 
     private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
 
-    private final ZettaSdkApi zettaSdkApi;
-    private final ZettaStyle.Parser zettaStyleParser;
-    private final ActionListItemParser actionListItemParser;
+    @NonNull private final ZettaSdkApi zettaSdkApi;
+    @NonNull private final ZettaStyle.Parser zettaStyleParser;
+    @NonNull private final ActionListItemParser actionListItemParser;
 
     public DeviceDetailsSdkService() {
         zettaSdkApi = ZettaSdkApi.INSTANCE;
@@ -42,7 +42,7 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    public DeviceDetailsService.Device getDeviceDetails(ZettaDeviceId deviceId) {
+    public DeviceDetailsService.Device getDeviceDetails(@NonNull ZettaDeviceId deviceId) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
@@ -52,8 +52,12 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private DeviceDetailsService.Device convertToDevice(final ZIKServer zikServer, final ZIKDevice zikDevice, final ZettaStyle zettaStyle, final List<ListItem> deviceListItems) {
+    private DeviceDetailsService.Device convertToDevice(@NonNull final ZIKServer zikServer,
+                                                        @NonNull final ZIKDevice zikDevice,
+                                                        @NonNull final ZettaStyle zettaStyle,
+                                                        @NonNull final List<ListItem> deviceListItems) {
         return new DeviceDetailsService.Device() {
+            @NonNull
             @Override
             public Spannable getSeverName() {
                 Spannable name = new SpannableString(zikServer.getName());
@@ -64,6 +68,7 @@ class DeviceDetailsSdkService {
                 return name;
             }
 
+            @NonNull
             @Override
             public Spannable getName() {
                 Spannable name = new SpannableString(zikDevice.getName());
@@ -72,11 +77,13 @@ class DeviceDetailsSdkService {
                 return name;
             }
 
+            @NonNull
             @Override
             public List<ListItem> getListItems() {
                 return deviceListItems;
             }
 
+            @NonNull
             @Override
             public Drawable createBackground() {
                 int backgroundColor = zettaStyle.getBackgroundColor();
@@ -96,7 +103,7 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private List<ListItem> convertToDeviceListItems(ZIKServer zikServer, ZIKDevice zikDevice) {
+    private List<ListItem> convertToDeviceListItems(@NonNull ZIKServer zikServer, @NonNull ZIKDevice zikDevice) {
         List<ListItem> listItems = new ArrayList<>();
         listItems.add(new ListItem.HeaderListItem("Actions"));
 
@@ -138,12 +145,14 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private ListItem.EmptyListItem createEmptyActionsListItem(ZettaStyle style) {
+    private ListItem.EmptyListItem createEmptyActionsListItem(@NonNull ZettaStyle style) {
         return new ListItem.EmptyListItem("No actions for this device.", style);
     }
 
     @NonNull
-    private StreamListItem createInitialStreamListItem(ZettaStyle style, ZIKDevice device, ZIKStream zikStream) {
+    private StreamListItem createInitialStreamListItem(@NonNull ZettaStyle style,
+                                                       @NonNull ZIKDevice device,
+                                                       @NonNull ZIKStream zikStream) {
         String stream = zikStream.getTitle();
         String value = "";
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
@@ -156,29 +165,32 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private ListItem.EmptyListItem createEmptyPropertiesListItem(ZettaStyle style) {
+    private ListItem.EmptyListItem createEmptyPropertiesListItem(@NonNull ZettaStyle style) {
         return new ListItem.EmptyListItem("No properties for this device.", style);
     }
 
     @NonNull
-    private PropertyListItem createPropertyListItem(ZettaStyle style, Map<String, Object> deviceProperties, String propertyName) {
+    private PropertyListItem createPropertyListItem(@NonNull ZettaStyle style,
+                                                    @NonNull Map<String, Object> deviceProperties,
+                                                    @NonNull String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
         return new PropertyListItem(propertyName, propertyValue, style);
     }
 
     @NonNull
-    private EventsListItem createEventsListItem(ZettaStyle style, ZIKDevice device) {
+    private EventsListItem createEventsListItem(@NonNull ZettaStyle style, @NonNull ZIKDevice device) {
         return new EventsListItem(getDeviceId(device), "View Events (...)", style);
     }
 
-    public void startMonitorStreamedUpdatesFor(final ZettaDeviceId deviceId, final DeviceDetailsService.StreamListener listener) {
+    public void startMonitorStreamedUpdatesFor(@NonNull final ZettaDeviceId deviceId,
+                                               @NonNull final DeviceDetailsService.StreamListener listener) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
         final ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
         zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
-            public void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry) {
+            public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
                 StreamListItem listItem = createStreamListItem(style, device, entry);
                 listener.onUpdated(listItem);
             }
@@ -186,7 +198,9 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private StreamListItem createStreamListItem(ZettaStyle style, ZIKDevice device, ZIKStreamEntry entry) {
+    private StreamListItem createStreamListItem(@NonNull ZettaStyle style,
+                                                @NonNull ZIKDevice device,
+                                                @NonNull ZIKStreamEntry entry) {
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         String stream = entry.getTitle();
         String value = String.valueOf(entry.getData());
@@ -199,7 +213,7 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private ZettaDeviceId getDeviceId(ZIKDevice device) {
+    private ZettaDeviceId getDeviceId(@NonNull ZIKDevice device) {
         UUID uuid = device.getDeviceId().getUuid();
         if (zettaDeviceIdCache.containsKey(uuid)) {
             return zettaDeviceIdCache.get(uuid);

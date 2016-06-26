@@ -14,7 +14,9 @@ import java.util.Map;
 public class ActionListItemParser {
 
     @NonNull
-    public ListItem parseActionListItem(ZettaDeviceId deviceId, ZettaStyle style, ZIKTransition transition) {
+    public ListItem parseActionListItem(@NonNull ZettaDeviceId deviceId,
+                                        @NonNull ZettaStyle style,
+                                        @NonNull ZIKTransition transition) {
         List<Map<String, Object>> eventFields = transition.getFields();
         if (eventFields.size() == 1) {
             String action = transition.getName();

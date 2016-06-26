@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 
@@ -18,17 +19,17 @@ public class ZettaStyle {
 
     private final int foregroundColor;
     private final int backgroundColor;
-    private final Uri stateImage;
-    private final TintMode tintMode;
+    @NonNull private final Uri stateImage;
+    @NonNull private final TintMode tintMode;
 
-    public ZettaStyle(int foregroundColor, int backgroundColor, Uri stateImage, TintMode tintMode) {
+    public ZettaStyle(int foregroundColor, int backgroundColor, @NonNull Uri stateImage, @NonNull TintMode tintMode) {
         this.foregroundColor = foregroundColor;
         this.backgroundColor = backgroundColor;
         this.stateImage = stateImage;
         this.tintMode = tintMode;
     }
 
-    public ZettaStyle(ZettaStyle otherStyle) {
+    public ZettaStyle(@NonNull ZettaStyle otherStyle) {
         this.foregroundColor = otherStyle.foregroundColor;
         this.backgroundColor = otherStyle.backgroundColor;
         this.stateImage = otherStyle.stateImage;
@@ -39,10 +40,12 @@ public class ZettaStyle {
         return foregroundColor;
     }
 
+    @NonNull
     public ColorStateList getForegroundColorList() {
         return ColorStateList.valueOf(foregroundColor);
     }
 
+    @NonNull
     public Drawable createForegroundDrawable() {
         return ImageLoader.Drawables.getSelectableDrawableFor(foregroundColor);
     }
@@ -51,22 +54,27 @@ public class ZettaStyle {
         return backgroundColor;
     }
 
+    @NonNull
     public ForegroundColorSpan createForegroundColorSpan() {
         return new ForegroundColorSpan(foregroundColor);
     }
 
+    @NonNull
     public ColorStateList getBackgroundColorList() {
         return ColorStateList.valueOf(backgroundColor);
     }
 
+    @NonNull
     public Drawable createBackgroundDrawable() {
         return ImageLoader.Drawables.getSelectableDrawableFor(backgroundColor);
     }
 
+    @NonNull
     public BackgroundColorSpan createBackgroundColorSpan() {
         return new BackgroundColorSpan(backgroundColor);
     }
 
+    @NonNull
     public Uri getStateImage() {
         return stateImage;
     }
@@ -85,7 +93,8 @@ public class ZettaStyle {
         private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
         private static final TintMode DEFAULT_TINT = TintMode.ORIGINAL;
 
-        public ZettaStyle parseStyle(ZIKServer zikServer) {
+        @NonNull
+        public ZettaStyle parseStyle(@NonNull ZIKServer zikServer) {
             ZIKStyle style = zikServer.getStyle();
             if (style == null) {
                 return new ZettaStyle(DEFAULT_FOREGROUND_COLOR, DEFAULT_BACKGROUND_COLOR, DEFAULT_URI_ICON, DEFAULT_TINT);
@@ -98,7 +107,7 @@ public class ZettaStyle {
             }
         }
 
-        private int parseForegroundColor(ZIKStyle serverStyle) {
+        private int parseForegroundColor(@NonNull ZIKStyle serverStyle) {
             ZIKStyleColor zikForegroundColor = serverStyle.getForegroundColor();
             if (zikForegroundColor == null) {
                 return DEFAULT_FOREGROUND_COLOR;
@@ -108,7 +117,7 @@ public class ZettaStyle {
             }
         }
 
-        private int parseBackgroundColor(ZIKStyle serverStyle) {
+        private int parseBackgroundColor(@NonNull ZIKStyle serverStyle) {
             ZIKStyleColor zikBackgroundColor = serverStyle.getBackgroundColor();
             if (zikBackgroundColor == null) {
                 return DEFAULT_BACKGROUND_COLOR;
@@ -118,7 +127,8 @@ public class ZettaStyle {
             }
         }
 
-        public ZettaStyle parseStyle(ZIKServer server, ZIKDevice device) {
+        @NonNull
+        public ZettaStyle parseStyle(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
             ZettaStyle serverStyle = parseStyle(server);
             ZIKStyle deviceStyle = device.getStyle();
             if (deviceStyle == null) {
@@ -132,7 +142,7 @@ public class ZettaStyle {
             }
         }
 
-        private int parseForegroundColor(ZettaStyle serverStyle, ZIKStyle deviceStyle) {
+        private int parseForegroundColor(@NonNull ZettaStyle serverStyle, @NonNull ZIKStyle deviceStyle) {
             ZIKStyleColor zikForegroundColor = deviceStyle.getForegroundColor();
             if (zikForegroundColor == null) {
                 return serverStyle.foregroundColor;
@@ -142,7 +152,7 @@ public class ZettaStyle {
             }
         }
 
-        private int parseBackgroundColor(ZettaStyle serverStyle, ZIKStyle deviceStyle) {
+        private int parseBackgroundColor(@NonNull ZettaStyle serverStyle, @NonNull ZIKStyle deviceStyle) {
             ZIKStyleColor zikBackgroundColor = deviceStyle.getBackgroundColor();
             if (zikBackgroundColor == null) {
                 return serverStyle.backgroundColor;
@@ -152,7 +162,8 @@ public class ZettaStyle {
             }
         }
 
-        private Uri parseStateImage(ZettaStyle serverStyle, ZIKStyle deviceStyle) {
+        @NonNull
+        private Uri parseStateImage(@NonNull ZettaStyle serverStyle, @NonNull ZIKStyle deviceStyle) {
             Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
             if (stateImage == null) {
                 return serverStyle.stateImage;
@@ -162,7 +173,8 @@ public class ZettaStyle {
             }
         }
 
-        private TintMode parseTintMode(ZettaStyle serverStyle, ZIKStyle deviceStyle) {
+        @NonNull
+        private TintMode parseTintMode(@NonNull ZettaStyle serverStyle, @NonNull ZIKStyle deviceStyle) {
             Map stateImage = (Map) deviceStyle.getProperties().get("stateImage");
             if (stateImage == null) {
                 return serverStyle.tintMode;
@@ -176,7 +188,8 @@ public class ZettaStyle {
     public enum TintMode {
         ORIGINAL, TINTED;
 
-        public static TintMode parse(String jsonTintMode) {
+        @NonNull
+        public static TintMode parse(@NonNull String jsonTintMode) {
             if ("original".equals(jsonTintMode)) {
                 return ORIGINAL;
             } else {

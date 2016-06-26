@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -60,19 +61,19 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
 
         @Override
-        public void onActionClick(ZettaDeviceId deviceId, String label, String input) {
+        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull String input) {
             Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onActionClick(ZettaDeviceId deviceId, String label, Map<String, String> inputs) {
+        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull Map<String, String> inputs) {
             Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
         }
     };
 
     private final DetailsListAdapter.OnEventsClickListener onEventsClickListener = new DetailsListAdapter.OnEventsClickListener() {
         @Override
-        public void onEventsClick(ZettaDeviceId deviceId) {
+        public void onEventsClick(@NonNull ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceDetailsActivity.this, EventsActivity.class);
             intent.putExtra(EventsActivity.KEY_DEVICE_ID, deviceId);
             startActivity(intent);
@@ -97,7 +98,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
         @Override
-        public void on(DeviceDetailsService.Device device) {
+        public void on(@NonNull DeviceDetailsService.Device device) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
@@ -123,7 +124,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {
         @Override
-        public void onUpdated(ListItem listItem) {
+        public void onUpdated(@NonNull ListItem listItem) {
             if (detailsListWidget.isComputingLayout() || detailsListWidget.isAnimating()) {
                 return;
             }

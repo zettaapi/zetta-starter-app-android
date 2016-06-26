@@ -1,5 +1,6 @@
 package com.zetta.android.settings;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.List;
 class HistoryCollection {
 
     static final String SEPARATOR = "[";
+
     private static final String ESC_SEPARATOR = "\\[";
 
     private String collection;
@@ -17,6 +19,7 @@ class HistoryCollection {
         return getHead().equals(item);
     }
 
+    @NonNull
     public String getHead() {
         if (collection == null) {
             return "";
@@ -28,7 +31,7 @@ class HistoryCollection {
         }
     }
 
-    public void appendTail(String tail) {
+    public void appendTail(@NonNull String tail) {
         if (this.collection == null) {
             this.collection = tail;
         } else {
@@ -40,6 +43,7 @@ class HistoryCollection {
         }
     }
 
+    @NonNull
     public List<String> getHistory() {
         if (collection == null) {
             return Collections.emptyList();

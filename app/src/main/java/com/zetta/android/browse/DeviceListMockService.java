@@ -27,11 +27,11 @@ class DeviceListMockService {
     private static final int DEFAULT_FOREGROUND_COLOR = Color.parseColor("#000000");
     private static final ZettaStyle DEFAULT_STYLE = new ZettaStyle(DEFAULT_FOREGROUND_COLOR, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
 
-    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+    @NonNull private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private ToggleStreamGenerator streamGenerator;
 
-    public List<ListItem> getListItems(String url) {
+    public List<ListItem> getListItems(@NonNull String url) {
         int banglorForegroundColor = Color.parseColor("#0000ff");
         int newOrleansForegroundColor = Color.parseColor("#dd33ff");
         int detroitForegroundColor = Color.parseColor("#dd3322");
@@ -175,16 +175,17 @@ class DeviceListMockService {
     }
 
     @NonNull
-    private ZettaStyle getServerListItemStyle(int foregounrColor) {
-        return new ZettaStyle(foregounrColor, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
+    private ZettaStyle getServerListItemStyle(int foregoundColor) {
+        return new ZettaStyle(foregoundColor, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
     }
 
-    public void startMonitorStreamedUpdates(String url, StreamListener listener) {
+    public void startMonitorStreamedUpdates(@NonNull String url, @NonNull StreamListener listener) {
         streamGenerator = new ToggleStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
 
-    public List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
+    @NonNull
+    public List<ListItem> getQuickActions(@NonNull ZettaDeviceId deviceId) {
         List<ListItem> items = new ArrayList<>();
         items.add(new ListItem.HeaderListItem("Door"));
         int foregroundColor = Color.parseColor("#1111dd");
@@ -212,12 +213,12 @@ class DeviceListMockService {
 
     private static class ToggleStreamGenerator implements Runnable {
 
-        private final Handler handler;
-        private final StreamListener listener;
+        @NonNull private final Handler handler;
+        @NonNull private final StreamListener listener;
 
         private boolean toggle;
 
-        private ToggleStreamGenerator(Handler handler, StreamListener listener) {
+        private ToggleStreamGenerator(@NonNull Handler handler, @NonNull StreamListener listener) {
             this.handler = handler;
             this.listener = listener;
         }

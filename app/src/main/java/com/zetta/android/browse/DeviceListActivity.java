@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -76,16 +77,16 @@ public class DeviceListActivity extends AppCompatActivity {
         pullRefreshWidget.setOnRefreshListener(onPullRefreshListener);
     }
 
-    private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
+    @NonNull private final DeviceListAdapter.OnDeviceClickListener onDeviceClickListener = new DeviceListAdapter.OnDeviceClickListener() {
         @Override
-        public void onDeviceClick(ZettaDeviceId deviceId) {
+        public void onDeviceClick(@NonNull ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceListActivity.this, DeviceDetailsActivity.class);
             intent.putExtra(DeviceDetailsActivity.KEY_DEVICE_ID, deviceId);
             startActivity(intent);
         }
 
         @Override
-        public void onDeviceLongClick(ZettaDeviceId deviceId) {
+        public void onDeviceLongClick(@NonNull ZettaDeviceId deviceId) {
             List<ListItem> items = new ArrayList<>();
             items.add(new ListItem.LoadingListItem());
             quickActionsAdapter.updateAll(items);
@@ -102,22 +103,22 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
+    @NonNull private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
 
         @Override
-        public void onActionClick(ZettaDeviceId deviceId, String label, String input) {
+        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull String input) {
             Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
 
         @Override
-        public void onActionClick(ZettaDeviceId deviceId, String label, Map<String, String> inputs) {
+        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull Map<String, String> inputs) {
             Toast.makeText(DeviceListActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     };
 
-    private final SwipeRefreshLayout.OnRefreshListener onPullRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+    @NonNull private final SwipeRefreshLayout.OnRefreshListener onPullRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
             Toast.makeText(DeviceListActivity.this, "Refreshing...", Toast.LENGTH_SHORT).show();
@@ -125,9 +126,9 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    private final DeviceListService.Callback onQuickActionsCallback = new DeviceListService.Callback() {
+    @NonNull private final DeviceListService.Callback onQuickActionsCallback = new DeviceListService.Callback() {
         @Override
-        public void on(List<ListItem> listItems) {
+        public void on(@NonNull List<ListItem> listItems) {
             quickActionsAdapter.updateAll(listItems);
         }
     };
@@ -148,9 +149,9 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     }
 
-    private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
+    @NonNull private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
         @Override
-        public void onUpdated(ListItem listItem) {
+        public void onUpdated(@NonNull ListItem listItem) {
             if (deviceListWidget.isComputingLayout() || deviceListWidget.isAnimating()) {
                 return;
             }
@@ -158,9 +159,9 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     };
 
-    private final DeviceListService.Callback onDeviceListLoaded = new DeviceListService.Callback() {
+    @NonNull private final DeviceListService.Callback onDeviceListLoaded = new DeviceListService.Callback() {
         @Override
-        public void on(List<ListItem> listItems) {
+        public void on(@NonNull List<ListItem> listItems) {
             adapter.updateAll(listItems);
             pullRefreshWidget.setRefreshing(false);
             updateState();

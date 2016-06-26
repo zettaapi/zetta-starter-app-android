@@ -1,5 +1,6 @@
 package com.zetta.android.device.actions;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
@@ -20,16 +21,17 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
 
     private static final int[] rowIds = {R.id.row_1, R.id.row_2, R.id.row_3, R.id.row_4, R.id.row_5, R.id.row_6};
 
-    private final List<EditText> boundInputRows = new ArrayList<>();
+    @NonNull private final List<EditText> boundInputRows = new ArrayList<>();
 
-    private final AppCompatButton actionButton;
+    @NonNull private final AppCompatButton actionButton;
 
-    public ActionMultipleViewHolder(View itemView) {
+    public ActionMultipleViewHolder(@NonNull View itemView) {
         super(itemView);
         actionButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_button);
     }
 
-    public void bind(final ActionMultipleInputListItem item, final OnActionClickListener onActionClickListener) {
+    public void bind(@NonNull final ActionMultipleInputListItem item,
+                     @NonNull final OnActionClickListener onActionClickListener) {
         if (item.getLabels().size() > 6) {
             itemView.setVisibility(View.GONE);
             Log.e("Zetta", "Sorry demo only supports upto 6 custom input actions. Cannot display " + item.getLabels());

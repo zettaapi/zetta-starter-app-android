@@ -1,16 +1,19 @@
 package com.zetta.android;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.UUID;
 
 public class ZettaDeviceId implements Serializable {
 
-    private final UUID uuid;
+    @NonNull private final UUID uuid;
 
-    public ZettaDeviceId(UUID uuid) {
+    public ZettaDeviceId(@NonNull UUID uuid) {
         this.uuid = uuid;
     }
 
+    @NonNull
     public UUID getUuid() {
         return uuid;
     }

@@ -14,30 +14,31 @@ import java.util.Date;
 
 class EventsSdkService {
 
-    private final ZettaSdkApi zettaSdkApi;
-    private final ZettaStyle.Parser zettaStyleParser;
+    @NonNull private final ZettaSdkApi zettaSdkApi;
+    @NonNull private final ZettaStyle.Parser zettaStyleParser;
 
     public EventsSdkService() {
         zettaSdkApi = ZettaSdkApi.INSTANCE;
         zettaStyleParser = new ZettaStyle.Parser();
     }
 
-    public void startMonitorLogUpdatesFor(final ZettaDeviceId deviceId, final EventsService.StreamListener listener) {
+    public void startMonitorLogUpdatesFor(@NonNull final ZettaDeviceId deviceId,
+                                          @NonNull final EventsService.StreamListener listener) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
         final ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
         zettaSdkApi.startMonitoringLogStreamFor(zikDeviceId, new ZettaSdkApi.ZikLogStreamEntryListener() {
             @Override
-            public void updateFor(ZIKServer server, ZIKDevice device, ZIKLogStreamEntry entry) {
-                EventListItem listItem = createEventListItem(style, device, entry);
+            public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry) {
+                EventListItem listItem = createEventListItem(style, entry);
                 listener.onUpdated(listItem);
             }
         });
     }
 
     @NonNull
-    private EventListItem createEventListItem(ZettaStyle style, ZIKDevice device, ZIKLogStreamEntry entry) {
+    private EventListItem createEventListItem(@NonNull ZettaStyle style, @NonNull ZIKLogStreamEntry entry) {
         String transition = entry.getTransition();
         String timestamp = new Date(entry.getTimeStamp()).toString();
         return new EventListItem(

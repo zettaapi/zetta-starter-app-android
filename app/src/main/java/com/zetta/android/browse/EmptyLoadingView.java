@@ -1,6 +1,7 @@
 package com.zetta.android.browse;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ public class EmptyLoadingView extends LinearLayout {
         loadingIndicatorWidget = (ProgressBar) findViewById(R.id.empty_loading_loading_view);
     }
 
-    public void setStateLoading(String url) {
+    public void setStateLoading(@NonNull String url) {
         loadingIndicatorWidget.setVisibility(View.VISIBLE);
         String loadingLabel = getResources().getString(R.string.waiting_for_devices_to_connect_to_x, url);
         emptyLoadingLabel.setText(loadingLabel);

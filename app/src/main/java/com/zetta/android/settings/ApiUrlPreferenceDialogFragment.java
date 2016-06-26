@@ -2,6 +2,7 @@ package com.zetta.android.settings;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +25,8 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
 
     private EditText apiUrlInputWidget;
 
-    public static ApiUrlPreferenceDialogFragment newInstance(String key) {
+    @NonNull
+    public static ApiUrlPreferenceDialogFragment newInstance(@NonNull String key) {
         ApiUrlPreferenceDialogFragment fragment = new ApiUrlPreferenceDialogFragment();
         Bundle b = new Bundle(1);
         b.putString(ARG_KEY, key);
@@ -49,7 +51,7 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         HistoryAdapter adapter = new HistoryAdapter(new HistoryClickListener() {
             @Override
-            public void onUrlSelected(String url) {
+            public void onUrlSelected(@NonNull String url) {
                 apiUrlInputWidget.setText(url);
             }
         });
@@ -58,6 +60,7 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
 
     }
 
+    @NonNull
     private EditTextWithHistoryPreference getApiUrlPreference() {
         return (EditTextWithHistoryPreference) getPreference();
     }
@@ -93,14 +96,15 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
 
     private static class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder> {
 
-        private final List<String> urls = new ArrayList<>();
-        private final HistoryClickListener clickListener;
+        @NonNull private final List<String> urls = new ArrayList<>();
 
-        private HistoryAdapter(HistoryClickListener clickListener) {
+        @NonNull private final HistoryClickListener clickListener;
+
+        private HistoryAdapter(@NonNull HistoryClickListener clickListener) {
             this.clickListener = clickListener;
         }
 
-        public void addAll(List<String> urls) {
+        public void addAll(@NonNull List<String> urls) {
             this.urls.clear();
             this.urls.addAll(urls);
             notifyDataSetChanged();
@@ -125,17 +129,17 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
 
     private static class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private final HistoryClickListener clickListener;
-        private final TextView urlLabelWidget;
+        @NonNull private final HistoryClickListener clickListener;
+        @NonNull private final TextView urlLabelWidget;
 
-        public HistoryViewHolder(View itemView, HistoryClickListener clickListener) {
+        public HistoryViewHolder(@NonNull View itemView, @NonNull HistoryClickListener clickListener) {
             super(itemView);
             this.clickListener = clickListener;
             itemView.setOnClickListener(this);
             urlLabelWidget = (TextView) itemView.findViewById(R.id.list_item_history_url_label);
         }
 
-        public void bind(String historyUrl) {
+        public void bind(@NonNull String historyUrl) {
             urlLabelWidget.setText(historyUrl);
         }
 
@@ -146,6 +150,6 @@ public class ApiUrlPreferenceDialogFragment extends PreferenceDialogFragmentComp
     }
 
     public interface HistoryClickListener {
-        void onUrlSelected(String url);
+        void onUrlSelected(@NonNull String url);
     }
 }

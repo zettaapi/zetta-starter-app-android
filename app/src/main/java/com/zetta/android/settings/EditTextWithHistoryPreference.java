@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
 import android.util.AttributeSet;
@@ -23,7 +24,7 @@ import java.util.List;
 public class EditTextWithHistoryPreference extends DialogPreference {
     static final String SEPARATOR = HistoryCollection.SEPARATOR;
 
-    private final HistoryCollection historyCollection;
+    @NonNull private final HistoryCollection historyCollection;
 
     public EditTextWithHistoryPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -43,7 +44,7 @@ public class EditTextWithHistoryPreference extends DialogPreference {
      *
      * @param text The text to save
      */
-    public void setText(String text) {
+    public void setText(@NonNull String text) {
         final boolean wasBlocking = shouldDisableDependents();
 
         if (historyCollection.hasHeadItem(text)) {
@@ -65,10 +66,12 @@ public class EditTextWithHistoryPreference extends DialogPreference {
      *
      * @return The current preference value.
      */
+    @NonNull
     public String getCurrentText() {
         return historyCollection.getHead();
     }
 
+    @NonNull
     public List<String> getHistory() {
         return historyCollection.getHistory();
     }

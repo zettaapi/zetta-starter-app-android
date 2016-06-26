@@ -26,13 +26,15 @@ import rx.subscriptions.CompositeSubscription;
 
 class DeviceListService {
 
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
+    @NonNull private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-    private final SdkProperties sdkProperties;
-    private final DeviceListSdkService sdkService;
-    private final DeviceListMockService mockService;
+    @NonNull private final SdkProperties sdkProperties;
+    @NonNull private final DeviceListSdkService sdkService;
+    @NonNull private final DeviceListMockService mockService;
 
-    DeviceListService(SdkProperties sdkProperties, DeviceListSdkService sdkService, DeviceListMockService mockService) {
+    DeviceListService(@NonNull SdkProperties sdkProperties,
+                      @NonNull DeviceListSdkService sdkService,
+                      @NonNull DeviceListMockService mockService) {
         this.sdkProperties = sdkProperties;
         this.sdkService = sdkService;
         this.mockService = mockService;
@@ -42,11 +44,12 @@ class DeviceListService {
         return sdkProperties.hasUrl() || sdkProperties.useMockResponses();
     }
 
+    @NonNull
     public String getRootUrl() {
         return sdkProperties.getUrl();
     }
 
-    public void getDeviceList(final Callback callback) {
+    public void getDeviceList(@NonNull final Callback callback) {
         Subscription subscription = getDeviceListObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -69,6 +72,7 @@ class DeviceListService {
         subscriptions.add(subscription);
     }
 
+    @NonNull
     private Observable<List<ListItem>> getDeviceListObservable() {
         return Observable.create(new Observable.OnSubscribe<List<ListItem>>() {
             @Override
@@ -79,6 +83,7 @@ class DeviceListService {
         });
     }
 
+    @NonNull
     private List<ListItem> getDeviceListItems() {
         String url = getRootUrl();
         final List<ListItem> items = new ArrayList<>();
@@ -100,7 +105,7 @@ class DeviceListService {
         return items;
     }
 
-    public void getQuickActions(final ZettaDeviceId deviceId, final Callback callback) {
+    public void getQuickActions(@NonNull final ZettaDeviceId deviceId, @NonNull final Callback callback) {
         Subscription subscription = Observable.create(new Observable.OnSubscribe<List<ListItem>>() {
             @Override
             public void call(Subscriber<? super List<ListItem>> subscriber) {
@@ -131,7 +136,7 @@ class DeviceListService {
     }
 
     @NonNull
-    private List<ListItem> getQuickActions(ZettaDeviceId deviceId) {
+    private List<ListItem> getQuickActions(@NonNull ZettaDeviceId deviceId) {
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return mockService.getQuickActions(deviceId);
@@ -141,10 +146,10 @@ class DeviceListService {
     }
 
     interface Callback {
-        void on(List<ListItem> listItems);
+        void on(@NonNull List<ListItem> listItems);
     }
 
-    public void startMonitoringStreamedUpdates(final StreamListener listener) {
+    public void startMonitoringStreamedUpdates(@NonNull final StreamListener listener) {
         Subscription subscription = getStreamedUpdatesObservable()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -167,6 +172,7 @@ class DeviceListService {
         subscriptions.add(subscription);
     }
 
+    @NonNull
     private Observable<ListItem> getStreamedUpdatesObservable() {
         return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
             @Override
@@ -185,7 +191,7 @@ class DeviceListService {
         });
     }
 
-    private void monitorStreamedUpdates(StreamListener listener) {
+    private void monitorStreamedUpdates(@NonNull StreamListener listener) {
         String url = sdkProperties.getUrl();
         if (sdkProperties.useMockResponses()) {
             mockService.startMonitorStreamedUpdates(url, listener);
@@ -205,7 +211,7 @@ class DeviceListService {
 
     interface StreamListener {
 
-        void onUpdated(ListItem listItem);
+        void onUpdated(@NonNull ListItem listItem);
 
     }
 
@@ -218,7 +224,7 @@ class DeviceListService {
         }
 
         @Override
-        public void onUpdated(ListItem listItem) {
+        public void onUpdated(@NonNull ListItem listItem) {
             this.listItem = listItem;
         }
     }

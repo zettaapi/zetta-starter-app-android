@@ -10,6 +10,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.widget.ImageView;
 
@@ -22,7 +23,7 @@ import java.util.Arrays;
 
 public class ImageLoader {
 
-    public void load(Uri uri, ImageView imageView) {
+    public void load(@NonNull Uri uri, @NonNull ImageView imageView) {
         Glide.with(imageView.getContext())
             .load(uri)
             .placeholder(R.drawable.device_placeholder)
@@ -36,6 +37,7 @@ public class ImageLoader {
 
     public static class Drawables {
 
+        @NonNull
         public static Drawable getSelectableDrawableFor(int color) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 StateListDrawable stateListDrawable = new StateListDrawable();
@@ -64,6 +66,7 @@ public class ImageLoader {
             }
         }
 
+        @NonNull
         private static Drawable getRippleMask(int color) {
             float[] outerRadii = new float[8];
             // 3 is radius of final ripple, instead of 3 you can give required final radius
@@ -132,7 +135,7 @@ public class ImageLoader {
             return (int) Math.min(color + (color * fraction), 255);
         }
 
-        public static void setInputTextLayoutColor(TextInputLayout textInputLayout, ColorStateList colorStateList) {
+        public static void setInputTextLayoutColor(@NonNull TextInputLayout textInputLayout, @NonNull ColorStateList colorStateList) {
             try {
                 Field fDefaultTextColor = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
                 fDefaultTextColor.setAccessible(true);

@@ -1,6 +1,7 @@
 package com.zetta.android;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 public interface ListItem {
 
@@ -22,9 +23,9 @@ public interface ListItem {
 
     class HeaderListItem implements ListItem {
 
-        private final String title;
+        @NonNull private final String title;
 
-        public HeaderListItem(String title) {
+        public HeaderListItem(@NonNull String title) {
             this.title = title;
         }
 
@@ -33,6 +34,7 @@ public interface ListItem {
             return TYPE_HEADER;
         }
 
+        @NonNull
         public String getTitle() {
             return title;
         }
@@ -40,10 +42,10 @@ public interface ListItem {
 
     class EmptyListItem implements ListItem {
 
-        private final String message;
-        private final ZettaStyle style;
+        @NonNull private final String message;
+        @NonNull private final ZettaStyle style;
 
-        public EmptyListItem(String message, ZettaStyle style) {
+        public EmptyListItem(@NonNull String message, @NonNull ZettaStyle style) {
             this.message = message;
             this.style = style;
         }
@@ -53,10 +55,12 @@ public interface ListItem {
             return ListItem.TYPE_EMPTY;
         }
 
+        @NonNull
         public String getMessage() {
             return message;
         }
 
+        @NonNull
         public Drawable createBackground() {
             return style.createBackgroundDrawable();
         }

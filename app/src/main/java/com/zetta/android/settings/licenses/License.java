@@ -1,30 +1,39 @@
 package com.zetta.android.settings.licenses;
 
-class License {
-    private final String libraryName;
-    private final String libraryAuthor;
-    private final String type;
-    private final String website;
+import android.support.annotation.NonNull;
 
-    License(String libraryName, String libraryAuthor, String type, String website) {
+class License {
+    @NonNull private final String libraryName;
+    @NonNull private final String libraryAuthor;
+    @NonNull private final String type;
+    @NonNull private final String website;
+
+    License(@NonNull String libraryName,
+            @NonNull String libraryAuthor,
+            @NonNull String type,
+            @NonNull String website) {
         this.libraryName = libraryName;
         this.libraryAuthor = libraryAuthor;
         this.type = type;
         this.website = website;
     }
 
+    @NonNull
     public String getLibraryName() {
         return libraryName;
     }
 
+    @NonNull
     public String getLibraryAuthor() {
         return libraryAuthor;
     }
 
+    @NonNull
     public String getType() {
         return type;
     }
 
+    @NonNull
     public String getWebsite() {
         return website;
     }

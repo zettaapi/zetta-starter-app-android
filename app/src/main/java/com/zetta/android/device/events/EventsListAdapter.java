@@ -1,5 +1,6 @@
 package com.zetta.android.device.events;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +15,14 @@ import java.util.List;
 
 class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ListItem> listItems = new ArrayList<>();
+    @NonNull private final List<ListItem> listItems = new ArrayList<>();
 
-    public void update(ListItem listItem) {
+    public void update(@NonNull ListItem listItem) {
         this.listItems.add(0, listItem);
         notifyDataSetChanged();
     }
 
-    public void updateAll(List<ListItem> listItems) {
+    public void updateAll(@NonNull List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
@@ -53,13 +54,13 @@ class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final TextView transitionLabelWidget;
         private final TextView timeStampLabelWidget;
 
-        public EventViewHolder(View itemView) {
+        public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             transitionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_event_transition);
             timeStampLabelWidget = (TextView) itemView.findViewById(R.id.list_item_event_timestamp);
         }
 
-        public void bind(EventListItem eventListItem) {
+        public void bind(@NonNull EventListItem eventListItem) {
             transitionLabelWidget.setText(eventListItem.getTransition());
             transitionLabelWidget.setTextColor(eventListItem.getForegroundColor());
             timeStampLabelWidget.setText(eventListItem.getTimeStamp());

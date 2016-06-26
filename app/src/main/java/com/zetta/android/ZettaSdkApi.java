@@ -1,5 +1,6 @@
 package com.zetta.android;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.apigee.zettakit.ZIKDevice;
@@ -32,23 +33,18 @@ import rx.schedulers.Schedulers;
 public enum ZettaSdkApi {
     INSTANCE;
 
-    private final List<ZIKStream> serverDevicesStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
-    private final List<ZIKStream> deviceStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
+    @NonNull private final List<ZIKStream> serverDevicesStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
+    @NonNull private final List<ZIKStream> deviceStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
 
-    @Nullable
-    private String rootUrl;
-    @Nullable
-    private ZIKRoot zikRoot;
-    @Nullable
-    private List<ZIKServer> zikServers;
-    @Nullable
-    private List<ZIKDevice> zikDevices;
-    @Nullable
-    private ZIKStream logStream;
+    @Nullable private String rootUrl;
+    @Nullable private ZIKRoot zikRoot;
+    @Nullable private List<ZIKServer> zikServers;
+    @Nullable private List<ZIKDevice> zikDevices;
+    @Nullable private ZIKStream logStream;
 
     private boolean cancelMonitoringSetup;
 
-    public void registerRoot(String url) {
+    public void registerRoot(@NonNull String url) {
         if (url.equals(this.rootUrl)) {
             // No need to re-register
             return;
@@ -57,6 +53,7 @@ public enum ZettaSdkApi {
         getRoot();
     }
 
+    @NonNull
     public ZIKRoot getRoot() {
         if (rootUrl == null) {
             throw new DeveloperError("Call registerRoot(url) before getRoot!");
@@ -66,6 +63,7 @@ public enum ZettaSdkApi {
         return zikRoot;
     }
 
+    @NonNull
     public List<ZIKServer> getServers() {
         if (zikRoot == null || !zikRoot.getSelfLink().getHref().equals(rootUrl)) {
             getRoot();
@@ -75,7 +73,8 @@ public enum ZettaSdkApi {
         return zikServers;
     }
 
-    public List<ZIKDevice> getDevices(ZIKServer zikServer) {
+    @NonNull
+    public List<ZIKDevice> getDevices(@NonNull ZIKServer zikServer) {
         if (zikServers == null) {
             throw new DeveloperError("Ensure getServers is called and completes successfully first!");
         }
@@ -84,7 +83,8 @@ public enum ZettaSdkApi {
         return zikDevices;
     }
 
-    public ZIKDevice getLiteDevice(ZIKDeviceId zikDeviceId) {
+    @NonNull
+    public ZIKDevice getLiteDevice(@NonNull ZIKDeviceId zikDeviceId) {
         if (zikDevices == null) {
             getDevices(getServerContaining(zikDeviceId));
         }
@@ -102,11 +102,13 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A device should always be found, what did you do?");
     }
 
-    public ZIKDevice getFullDevice(ZIKDeviceId zikDeviceId) {
+    @NonNull
+    public ZIKDevice getFullDevice(@NonNull ZIKDeviceId zikDeviceId) {
         return getLiteDevice(zikDeviceId).fetchSync();
     }
 
-    public ZIKServer getServerContaining(ZIKDeviceId zikDeviceId) {
+    @NonNull
+    public ZIKServer getServerContaining(@NonNull ZIKDeviceId zikDeviceId) {
         if (zikServers == null) {
             throw new DeveloperError("Ensure getServers is called and completes successfully first!");
         }
@@ -120,14 +122,16 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A server should always be found, what did you do?");
     }
 
-    public void startMonitoringDeviceStreamsFor(ZIKDeviceId deviceId, ZikStreamEntryListener listener) {
+    public void startMonitoringDeviceStreamsFor(@NonNull ZIKDeviceId deviceId, @NonNull ZikStreamEntryListener listener) {
         stopMonitoringDeviceStreams();
         cancelMonitoringSetup = false;
         ZIKDevice device = getLiteDevice(deviceId);
         monitorNonLogStreams(device, listener, deviceStreams);
     }
 
-    private void monitorNonLogStreams(ZIKDevice device, ZikStreamEntryListener listener, List<ZIKStream> streamsCache) {
+    private void monitorNonLogStreams(@NonNull ZIKDevice device,
+                                      @NonNull ZikStreamEntryListener listener,
+                                      @NonNull List<ZIKStream> streamsCache) {
         List<ZIKStream> allStreams = device.getAllStreams();
         for (ZIKStream stream : allStreams) {
             if (cancelMonitoringSetup) {
@@ -153,7 +157,7 @@ public enum ZettaSdkApi {
         deviceStreams.clear();
     }
 
-    public void startMonitoringAllServerDeviceStreams(final ZikStreamEntryListener listener) {
+    public void startMonitoringAllServerDeviceStreams(@NonNull final ZikStreamEntryListener listener) {
         if (zikServers == null) {
             getServers();
         }
@@ -176,7 +180,10 @@ public enum ZettaSdkApi {
         }
     }
 
-    private void monitor(final ZIKStream stream, final ZIKDevice zikDevice, final ZIKServer zikServer, final ZikStreamEntryListener listener) {
+    private void monitor(@NonNull final ZIKStream stream,
+                         @NonNull final ZIKDevice zikDevice,
+                         @NonNull final ZIKServer zikServer,
+                         @NonNull final ZikStreamEntryListener listener) {
         Observable.create(new Observable.OnSubscribe<ZIKStreamEntry>() {
             @Override
             public void call(final Subscriber<? super ZIKStreamEntry> subscriber) {
@@ -236,17 +243,23 @@ public enum ZettaSdkApi {
         serverDevicesStreams.clear();
     }
 
-    public void startMonitoringLogStreamFor(ZIKDeviceId deviceId, ZikLogStreamEntryListener listener) {
+    public void startMonitoringLogStreamFor(@NonNull ZIKDeviceId deviceId, @NonNull ZikLogStreamEntryListener listener) {
         ZIKDevice device = getLiteDevice(deviceId);
         monitorLogStreams(device, listener);
     }
 
-    private void monitorLogStreams(ZIKDevice device, ZikLogStreamEntryListener listener) {
+    private void monitorLogStreams(@NonNull ZIKDevice device, @NonNull ZikLogStreamEntryListener listener) {
         logStream = device.stream("logs");
+        if (logStream == null) {
+            Log.e("Stream not found, monitoring nothing.");
+            return;
+        }
         monitorLog(logStream, listener, device);
     }
 
-    private void monitorLog(ZIKStream stream, final ZikLogStreamEntryListener listener, final ZIKDevice device) {
+    private void monitorLog(@NonNull ZIKStream stream,
+                            @NonNull final ZikLogStreamEntryListener listener,
+                            @NonNull final ZIKDevice device) {
         ZIKDeviceId deviceId = device.getDeviceId();
         final ZIKServer server = getServerContaining(deviceId);
         stream.setStreamListener(new ZIKStreamListener() {
@@ -304,10 +317,10 @@ public enum ZettaSdkApi {
     }
 
     public interface ZikStreamEntryListener {
-        void updateFor(ZIKServer server, ZIKDevice device, ZIKStreamEntry entry);
+        void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry);
     }
 
     public interface ZikLogStreamEntryListener {
-        void updateFor(ZIKServer server, ZIKDevice device, ZIKLogStreamEntry entry);
+        void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry);
     }
 }

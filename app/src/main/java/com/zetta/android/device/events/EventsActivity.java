@@ -1,6 +1,7 @@
 package com.zetta.android.device.events;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,9 +57,9 @@ public class EventsActivity extends AppCompatActivity {
         eventsService.startMonitoringLogs(deviceId, onEventsLoaded);
     }
 
-    private final EventsService.StreamListener onEventsLoaded = new EventsService.StreamListener() {
+    @NonNull private final EventsService.StreamListener onEventsLoaded = new EventsService.StreamListener() {
         @Override
-        public void onUpdated(ListItem listItem) {
+        public void onUpdated(@NonNull ListItem listItem) {
             adapter.update(listItem);
             updateState();
         }

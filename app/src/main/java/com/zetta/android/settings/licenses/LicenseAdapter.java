@@ -1,5 +1,6 @@
 package com.zetta.android.settings.licenses;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +15,15 @@ import java.util.List;
 
 class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.LicenseViewHolder> {
 
-    private final List<License> licenses = new ArrayList<>();
-    private final LayoutInflater layoutInflater;
+    @NonNull private final List<License> licenses = new ArrayList<>();
 
-    public LicenseAdapter(LayoutInflater layoutInflater) {
+    @NonNull private final LayoutInflater layoutInflater;
+
+    public LicenseAdapter(@NonNull LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
     }
 
-    public void addAll(List<License> licenses) {
+    public void addAll(@NonNull List<License> licenses) {
         this.licenses.addAll(licenses);
         notifyDataSetChanged();
     }
@@ -45,12 +47,12 @@ class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.LicenseViewHold
 
     public static class LicenseViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView nameWidget;
-        private final TextView authorWidget;
-        private final TextView typeWidget;
-        private final TextView websiteWidget;
+        @NonNull private final TextView nameWidget;
+        @NonNull private final TextView authorWidget;
+        @NonNull private final TextView typeWidget;
+        @NonNull private final TextView websiteWidget;
 
-        public LicenseViewHolder(View itemView) {
+        public LicenseViewHolder(@NonNull View itemView) {
             super(itemView);
             nameWidget = (TextView) itemView.findViewById(R.id.item_license_library_name);
             authorWidget = (TextView) itemView.findViewById(R.id.item_license_library_author);
@@ -58,14 +60,15 @@ class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.LicenseViewHold
             websiteWidget = (TextView) itemView.findViewById(R.id.item_license_website);
         }
 
-        public void bind(License license) {
+        public void bind(@NonNull License license) {
             nameWidget.setText(license.getLibraryName());
             authorWidget.setText(getString(R.string.library_author, license.getLibraryAuthor()));
             typeWidget.setText(license.getType());
             websiteWidget.setText(license.getWebsite());
         }
 
-        private String getString(@StringRes int resourceId, Object... item) {
+        @NonNull
+        private String getString(@StringRes int resourceId, @NonNull Object... item) {
             return itemView.getResources().getString(resourceId, item);
         }
     }

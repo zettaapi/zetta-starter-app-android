@@ -1,5 +1,7 @@
 package com.zetta.android.device.events;
 
+import android.support.annotation.NonNull;
+
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
@@ -13,17 +15,19 @@ import rx.schedulers.Schedulers;
 
 class EventsService {
 
-    private final SdkProperties sdkProperties;
-    private final EventsSdkService sdkService;
-    private final EventsMockService mockService;
+    @NonNull private final SdkProperties sdkProperties;
+    @NonNull private final EventsSdkService sdkService;
+    @NonNull private final EventsMockService mockService;
 
-    EventsService(SdkProperties sdkProperties, EventsSdkService sdkService, EventsMockService mockService) {
+    EventsService(@NonNull SdkProperties sdkProperties,
+                  @NonNull EventsSdkService sdkService,
+                  @NonNull EventsMockService mockService) {
         this.sdkProperties = sdkProperties;
         this.sdkService = sdkService;
         this.mockService = mockService;
     }
 
-    public void startMonitoringLogs(ZettaDeviceId deviceId, final StreamListener listener) {
+    public void startMonitoringLogs(@NonNull ZettaDeviceId deviceId, @NonNull final StreamListener listener) {
         getLogsObservable(deviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,13 +49,14 @@ class EventsService {
             });
     }
 
-    private Observable<ListItem> getLogsObservable(final ZettaDeviceId deviceId) {
+    @NonNull
+    private Observable<ListItem> getLogsObservable(@NonNull final ZettaDeviceId deviceId) {
         return Observable.create(new Observable.OnSubscribe<ListItem>() {
             @Override
             public void call(final Subscriber<? super ListItem> subscriber) {
                 monitorLogUpdates(deviceId, new StreamListener() {
                     @Override
-                    public void onUpdated(ListItem listItem) {
+                    public void onUpdated(@NonNull ListItem listItem) {
                         subscriber.onNext(listItem);
                     }
                 });
@@ -60,7 +65,7 @@ class EventsService {
         });
     }
 
-    private void monitorLogUpdates(ZettaDeviceId deviceId, StreamListener listener) {
+    private void monitorLogUpdates(@NonNull ZettaDeviceId deviceId, @NonNull StreamListener listener) {
         if (sdkProperties.useMockResponses()) {
             mockService.startMonitorLogUpdates(listener);
         } else {
@@ -78,7 +83,7 @@ class EventsService {
 
     interface StreamListener {
 
-        void onUpdated(ListItem listItem);
+        void onUpdated(@NonNull ListItem listItem);
 
     }
 }

@@ -1,5 +1,6 @@
 package com.zetta.android.browse;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,23 +19,23 @@ import java.util.List;
 
 class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ListItem> listItems = new ArrayList<>();
+    @NonNull private final List<ListItem> listItems = new ArrayList<>();
 
-    private final ImageLoader imageLoader;
-    private final OnDeviceClickListener onDeviceClickListener;
+    @NonNull private final ImageLoader imageLoader;
+    @NonNull private final OnDeviceClickListener onDeviceClickListener;
 
-    DeviceListAdapter(ImageLoader imageLoader, OnDeviceClickListener onDeviceClickListener) {
+    DeviceListAdapter(@NonNull ImageLoader imageLoader, @NonNull OnDeviceClickListener onDeviceClickListener) {
         this.imageLoader = imageLoader;
         this.onDeviceClickListener = onDeviceClickListener;
     }
 
-    public void updateAll(List<ListItem> listItems) {
+    public void updateAll(@NonNull List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
     }
 
-    public void update(ListItem listItem) {
+    public void update(@NonNull ListItem listItem) {
         int i = listItems.indexOf(listItem);
         if (i == -1) {
             Log.e("Not found in list");
@@ -95,20 +96,20 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface OnDeviceClickListener {
 
-        void onDeviceClick(ZettaDeviceId deviceId);
+        void onDeviceClick(@NonNull ZettaDeviceId deviceId);
 
-        void onDeviceLongClick(ZettaDeviceId deviceId);
+        void onDeviceLongClick(@NonNull ZettaDeviceId deviceId);
 
     }
 
     public static class DeviceViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageLoader imageLoader;
-        private final TextView nameLabelWidget;
-        private final TextView stateLabelWidget;
-        private final ImageView stateImageWidget;
+        @NonNull private final ImageLoader imageLoader;
+        @NonNull private final TextView nameLabelWidget;
+        @NonNull private final TextView stateLabelWidget;
+        @NonNull private final ImageView stateImageWidget;
 
-        public DeviceViewHolder(View itemView, ImageLoader imageLoader) {
+        public DeviceViewHolder(@NonNull View itemView, @NonNull ImageLoader imageLoader) {
             super(itemView);
             this.imageLoader = imageLoader;
             nameLabelWidget = (TextView) itemView.findViewById(R.id.list_item_device_name);
@@ -116,7 +117,8 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             stateImageWidget = (ImageView) itemView.findViewById(R.id.list_item_device_state_image);
         }
 
-        public void bind(final DeviceListItem deviceListItem, final OnDeviceClickListener onDeviceClickListener) {
+        public void bind(@NonNull final DeviceListItem deviceListItem,
+                         @NonNull final OnDeviceClickListener onDeviceClickListener) {
             itemView.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -152,16 +154,16 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class ServerViewHolder extends RecyclerView.ViewHolder {
 
-        private final View swatchColorWidget;
-        private final TextView nameLabelWidget;
+        @NonNull private final View swatchColorWidget;
+        @NonNull private final TextView nameLabelWidget;
 
-        public ServerViewHolder(View itemView) {
+        public ServerViewHolder(@NonNull View itemView) {
             super(itemView);
             swatchColorWidget = itemView.findViewById(R.id.list_item_server_swatch);
             nameLabelWidget = (TextView) itemView.findViewById(R.id.list_item_server_name);
         }
 
-        public void bind(ServerListItem serverListItem) {
+        public void bind(@NonNull ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
             itemView.setBackground(serverListItem.createBackground());
@@ -171,14 +173,14 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class EmptyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView messageWidget;
+        @NonNull private final TextView messageWidget;
 
-        public EmptyViewHolder(View itemView) {
+        public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
             messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_message);
         }
 
-        public void bind(ListItem.EmptyListItem listItem) {
+        public void bind(@NonNull ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
             itemView.setBackground(listItem.createBackground());
         }

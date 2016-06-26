@@ -1,5 +1,6 @@
 package com.zetta.android.device.actions;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,16 +10,17 @@ import com.zetta.android.R;
 
 public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextView actionLabelWidget;
-    private final AppCompatButton actionToggleButton;
+    @NonNull private final TextView actionLabelWidget;
+    @NonNull private final AppCompatButton actionToggleButton;
 
-    public ActionToggleViewHolder(View itemView) {
+    public ActionToggleViewHolder(@NonNull View itemView) {
         super(itemView);
         actionLabelWidget = (TextView) itemView.findViewById(R.id.list_item_action_label);
         actionToggleButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_toggle);
     }
 
-    public void bind(final ActionToggleListItem item, final OnActionClickListener onActionClickListener) {
+    public void bind(@NonNull final ActionToggleListItem item,
+                     @NonNull final OnActionClickListener onActionClickListener) {
         actionLabelWidget.setText(item.getLabel());
         actionLabelWidget.setTextColor(item.getActionInputTextColor());
         actionToggleButton.setText(item.getAction());

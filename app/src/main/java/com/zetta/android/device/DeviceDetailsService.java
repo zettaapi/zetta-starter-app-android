@@ -3,6 +3,7 @@ package com.zetta.android.device;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.text.Spannable;
 
 import com.novoda.notils.logger.simple.Log;
@@ -22,17 +23,19 @@ import rx.schedulers.Schedulers;
 
 class DeviceDetailsService {
 
-    private final SdkProperties sdkProperties;
-    private final DeviceDetailsSdkService sdkService;
-    private final DeviceDetailsMockService mockService;
+    @NonNull private final SdkProperties sdkProperties;
+    @NonNull private final DeviceDetailsSdkService sdkService;
+    @NonNull private final DeviceDetailsMockService mockService;
 
-    DeviceDetailsService(SdkProperties sdkProperties, DeviceDetailsSdkService sdkService, DeviceDetailsMockService mockService) {
+    DeviceDetailsService(@NonNull SdkProperties sdkProperties,
+                         @NonNull DeviceDetailsSdkService sdkService,
+                         @NonNull DeviceDetailsMockService mockService) {
         this.sdkProperties = sdkProperties;
         this.sdkService = sdkService;
         this.mockService = mockService;
     }
 
-    public void getDetails(ZettaDeviceId deviceId, final Callback callback) {
+    public void getDetails(@NonNull ZettaDeviceId deviceId, @NonNull final Callback callback) {
         getDetailsObservable(deviceId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -54,7 +57,8 @@ class DeviceDetailsService {
             });
     }
 
-    private Observable<Device> getDetailsObservable(final ZettaDeviceId deviceId) {
+    @NonNull
+    private Observable<Device> getDetailsObservable(@NonNull final ZettaDeviceId deviceId) {
         return Observable.create(new Observable.OnSubscribe<Device>() {
             @Override
             public void call(Subscriber<? super Device> subscriber) {
@@ -64,7 +68,8 @@ class DeviceDetailsService {
         });
     }
 
-    private Device getDetails(ZettaDeviceId deviceId) {
+    @NonNull
+    private Device getDetails(@NonNull ZettaDeviceId deviceId) {
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return mockService.getDetails();
@@ -73,7 +78,7 @@ class DeviceDetailsService {
         }
     }
 
-    public void startMonitoringStreamedUpdatesFor(ZettaDeviceId deviceId, final StreamListener listener) {
+    public void startMonitoringStreamedUpdatesFor(@NonNull ZettaDeviceId deviceId, @NonNull final StreamListener listener) {
         getStreamedUpdatesObservable(deviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -95,7 +100,8 @@ class DeviceDetailsService {
             });
     }
 
-    private Observable<ListItem> getStreamedUpdatesObservable(final ZettaDeviceId deviceId) {
+    @NonNull
+    private Observable<ListItem> getStreamedUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
         return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
             @Override
             protected LatestStateListener generateState() {
@@ -105,7 +111,9 @@ class DeviceDetailsService {
             }
 
             @Override
-            protected LatestStateListener next(LatestStateListener state, long requested, Observer<Observable<? extends ListItem>> observer) {
+            protected LatestStateListener next(LatestStateListener state,
+                                               long requested,
+                                               Observer<Observable<? extends ListItem>> observer) {
                 ListItem latest = state.getLatest();
                 observer.onNext(Observable.just(latest));
                 return state;
@@ -113,7 +121,7 @@ class DeviceDetailsService {
         });
     }
 
-    private void monitorStreamedUpdates(ZettaDeviceId deviceId, StreamListener listener) {
+    private void monitorStreamedUpdates(@NonNull ZettaDeviceId deviceId, @NonNull StreamListener listener) {
         if (sdkProperties.useMockResponses()) {
             mockService.startMonitorStreamedUpdates(listener);
         } else {
@@ -130,16 +138,20 @@ class DeviceDetailsService {
     }
 
     interface Callback {
-        void on(Device device);
+        void on(@NonNull Device device);
     }
 
     interface Device {
+        @NonNull
         Spannable getName();
 
+        @NonNull
         Spannable getSeverName();
 
+        @NonNull
         Drawable createBackground();
 
+        @NonNull
         List<ListItem> getListItems();
 
         @ColorInt
@@ -151,7 +163,7 @@ class DeviceDetailsService {
 
     interface StreamListener {
 
-        void onUpdated(ListItem listItem);
+        void onUpdated(@NonNull ListItem listItem);
 
     }
 
@@ -164,7 +176,7 @@ class DeviceDetailsService {
         }
 
         @Override
-        public void onUpdated(ListItem listItem) {
+        public void onUpdated(@NonNull ListItem listItem) {
             this.listItem = listItem;
         }
     }

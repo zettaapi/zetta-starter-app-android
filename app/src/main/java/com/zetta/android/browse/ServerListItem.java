@@ -2,17 +2,17 @@ package com.zetta.android.browse;
 
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaStyle;
 
 class ServerListItem implements ListItem {
 
-    @ColorInt
-    private final String name;
-    private final ZettaStyle style;
+    @NonNull private final String name;
+    @NonNull private final ZettaStyle style;
 
-    public ServerListItem(String name, ZettaStyle style) {
+    public ServerListItem(@NonNull String name, @NonNull ZettaStyle style) {
         this.name = name;
         this.style = style;
     }
@@ -27,10 +27,12 @@ class ServerListItem implements ListItem {
         return style.getForegroundColor();
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
+    @NonNull
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
     }

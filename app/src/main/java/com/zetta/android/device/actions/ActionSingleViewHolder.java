@@ -1,5 +1,6 @@
 package com.zetta.android.device.actions;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
@@ -12,18 +13,19 @@ import com.zetta.android.R;
 
 public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
 
-    private final TextInputLayout actionHintWidget;
-    private final EditText actionInputWidget;
-    private final AppCompatButton actionButton;
+    @NonNull private final TextInputLayout actionHintWidget;
+    @NonNull private final EditText actionInputWidget;
+    @NonNull private final AppCompatButton actionButton;
 
-    public ActionSingleViewHolder(View itemView) {
+    public ActionSingleViewHolder(@NonNull View itemView) {
         super(itemView);
         actionHintWidget = (TextInputLayout) itemView.findViewById(R.id.list_item_action_input_layout);
         actionInputWidget = (EditText) itemView.findViewById(R.id.list_item_action_input);
         actionButton = (AppCompatButton) itemView.findViewById(R.id.list_item_action_button);
     }
 
-    public void bind(final ActionSingleInputListItem item, final OnActionClickListener onActionClickListener) {
+    public void bind(@NonNull final ActionSingleInputListItem item,
+                     @NonNull final OnActionClickListener onActionClickListener) {
         actionHintWidget.setHint(item.getLabel());
         ImageLoader.Drawables.setInputTextLayoutColor(actionHintWidget, item.getActionInputTextColor());
         actionInputWidget.setTextColor(item.getActionInputTextColor());

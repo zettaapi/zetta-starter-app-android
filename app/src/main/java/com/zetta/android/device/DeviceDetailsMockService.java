@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -27,10 +28,11 @@ class DeviceDetailsMockService {
 
     private static final ZettaDeviceId DEVICE_ID = new ZettaDeviceId(UUID.fromString("86fee1a0-2fd1-11e6-a818-0002a5d5c51b"));
 
-    private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+    @NonNull private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private RandomStreamGenerator streamGenerator;
 
+    @NonNull
     public DeviceDetailsService.Device getDetails() {
         final List<ListItem> items = new ArrayList<>();
 
@@ -87,6 +89,7 @@ class DeviceDetailsMockService {
         items.add(new EventsListItem(DEVICE_ID, "View Events (42)", style));
 
         return new DeviceDetailsService.Device() {
+            @NonNull
             @Override
             public Spannable getName() {
                 Spannable name = new SpannableString("Porch Light");
@@ -95,6 +98,7 @@ class DeviceDetailsMockService {
                 return name;
             }
 
+            @NonNull
             @Override
             public Spannable getSeverName() {
                 Spannable name = new SpannableString("neworleans");
@@ -103,11 +107,13 @@ class DeviceDetailsMockService {
                 return name;
             }
 
+            @NonNull
             @Override
             public Drawable createBackground() {
                 return style.createBackgroundDrawable();
             }
 
+            @NonNull
             @Override
             public List<ListItem> getListItems() {
                 return items;
@@ -125,19 +131,19 @@ class DeviceDetailsMockService {
         };
     }
 
-    public void startMonitorStreamedUpdates(DeviceDetailsService.StreamListener listener) {
+    public void startMonitorStreamedUpdates(@NonNull DeviceDetailsService.StreamListener listener) {
         streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
 
     private static class RandomStreamGenerator implements Runnable {
 
-        private final Random random = new Random();
+        @NonNull private final Random random = new Random();
 
-        private final Handler handler;
-        private final DeviceDetailsService.StreamListener listener;
+        @NonNull private final Handler handler;
+        @NonNull private final DeviceDetailsService.StreamListener listener;
 
-        private RandomStreamGenerator(Handler handler, DeviceDetailsService.StreamListener listener) {
+        private RandomStreamGenerator(@NonNull Handler handler, @NonNull DeviceDetailsService.StreamListener listener) {
             this.handler = handler;
             this.listener = listener;
         }

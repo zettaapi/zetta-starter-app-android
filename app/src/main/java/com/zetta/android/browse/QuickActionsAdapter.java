@@ -1,5 +1,6 @@
 package com.zetta.android.browse;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,14 +22,15 @@ import java.util.List;
 
 class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<ListItem> items = new ArrayList<>();
-    private final OnActionClickListener onActionClickListener;
+    @NonNull private final List<ListItem> items = new ArrayList<>();
 
-    public QuickActionsAdapter(OnActionClickListener onActionClickListener) {
+    @NonNull private final OnActionClickListener onActionClickListener;
+
+    public QuickActionsAdapter(@NonNull OnActionClickListener onActionClickListener) {
         this.onActionClickListener = onActionClickListener;
     }
 
-    public void updateAll(List<ListItem> listItems) {
+    public void updateAll(@NonNull List<ListItem> listItems) {
         this.items.clear();
         this.items.addAll(listItems);
         notifyDataSetChanged();
@@ -102,19 +104,19 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private final TextView headerTitleWidget;
 
-        public HeaderViewHolder(View itemView) {
+        public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             headerTitleWidget = (TextView) itemView.findViewById(R.id.list_item_action_header_label);
         }
 
-        public void bind(ListItem.HeaderListItem item) {
+        public void bind(@NonNull ListItem.HeaderListItem item) {
             headerTitleWidget.setText(item.getTitle());
         }
     }
 
     private static class LoadingViewHolder extends RecyclerView.ViewHolder {
 
-        public LoadingViewHolder(View itemView) {
+        public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
@@ -127,12 +129,12 @@ class QuickActionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private final TextView messageWidget;
 
-        public EmptyViewHolder(View itemView) {
+        public EmptyViewHolder(@NonNull View itemView) {
             super(itemView);
             messageWidget = (TextView) itemView.findViewById(R.id.list_item_empty_message);
         }
 
-        public void bind(ListItem.EmptyListItem listItem) {
+        public void bind(@NonNull ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
             itemView.setBackground(listItem.createBackground());
         }
