@@ -9,12 +9,10 @@ import com.zetta.android.ZettaStyle;
 class StateListItem implements ListItem {
 
     @NonNull private final String state;
-    @NonNull private final Uri stateImageUri;
     @NonNull private final ZettaStyle style;
 
-    public StateListItem(@NonNull String state, @NonNull Uri stateImageUri, @NonNull ZettaStyle style) {
+    public StateListItem(@NonNull String state, @NonNull ZettaStyle style) {
         this.state = state;
-        this.stateImageUri = stateImageUri;
         this.style = style;
     }
 
@@ -30,7 +28,7 @@ class StateListItem implements ListItem {
 
     @NonNull
     public Uri getStateImageUri() {
-        return stateImageUri;
+        return style.getStateImage();
     }
 
     public int getStateColor() {

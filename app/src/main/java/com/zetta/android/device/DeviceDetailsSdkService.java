@@ -105,9 +105,12 @@ class DeviceDetailsSdkService {
     @NonNull
     private List<ListItem> convertToDeviceListItems(@NonNull ZIKServer zikServer, @NonNull ZIKDevice zikDevice) {
         List<ListItem> listItems = new ArrayList<>();
-        listItems.add(new ListItem.HeaderListItem("Actions"));
-
         ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
+
+        String state = zikDevice.getState();
+        listItems.add(new StateListItem(state, style));
+
+        listItems.add(new ListItem.HeaderListItem("Actions"));
 
         List<ZIKTransition> transitions = zikDevice.getTransitions();
         if (transitions.isEmpty()) {

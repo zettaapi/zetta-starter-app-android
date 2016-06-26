@@ -41,8 +41,7 @@ class DeviceDetailsMockService {
         final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         items.add(new StateListItem(
             "on",
-            Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
-            style
+            new ZettaStyle(foregroundColor, backgroundColor, Uri.parse("http://www.zettaapi.org/icons/light-on.png"), ZettaStyle.TintMode.ORIGINAL)
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
