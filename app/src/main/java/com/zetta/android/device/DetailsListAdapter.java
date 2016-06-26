@@ -246,6 +246,7 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             stateImageWidget.setColorFilter(item.getStateColor());
             stateLabelWidget.setText(item.getState());
             stateLabelWidget.setTextColor(item.getStateColor());
+            itemView.setBackgroundColor(item.getBackgroundColor());
         }
     }
 

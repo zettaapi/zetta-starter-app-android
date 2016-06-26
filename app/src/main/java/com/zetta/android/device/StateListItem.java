@@ -34,4 +34,8 @@ class StateListItem implements ListItem {
     public int getStateColor() {
         return style.getForegroundColor();
     }
+
+    public int getBackgroundColor() {
+        return style.getBackgroundColor();
+    }
 }
