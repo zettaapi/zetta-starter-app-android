@@ -4,17 +4,18 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.zetta.android.ListItem;
+import com.zetta.android.ZettaStyle;
 
 class StateListItem implements ListItem {
 
     @NonNull private final String state;
     @NonNull private final Uri stateImageUri;
-    private final int foregroundColor;
+    @NonNull private final ZettaStyle style;
 
-    public StateListItem(@NonNull String state, @NonNull Uri stateImageUri, int foregroundColor) {
+    public StateListItem(@NonNull String state, @NonNull Uri stateImageUri, @NonNull ZettaStyle style) {
         this.state = state;
         this.stateImageUri = stateImageUri;
-        this.foregroundColor = foregroundColor;
+        this.style = style;
     }
 
     @Override
@@ -33,6 +34,6 @@ class StateListItem implements ListItem {
     }
 
     public int getStateColor() {
-        return foregroundColor;
+        return style.getForegroundColor();
     }
 }

@@ -42,7 +42,7 @@ class DeviceDetailsMockService {
         items.add(new StateListItem(
             "on",
             Uri.parse("http://www.zettaapi.org/icons/light-on.png"),
-            foregroundColor
+            style
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
