@@ -51,6 +51,7 @@ class DeviceListSdkService {
             items.add(createServerListItem(serverStyle, server));
 
             List<ZIKDevice> zikDevices = server.getDevices();
+
             if (zikDevices.isEmpty()) {
                 items.add(createEmptyServerListItem(serverStyle));
             } else {
@@ -60,6 +61,7 @@ class DeviceListSdkService {
                 }
             }
         }
+
         return items;
     }
 
