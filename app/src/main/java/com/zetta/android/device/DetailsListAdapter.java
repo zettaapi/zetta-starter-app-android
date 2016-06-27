@@ -100,6 +100,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ListItem.TYPE_EMPTY) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_empty, parent, false);
             return new EmptyViewHolder(v);
+        } else if (viewType == ListItem.TYPE_PROMOTED) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_promoted, parent, false);
+            return new PromotedViewHolder(v);
         }
         throw new IllegalStateException("Attempted to create view holder for a type you haven't coded for: " + viewType);
     }
@@ -142,6 +145,10 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (type == ListItem.TYPE_EMPTY) {
             ListItem.EmptyListItem emptyListItem = (ListItem.EmptyListItem) listItems.get(position);
             ((EmptyViewHolder) holder).bind(emptyListItem);
+            return;
+        } else if (type == ListItem.TYPE_PROMOTED) {
+            PromotedListItem promotedListItem = (PromotedListItem) listItems.get(position);
+            ((PromotedViewHolder) holder).bind(promotedListItem);
             return;
         }
         throw new IllegalStateException("Attempted to bind a type you haven't coded for: " + type);
@@ -264,5 +271,29 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setBackground(listItem.createBackground());
         }
 
+    }
+
+    public static class PromotedViewHolder extends RecyclerView.ViewHolder {
+
+        @NonNull private final TextView propertyLabelWidget;
+        @NonNull private final TextView valueLabelWidget;
+        @NonNull private final TextView symbolLabelWidget;
+
+        public PromotedViewHolder(@NonNull View itemView) {
+            super(itemView);
+            propertyLabelWidget = (TextView) itemView.findViewById(R.id.list_item_promoted_property_label);
+            valueLabelWidget = (TextView) itemView.findViewById(R.id.list_item_promoted_value_label);
+            symbolLabelWidget = (TextView) itemView.findViewById(R.id.list_item_promoted_symbol_label);
+        }
+
+        public void bind(@NonNull PromotedListItem item) {
+            propertyLabelWidget.setText(item.getProperty());
+            propertyLabelWidget.setTextColor(item.getForegroundColor());
+            valueLabelWidget.setText(item.getValue());
+            valueLabelWidget.setTextColor(item.getForegroundColor());
+            symbolLabelWidget.setText(item.getSymbol());
+            symbolLabelWidget.setTextColor(item.getForegroundColor());
+            itemView.setBackgroundColor(item.getBackgroundColor());
+        }
     }
 }
