@@ -4,7 +4,8 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="vertical"
-  android:paddingBottom="@dimen/spacing_double">
+  android:paddingBottom="@dimen/spacing_double"
+  android:paddingTop="@dimen/spacing_double">
 
   <ImageView
     android:id="@+id/list_item_state_image"

@@ -32,7 +32,7 @@ class StateListItem implements ListItem {
     }
 
     public int getStateColor() {
-        return style.getForegroundColor();
+        return style.getTintColor();
     }
 
     public int getBackgroundColor() {
