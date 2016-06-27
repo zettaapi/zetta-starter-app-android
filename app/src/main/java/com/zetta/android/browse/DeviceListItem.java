@@ -53,7 +53,6 @@ class DeviceListItem implements ListItem {
     }
 
     @ColorInt
-    @NonNull
     public int getImageColorFilter() {
         return style.getTintColor();
     }
