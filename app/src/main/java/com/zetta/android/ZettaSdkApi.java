@@ -18,7 +18,9 @@ import com.novoda.notils.logger.simple.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Response;
@@ -69,8 +71,33 @@ public enum ZettaSdkApi {
             getRoot();
         }
         ZIKSession session = ZIKSession.getSharedSession();
-        this.zikServers = session.getServersSync(zikRoot);
-        return zikServers;
+        List<ZIKServer> zikServers = session.getServersSync(zikRoot);
+        filterHiddenDevices(zikServers);
+        this.zikServers = zikServers;
+        return this.zikServers;
+    }
+
+    private void filterHiddenDevices(List<ZIKServer> zikServers) {
+        for (ZIKServer zikServer : zikServers) {
+            filterHiddenDevices(zikServer, zikServer.getDevices());
+        }
+    }
+
+    private void filterHiddenDevices(ZIKServer server, List<ZIKDevice> zikDevices) {
+        if (server.getProperties().containsKey("style")) {
+            Map entities = (Map) ((Map) server.getProperties().get("style")).get("entities");
+            for (Object entityType : entities.keySet()) {
+                Map deviceType = (Map) entities.get(entityType);
+                if (deviceType.containsKey("display") && deviceType.get("display").equals("none")) {
+                    for (Iterator<ZIKDevice> iterator = zikDevices.iterator(); iterator.hasNext(); ) {
+                        ZIKDevice zikDevice = iterator.next();
+                        if (zikDevice.getType().equals(entityType)) {
+                            iterator.remove();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @NonNull
@@ -164,7 +191,8 @@ public enum ZettaSdkApi {
         stopMonitoringAllServerDeviceStreams();
         cancelMonitoringSetup = false;
         for (final ZIKServer zikServer : zikServers) {
-            for (ZIKDevice liteZikDevice : zikServer.getDevices()) {
+            List<ZIKDevice> zikDevices = zikServer.getDevices();
+            for (ZIKDevice liteZikDevice : zikDevices) {
                 final ZIKDevice zikDevice = liteZikDevice.fetchSync();
                 for (final ZIKStream stream : zikDevice.getAllStreams()) {
                     if (cancelMonitoringSetup) {
