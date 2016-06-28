@@ -118,6 +118,9 @@ class DeviceDetailsSdkService {
             listItems.add(createEmptyActionsListItem(style));
         }
         for (ZIKTransition transition : transitions) {
+            if (transition.getName().startsWith("_")) {
+                continue;
+            }
             listItems.add(actionListItemParser.parseActionListItem(getDeviceId(zikDevice), style, transition));
         }
 
