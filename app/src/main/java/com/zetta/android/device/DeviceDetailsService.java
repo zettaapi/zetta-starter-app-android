@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.Spannable;
 
 import com.novoda.notils.logger.simple.Log;
+import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
@@ -18,7 +19,6 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.AsyncOnSubscribe;
 import rx.schedulers.Schedulers;
 
 class DeviceDetailsService {
@@ -103,21 +103,15 @@ class DeviceDetailsService {
 
     @NonNull
     private Observable<ListItem> getStreamedUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
-        return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
+        return Observable.create(new BackpressureAbsorbingOnSubscribe() {
             @Override
-            protected LatestStateListener generateState() {
-                LatestStateListener latestStateListener = new LatestStateListener();
-                monitorStreamedUpdates(deviceId, latestStateListener);
-                return latestStateListener;
-            }
-
-            @Override
-            protected LatestStateListener next(LatestStateListener state,
-                                               long requested,
-                                               Observer<Observable<? extends ListItem>> observer) {
-                ListItem latest = state.getLatest();
-                observer.onNext(Observable.just(latest));
-                return state;
+            public void startAsync(final LatestStateListener listener) {
+                monitorStreamedUpdates(deviceId, new StreamListener() {
+                    @Override
+                    public void onUpdated(@NonNull ListItem listItem) {
+                        listener.onNext(listItem);
+                    }
+                });
             }
         });
     }
@@ -170,17 +164,4 @@ class DeviceDetailsService {
 
     }
 
-    private static class LatestStateListener implements StreamListener {
-
-        private ListItem listItem;
-
-        public ListItem getLatest() {
-            return listItem;
-        }
-
-        @Override
-        public void onUpdated(@NonNull ListItem listItem) {
-            this.listItem = listItem;
-        }
-    }
 }

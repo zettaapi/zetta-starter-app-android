@@ -9,6 +9,7 @@ import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
+import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.AsyncOnSubscribe;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -174,19 +174,15 @@ class DeviceListService {
 
     @NonNull
     private Observable<ListItem> getStreamedUpdatesObservable() {
-        return Observable.create(new AsyncOnSubscribe<LatestStateListener, ListItem>() {
+        return Observable.create(new BackpressureAbsorbingOnSubscribe() {
             @Override
-            protected LatestStateListener generateState() {
-                LatestStateListener latestStateListener = new LatestStateListener();
-                monitorStreamedUpdates(latestStateListener);
-                return latestStateListener;
-            }
-
-            @Override
-            protected LatestStateListener next(LatestStateListener state, long requested, Observer<Observable<? extends ListItem>> observer) {
-                ListItem latest = state.getLatest();
-                observer.onNext(Observable.just(latest));
-                return state;
+            public void startAsync(final LatestStateListener listener) {
+                monitorStreamedUpdates(new StreamListener() {
+                    @Override
+                    public void onUpdated(@NonNull ListItem listItem) {
+                        listener.onNext(listItem);
+                    }
+                });
             }
         });
     }
@@ -214,19 +210,4 @@ class DeviceListService {
         void onUpdated(@NonNull ListItem listItem);
 
     }
-
-    private static class LatestStateListener implements StreamListener {
-
-        private ListItem listItem;
-
-        public ListItem getLatest() {
-            return listItem;
-        }
-
-        @Override
-        public void onUpdated(@NonNull ListItem listItem) {
-            this.listItem = listItem;
-        }
-    }
-
 }
