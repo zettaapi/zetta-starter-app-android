@@ -125,6 +125,9 @@ class DeviceDetailsSdkService {
 
         List<ZIKStream> allStreams = zikDevice.getAllStreams();
         for (ZIKStream stream : allStreams) {
+            if (stream.getTitle().equals("logs")) {
+                continue;
+            }
             listItems.add(createInitialStreamListItem(style, zikDevice, stream));
         }
 
