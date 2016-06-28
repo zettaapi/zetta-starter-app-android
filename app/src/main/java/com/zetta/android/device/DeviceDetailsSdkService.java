@@ -191,6 +191,10 @@ class DeviceDetailsSdkService {
                                                        @NonNull ZIKStream zikStream) {
         String stream = zikStream.getTitle();
         String value = "";
+        Map<String, Object> properties = device.getProperties();
+        if (properties.containsKey(stream)) {
+            value = String.valueOf(properties.get(stream));
+        }
         ZettaDeviceId zettaDeviceId = getDeviceId(device);
         return new StreamListItem(
             zettaDeviceId,
