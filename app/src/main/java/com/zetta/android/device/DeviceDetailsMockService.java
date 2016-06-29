@@ -32,13 +32,13 @@ class DeviceDetailsMockService {
     private RandomStreamGenerator streamGenerator;
 
     @NonNull
-    public DeviceDetailsService.Device getDetails() {
+    public Device getDetails() {
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
         ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         List<ListItem> items = createListItems(style);
 
-        return new ZettaDevice(getDeviceName(style), getServerName(style), style, items);
+        return new Device(getDeviceName(style), getServerName(style), style, items);
     }
 
     @NonNull

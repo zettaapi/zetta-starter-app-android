@@ -1,10 +1,7 @@
 package com.zetta.android.device;
 
-import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.text.Spannable;
 
 import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.BackpressureAbsorbingOnSubscribe;
@@ -137,26 +134,6 @@ class DeviceDetailsService {
         void on(@NonNull Device device);
 
         void onDeviceLoadError();
-    }
-
-    interface Device {
-        @NonNull
-        Spannable getName();
-
-        @NonNull
-        Spannable getSeverName();
-
-        @NonNull
-        Drawable createBackground();
-
-        @NonNull
-        List<ListItem> getListItems();
-
-        @ColorInt
-        int getTintColor();
-
-        @ColorInt
-        int getBackgroundColor();
     }
 
     interface StreamListener {

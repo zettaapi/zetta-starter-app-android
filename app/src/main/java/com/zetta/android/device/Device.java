@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-class ZettaDevice implements DeviceDetailsService.Device {
+class Device {
 
     private final Spannable deviceName;
     private final Spannable serverName;
     private final ZettaStyle style;
     private final List<ListItem> listItems;
 
-    public ZettaDevice(Spannable deviceName, Spannable serverName, ZettaStyle style, List<ListItem> listItems) {
+    public Device(Spannable deviceName, Spannable serverName, ZettaStyle style, List<ListItem> listItems) {
         this.deviceName = deviceName;
         this.serverName = serverName;
         this.style = style;
@@ -40,35 +40,29 @@ class ZettaDevice implements DeviceDetailsService.Device {
     }
 
     @NonNull
-    @Override
     public Spannable getName() {
         return deviceName;
     }
 
     @NonNull
-    @Override
     public Spannable getSeverName() {
         return serverName;
     }
 
     @NonNull
-    @Override
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
     }
 
     @NonNull
-    @Override
     public List<ListItem> getListItems() {
         return listItems;
     }
 
-    @Override
     public int getTintColor() {
         return style.getTintColor();
     }
 
-    @Override
     public int getBackgroundColor() {
         return style.getBackgroundColor();
     }
@@ -86,13 +80,13 @@ class ZettaDevice implements DeviceDetailsService.Device {
         }
 
         @NonNull
-        public ZettaDevice convertToDevice(@NonNull final ZIKServer zikServer,
-                                           @NonNull final ZIKDevice zikDevice) {
+        public Device convertToDevice(@NonNull final ZIKServer zikServer,
+                                      @NonNull final ZIKDevice zikDevice) {
             ZettaStyle zettaStyle = zettaStyleParser.parseStyle(zikServer, zikDevice);
             Spannable serverName = getServerName(zikServer, zettaStyle);
             Spannable deviceName = getDeviceName(zikDevice, zettaStyle);
             List<ListItem> listItems = convertToDeviceListItems(zettaStyle, zikServer, zikDevice);
-            return new ZettaDevice(serverName, deviceName, zettaStyle, listItems);
+            return new Device(serverName, deviceName, zettaStyle, listItems);
         }
 
         @NonNull

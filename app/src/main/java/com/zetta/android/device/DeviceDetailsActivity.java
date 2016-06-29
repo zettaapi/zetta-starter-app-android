@@ -99,7 +99,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
         @Override
-        public void on(@NonNull DeviceDetailsService.Device device) {
+        public void on(@NonNull Device device) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
