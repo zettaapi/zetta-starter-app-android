@@ -10,15 +10,15 @@ import rx.Observable;
 import rx.Observer;
 import rx.observables.AsyncOnSubscribe;
 
-public abstract class BackpressureAbsorbingOnSubscribe extends AsyncOnSubscribe<BackpressureAbsorbingOnSubscribe.LatestStateListener, ListItem> {
+public abstract class BackpressureAbsorbingOnSubscribe<T> extends AsyncOnSubscribe<BackpressureAbsorbingOnSubscribe.LatestStateListener<T>, T> {
     @Override
-    protected LatestStateListener generateState() {
-        final LatestStateListener latestStateListener = new LatestStateListener();
+    protected LatestStateListener<T> generateState() {
+        final LatestStateListener<T> latestStateListener = new LatestStateListener<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        startAsync(new LatestStateListener() {
+        startAsync(new LatestStateListener<T>() {
             @Override
-            public void onNext(@NonNull ListItem listItem) {
+            public void onNext(@NonNull T listItem) {
                 latestStateListener.onNext(listItem);
                 latch.countDown();
             }
@@ -38,13 +38,11 @@ public abstract class BackpressureAbsorbingOnSubscribe extends AsyncOnSubscribe<
      *
      * @param listener
      */
-    public abstract void startAsync(LatestStateListener listener);
+    public abstract void startAsync(LatestStateListener<T> listener);
 
     @Override
-    protected LatestStateListener next(LatestStateListener state,
-                                       long requested,
-                                       Observer<Observable<? extends ListItem>> observer) {
-        ListItem latest = state.getLatest();
+    protected LatestStateListener<T> next(LatestStateListener<T> state, long requested, Observer<Observable<? extends T>> observer) {
+        T latest = state.getLatest();
         if (latest == null) {
             observer.onCompleted();
             return state;
@@ -54,16 +52,16 @@ public abstract class BackpressureAbsorbingOnSubscribe extends AsyncOnSubscribe<
         return state;
     }
 
-    public static class LatestStateListener {
+    public static class LatestStateListener<T> {
 
-        private ListItem listItem;
+        private T item;
 
-        public ListItem getLatest() {
-            return listItem;
+        public T getLatest() {
+            return item;
         }
 
-        public void onNext(@NonNull ListItem listItem) {
-            this.listItem = listItem;
+        public void onNext(@NonNull T item) {
+            this.item = item;
         }
     }
 }
