@@ -34,14 +34,61 @@ class DeviceDetailsMockService {
 
     @NonNull
     public DeviceDetailsService.Device getDetails() {
-        final List<ListItem> items = new ArrayList<>();
 
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
         final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
+        final List<ListItem> items = createListItems(style);
+
+        return new DeviceDetailsService.Device() {
+            @NonNull
+            @Override
+            public Spannable getName() {
+                Spannable name = new SpannableString("Porch Light");
+                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
+            }
+
+            @NonNull
+            @Override
+            public Spannable getSeverName() {
+                Spannable name = new SpannableString("neworleans");
+                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                return name;
+            }
+
+            @NonNull
+            @Override
+            public Drawable createBackground() {
+                return style.createBackgroundDrawable();
+            }
+
+            @NonNull
+            @Override
+            public List<ListItem> getListItems() {
+                return items;
+            }
+
+            @Override
+            public int getTintColor() {
+                return style.getTintColor();
+            }
+
+            @Override
+            public int getBackgroundColor() {
+                return style.getBackgroundColor();
+            }
+        };
+    }
+
+    private List<ListItem> createListItems(ZettaStyle style) {
+        List<ListItem> items = new ArrayList<>();
+
         items.add(new StateListItem(
             DEVICE_ID, "on",
-            new ZettaStyle(foregroundColor, backgroundColor, Uri.parse("http://www.zettaapi.org/icons/light-on.png"), ZettaStyle.TintMode.ORIGINAL)
+            new ZettaStyle(style.getForegroundColor(), style.getBackgroundColor(), Uri.parse("http://www.zettaapi.org/icons/light-on.png"), ZettaStyle.TintMode.ORIGINAL)
         ));
 
         items.add(new ListItem.HeaderListItem("Actions"));
@@ -87,47 +134,7 @@ class DeviceDetailsMockService {
         items.add(new ListItem.HeaderListItem("Events"));
         items.add(new EventsListItem(DEVICE_ID, "View Events (42)", style));
 
-        return new DeviceDetailsService.Device() {
-            @NonNull
-            @Override
-            public Spannable getName() {
-                Spannable name = new SpannableString("Porch Light");
-                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return name;
-            }
-
-            @NonNull
-            @Override
-            public Spannable getSeverName() {
-                Spannable name = new SpannableString("neworleans");
-                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return name;
-            }
-
-            @NonNull
-            @Override
-            public Drawable createBackground() {
-                return style.createBackgroundDrawable();
-            }
-
-            @NonNull
-            @Override
-            public List<ListItem> getListItems() {
-                return items;
-            }
-
-            @Override
-            public int getTintColor() {
-                return style.getTintColor();
-            }
-
-            @Override
-            public int getBackgroundColor() {
-                return style.getBackgroundColor();
-            }
-        };
+        return items;
     }
 
     public void startMonitorStreamedUpdates(@NonNull DeviceDetailsService.StreamListener listener) {
