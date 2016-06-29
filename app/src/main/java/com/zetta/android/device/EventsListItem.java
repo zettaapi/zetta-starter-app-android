@@ -44,4 +44,24 @@ class EventsListItem implements ListItem {
     public int getForegroundColor() {
         return style.getForegroundColor();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof EventsListItem)) {
+            return false;
+        }
+
+        EventsListItem that = (EventsListItem) o;
+
+        return deviceId.equals(that.deviceId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return deviceId.hashCode();
+    }
 }

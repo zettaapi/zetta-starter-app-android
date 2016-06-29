@@ -64,4 +64,27 @@ public class ActionToggleListItem implements ListItem {
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ActionToggleListItem)) {
+            return false;
+        }
+
+        ActionToggleListItem that = (ActionToggleListItem) o;
+
+        return deviceId.equals(that.deviceId)
+            && label.equals(that.label);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deviceId.hashCode();
+        result = 31 * result + label.hashCode();
+        return result;
+    }
 }

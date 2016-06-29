@@ -66,4 +66,27 @@ public class ActionMultipleInputListItem implements ListItem {
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ActionMultipleInputListItem)) {
+            return false;
+        }
+
+        ActionMultipleInputListItem that = (ActionMultipleInputListItem) o;
+
+        return deviceId.equals(that.deviceId)
+            && labels.equals(that.labels);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deviceId.hashCode();
+        result = 31 * result + labels.hashCode();
+        return result;
+    }
 }

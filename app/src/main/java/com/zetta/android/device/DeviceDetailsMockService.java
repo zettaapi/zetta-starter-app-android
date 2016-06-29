@@ -40,7 +40,7 @@ class DeviceDetailsMockService {
         int backgroundColor = Color.parseColor("#d9d9d9");
         final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
         items.add(new StateListItem(
-            "on",
+            DEVICE_ID, "on",
             new ZettaStyle(foregroundColor, backgroundColor, Uri.parse("http://www.zettaapi.org/icons/light-on.png"), ZettaStyle.TintMode.ORIGINAL)
         ));
 
@@ -75,14 +75,14 @@ class DeviceDetailsMockService {
         items.add(new StreamListItem(DEVICE_ID, "temperature", "23.872342385", style));
 
         items.add(new ListItem.HeaderListItem("Properties"));
-        items.add(new PropertyListItem("type", "light", style));
-        items.add(new PropertyListItem("style", "", style));
-        items.add(new PropertyListItem("brightness", "", style));
-        items.add(new PropertyListItem("name", "Porch Light", style));
-        items.add(new PropertyListItem("id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2", style));
-        items.add(new PropertyListItem("state", "on", style));
-        items.add(new PropertyListItem("color", "", style));
-        items.add(new PropertyListItem("blink", "", style));
+        items.add(new PropertyListItem(DEVICE_ID, "type", "light", style));
+        items.add(new PropertyListItem(DEVICE_ID, "style", "", style));
+        items.add(new PropertyListItem(DEVICE_ID, "brightness", "", style));
+        items.add(new PropertyListItem(DEVICE_ID, "name", "Porch Light", style));
+        items.add(new PropertyListItem(DEVICE_ID, "id", "5113a9d2-0dfa-4061-8034-8cde5bbb41b2", style));
+        items.add(new PropertyListItem(DEVICE_ID, "state", "on", style));
+        items.add(new PropertyListItem(DEVICE_ID, "color", "", style));
+        items.add(new PropertyListItem(DEVICE_ID, "blink", "", style));
 
         items.add(new ListItem.HeaderListItem("Events"));
         items.add(new EventsListItem(DEVICE_ID, "View Events (42)", style));

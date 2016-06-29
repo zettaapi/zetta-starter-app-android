@@ -64,4 +64,27 @@ public class ActionSingleInputListItem implements ListItem {
     public Drawable getBackground() {
         return zettaStyle.createBackgroundDrawable();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ActionSingleInputListItem)) {
+            return false;
+        }
+
+        ActionSingleInputListItem that = (ActionSingleInputListItem) o;
+
+        return deviceId.equals(that.deviceId)
+            && label.equals(that.label);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deviceId.hashCode();
+        result = 31 * result + label.hashCode();
+        return result;
+    }
 }

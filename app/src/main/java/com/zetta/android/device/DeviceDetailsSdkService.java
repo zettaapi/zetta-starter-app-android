@@ -136,12 +136,13 @@ class DeviceDetailsSdkService {
 
         listItems.add(new ListItem.HeaderListItem("Properties"));
 
+        ZettaDeviceId zettaDeviceId = getDeviceId(zikDevice);
         Map<String, Object> deviceProperties = zikDevice.getProperties();
         for (String propertyName : deviceProperties.keySet()) {
             if (propertyName.equals("style")) {
                 continue;
             }
-            listItems.add(createPropertyListItem(style, deviceProperties, propertyName));
+            listItems.add(createPropertyListItem(zettaDeviceId, style, deviceProperties, propertyName));
         }
         if (deviceProperties.isEmpty()) {
             listItems.add(createEmptyPropertiesListItem(style));
@@ -156,6 +157,7 @@ class DeviceDetailsSdkService {
 
     @NonNull
     private ListItem createPromotedListItem(@NonNull ZIKServer zikServer, @NonNull ZIKDevice zikDevice, @NonNull ZettaStyle style) {
+        ZettaDeviceId zettaDeviceId = getDeviceId(zikDevice);
         Map entities = (Map) ((Map) zikServer.getProperties().get("style")).get("entities");
         String deviceType = zikDevice.getType();
         if (entities.containsKey(deviceType)) {
@@ -171,13 +173,13 @@ class DeviceDetailsSdkService {
                     Double significantDigits = (double) promotedProperties.get("significantDigits");
                     BigDecimal bigValue = new BigDecimal(value).setScale(significantDigits.intValue(), BigDecimal.ROUND_FLOOR);
                     String roundedValue = bigValue.toString();
-                    return new PromotedListItem(promotedPropertyKey, roundedValue, symbol, style);
+                    return new PromotedListItem(zettaDeviceId, promotedPropertyKey, roundedValue, symbol, style);
                 }
             }
 
         }
         String state = zikDevice.getState();
-        return new StateListItem(state, style);
+        return new StateListItem(zettaDeviceId, state, style);
     }
 
     @NonNull
@@ -210,11 +212,12 @@ class DeviceDetailsSdkService {
     }
 
     @NonNull
-    private PropertyListItem createPropertyListItem(@NonNull ZettaStyle style,
+    private PropertyListItem createPropertyListItem(@NonNull ZettaDeviceId zettaDeviceId,
+                                                    @NonNull ZettaStyle style,
                                                     @NonNull Map<String, Object> deviceProperties,
                                                     @NonNull String propertyName) {
         String propertyValue = String.valueOf(deviceProperties.get(propertyName));
-        return new PropertyListItem(propertyName, propertyValue, style);
+        return new PropertyListItem(zettaDeviceId, propertyName, propertyValue, style);
     }
 
     @NonNull
