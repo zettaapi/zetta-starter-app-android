@@ -1,7 +1,6 @@
 package com.zetta.android.device;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,53 +33,28 @@ class DeviceDetailsMockService {
 
     @NonNull
     public DeviceDetailsService.Device getDetails() {
-
         int foregroundColor = Color.parseColor("#1111dd");
         int backgroundColor = Color.parseColor("#d9d9d9");
-        final ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
-        final List<ListItem> items = createListItems(style);
+        ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
+        List<ListItem> items = createListItems(style);
 
-        return new DeviceDetailsService.Device() {
-            @NonNull
-            @Override
-            public Spannable getName() {
-                Spannable name = new SpannableString("Porch Light");
-                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return name;
-            }
+        return new ZettaDevice(getDeviceName(style), getServerName(style), style, items);
+    }
 
-            @NonNull
-            @Override
-            public Spannable getSeverName() {
-                Spannable name = new SpannableString("neworleans");
-                name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                return name;
-            }
+    @NonNull
+    private Spannable getServerName(ZettaStyle style) {
+        Spannable name = new SpannableString("neworleans");
+        name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return name;
+    }
 
-            @NonNull
-            @Override
-            public Drawable createBackground() {
-                return style.createBackgroundDrawable();
-            }
-
-            @NonNull
-            @Override
-            public List<ListItem> getListItems() {
-                return items;
-            }
-
-            @Override
-            public int getTintColor() {
-                return style.getTintColor();
-            }
-
-            @Override
-            public int getBackgroundColor() {
-                return style.getBackgroundColor();
-            }
-        };
+    @NonNull
+    private Spannable getDeviceName(ZettaStyle style) {
+        Spannable name = new SpannableString("Porch Light");
+        name.setSpan(style.createBackgroundColorSpan(), 0, name.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        name.setSpan(style.createForegroundColorSpan(), 0, name.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return name;
     }
 
     private List<ListItem> createListItems(ZettaStyle style) {
