@@ -36,7 +36,7 @@ class DeviceDetailsService {
         getDetailsObservable(deviceId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(new Subscriber<Device>() {
+            .subscribe(new Subscriber<DeviceDetails>() {
                 @Override
                 public void onCompleted() {
                     // not used
@@ -49,17 +49,17 @@ class DeviceDetailsService {
                 }
 
                 @Override
-                public void onNext(Device device) {
-                    callback.on(device);
+                public void onNext(DeviceDetails deviceDetails) {
+                    callback.on(deviceDetails);
                 }
             });
     }
 
     @NonNull
-    private Observable<Device> getDetailsObservable(@NonNull final ZettaDeviceId deviceId) {
-        return Observable.create(new Observable.OnSubscribe<Device>() {
+    private Observable<DeviceDetails> getDetailsObservable(@NonNull final ZettaDeviceId deviceId) {
+        return Observable.create(new Observable.OnSubscribe<DeviceDetails>() {
             @Override
-            public void call(Subscriber<? super Device> subscriber) {
+            public void call(Subscriber<? super DeviceDetails> subscriber) {
                 subscriber.onNext(getDetails(deviceId));
                 subscriber.onCompleted();
             }
@@ -67,7 +67,7 @@ class DeviceDetailsService {
     }
 
     @NonNull
-    private Device getDetails(@NonNull ZettaDeviceId deviceId) {
+    private DeviceDetails getDetails(@NonNull ZettaDeviceId deviceId) {
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(1));
             return mockService.getDetails();
@@ -131,7 +131,7 @@ class DeviceDetailsService {
     }
 
     interface Callback {
-        void on(@NonNull Device device);
+        void on(@NonNull DeviceDetails deviceDetails);
 
         void onDeviceLoadError();
     }

@@ -24,7 +24,7 @@ import com.zetta.android.device.actions.OnActionClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull private final List<ListItem> listItems = new ArrayList<>();
 
@@ -32,9 +32,9 @@ class DetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private final OnActionClickListener onActionClickListener;
     @NonNull private final OnEventsClickListener onEventsClickListener;
 
-    public DetailsListAdapter(@NonNull ImageLoader imageLoader,
-                              @NonNull OnActionClickListener onActionClickListener,
-                              @NonNull OnEventsClickListener onEventsClickListener) {
+    public DeviceDetailsListAdapter(@NonNull ImageLoader imageLoader,
+                                    @NonNull OnActionClickListener onActionClickListener,
+                                    @NonNull OnEventsClickListener onEventsClickListener) {
         this.imageLoader = imageLoader;
         this.onActionClickListener = onActionClickListener;
         this.onEventsClickListener = onEventsClickListener;

@@ -14,17 +14,17 @@ import com.zetta.android.device.actions.ActionListItemParser;
 class DeviceDetailsSdkService {
 
     @NonNull private final ZettaSdkApi zettaSdkApi;
-    @NonNull private final Device.Parser deviceParser;
+    @NonNull private final DeviceDetails.Parser deviceParser;
 
     public DeviceDetailsSdkService() {
         zettaSdkApi = ZettaSdkApi.INSTANCE;
         ZettaStyle.Parser zettaStyleParser = new ZettaStyle.Parser();
         ActionListItemParser actionListItemParser = new ActionListItemParser();
-        deviceParser = new Device.Parser(zettaStyleParser, actionListItemParser);
+        deviceParser = new DeviceDetails.Parser(zettaStyleParser, actionListItemParser);
     }
 
     @NonNull
-    public Device getDeviceDetails(@NonNull ZettaDeviceId deviceId) {
+    public DeviceDetails getDeviceDetails(@NonNull ZettaDeviceId deviceId) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
@@ -38,8 +38,8 @@ class DeviceDetailsSdkService {
             @Override
             public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
                 ZIKDevice updatedDevice = device.fetchSync();
-                Device zettaDevice = deviceParser.convertToDevice(server, updatedDevice);
-                listener.onUpdated(zettaDevice.getListItems());
+                DeviceDetails deviceDetails = deviceParser.convertToDevice(server, updatedDevice);
+                listener.onUpdated(deviceDetails.getListItems());
             }
         });
     }

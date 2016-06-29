@@ -37,7 +37,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private DeviceDetailsService deviceDetailsService;
     private EmptyLoadingView emptyLoadingWidget;
-    private DetailsListAdapter adapter;
+    private DeviceDetailsListAdapter adapter;
     private RecyclerView detailsListWidget;
 
     @Override
@@ -51,7 +51,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.device_details_activity);
 
         emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.device_details_empty_view);
-        adapter = new DetailsListAdapter(new ImageLoader(), onActionClickListener, onEventsClickListener);
+        adapter = new DeviceDetailsListAdapter(new ImageLoader(), onActionClickListener, onEventsClickListener);
         detailsListWidget = (RecyclerView) findViewById(R.id.device_details_list);
         detailsListWidget.setAdapter(adapter);
         detailsListWidget.setHasFixedSize(true);
@@ -72,7 +72,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         }
     };
 
-    private final DetailsListAdapter.OnEventsClickListener onEventsClickListener = new DetailsListAdapter.OnEventsClickListener() {
+    private final DeviceDetailsListAdapter.OnEventsClickListener onEventsClickListener = new DeviceDetailsListAdapter.OnEventsClickListener() {
         @Override
         public void onEventsClick(@NonNull ZettaDeviceId deviceId) {
             Intent intent = new Intent(DeviceDetailsActivity.this, EventsActivity.class);
@@ -99,26 +99,26 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
         @Override
-        public void on(@NonNull Device device) {
+        public void on(@NonNull DeviceDetails deviceDetails) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(device.getName());
-            actionBar.setSubtitle(device.getSeverName());
-            actionBar.setBackgroundDrawable(device.createBackground());
+            actionBar.setTitle(deviceDetails.getName());
+            actionBar.setSubtitle(deviceDetails.getSeverName());
+            actionBar.setBackgroundDrawable(deviceDetails.createBackground());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(device.getBackgroundColor());
+                window.setStatusBarColor(deviceDetails.getBackgroundColor());
             }
 
             Drawable upArrow = ContextCompat.getDrawable(DeviceDetailsActivity.this, R.drawable.ic_back_arrow);
-            upArrow.setColorFilter(device.getTintColor(), PorterDuff.Mode.SRC_ATOP);
+            upArrow.setColorFilter(deviceDetails.getTintColor(), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-            adapter.updateAll(device.getListItems());
+            adapter.updateAll(deviceDetails.getListItems());
             updateState();
         }
 

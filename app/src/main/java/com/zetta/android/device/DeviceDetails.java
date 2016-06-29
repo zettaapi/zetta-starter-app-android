@@ -25,14 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-class Device {
+class DeviceDetails {
 
     private final Spannable deviceName;
     private final Spannable serverName;
     private final ZettaStyle style;
     private final List<ListItem> listItems;
 
-    public Device(Spannable deviceName, Spannable serverName, ZettaStyle style, List<ListItem> listItems) {
+    public DeviceDetails(Spannable deviceName, Spannable serverName, ZettaStyle style, List<ListItem> listItems) {
         this.deviceName = deviceName;
         this.serverName = serverName;
         this.style = style;
@@ -80,13 +80,13 @@ class Device {
         }
 
         @NonNull
-        public Device convertToDevice(@NonNull final ZIKServer zikServer,
-                                      @NonNull final ZIKDevice zikDevice) {
+        public DeviceDetails convertToDevice(@NonNull final ZIKServer zikServer,
+                                             @NonNull final ZIKDevice zikDevice) {
             ZettaStyle zettaStyle = zettaStyleParser.parseStyle(zikServer, zikDevice);
             Spannable serverName = getServerName(zikServer, zettaStyle);
             Spannable deviceName = getDeviceName(zikDevice, zettaStyle);
             List<ListItem> listItems = convertToDeviceListItems(zettaStyle, zikServer, zikDevice);
-            return new Device(serverName, deviceName, zettaStyle, listItems);
+            return new DeviceDetails(serverName, deviceName, zettaStyle, listItems);
         }
 
         @NonNull
