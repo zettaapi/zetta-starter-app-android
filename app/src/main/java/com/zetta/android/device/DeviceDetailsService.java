@@ -83,9 +83,9 @@ class DeviceDetailsService {
         getStreamedUpdatesObservable(deviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<ListItem>() {
+            .subscribe(new Observer<List<ListItem>>() {
                 @Override
-                public void onNext(ListItem listItem) {
+                public void onNext(List<ListItem> listItem) {
                     listener.onUpdated(listItem);
                 }
 
@@ -102,14 +102,15 @@ class DeviceDetailsService {
     }
 
     @NonNull
-    private Observable<ListItem> getStreamedUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
-        return Observable.create(new BackpressureAbsorbingOnSubscribe() {
+    private Observable<List<ListItem>> getStreamedUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
+        return Observable.create(new BackpressureAbsorbingOnSubscribe<List<ListItem>>() {
             @Override
-            public void startAsync(final LatestStateListener listener) {
+            public void startAsync(final LatestStateListener<List<ListItem>> listener) {
                 monitorStreamedUpdates(deviceId, new StreamListener() {
+
                     @Override
-                    public void onUpdated(@NonNull ListItem listItem) {
-                        listener.onNext(listItem);
+                    public void onUpdated(@NonNull List<ListItem> listItems) {
+                        listener.onNext(listItems);
                     }
                 });
             }
@@ -160,7 +161,7 @@ class DeviceDetailsService {
 
     interface StreamListener {
 
-        void onUpdated(@NonNull ListItem listItem);
+        void onUpdated(@NonNull List<ListItem> listItems);
 
     }
 

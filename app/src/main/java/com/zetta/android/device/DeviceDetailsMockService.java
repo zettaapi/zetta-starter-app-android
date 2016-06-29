@@ -142,7 +142,7 @@ class DeviceDetailsMockService {
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
 
-    private static class RandomStreamGenerator implements Runnable {
+    private class RandomStreamGenerator implements Runnable {
 
         @NonNull private final Random random = new Random();
 
@@ -162,7 +162,12 @@ class DeviceDetailsMockService {
             Uri image = Uri.EMPTY;
             ZettaStyle.TintMode tintMode = ZettaStyle.TintMode.ORIGINAL;
             ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, image, tintMode);
-            listener.onUpdated(new StreamListItem(DEVICE_ID, "temperature", value, style));
+            List<ListItem> listItems = createListItems(style);
+            StreamListItem streamListItem = new StreamListItem(DEVICE_ID, "temperature", value, style);
+            int position = listItems.indexOf(streamListItem);
+            listItems.remove(position);
+            listItems.add(position, streamListItem);
+            listener.onUpdated(listItems);
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(1));
         }
     }

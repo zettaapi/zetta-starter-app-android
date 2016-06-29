@@ -228,31 +228,14 @@ class DeviceDetailsSdkService {
     public void startMonitorStreamedUpdatesFor(@NonNull final ZettaDeviceId deviceId,
                                                @NonNull final DeviceDetailsService.StreamListener listener) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
-        ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
-        ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
-        final ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
         zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
-                StreamListItem listItem = createStreamListItem(style, device, entry);
-                listener.onUpdated(listItem);
+                ZIKDevice updatedDevice = device.fetchSync();
+                List<ListItem> listItems = convertToDeviceListItems(server, updatedDevice);
+                listener.onUpdated(listItems);
             }
         });
-    }
-
-    @NonNull
-    private StreamListItem createStreamListItem(@NonNull ZettaStyle style,
-                                                @NonNull ZIKDevice device,
-                                                @NonNull ZIKStreamEntry entry) {
-        ZettaDeviceId zettaDeviceId = getDeviceId(device);
-        String stream = entry.getTitle();
-        String value = String.valueOf(entry.getData());
-        return new StreamListItem(
-            zettaDeviceId,
-            stream,
-            value,
-            style
-        );
     }
 
     @NonNull

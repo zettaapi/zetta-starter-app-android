@@ -28,6 +28,7 @@ import com.zetta.android.device.actions.OnActionClickListener;
 import com.zetta.android.device.events.EventsActivity;
 import com.zetta.android.settings.SdkProperties;
 
+import java.util.List;
 import java.util.Map;
 
 public class DeviceDetailsActivity extends AppCompatActivity {
@@ -131,11 +132,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {
         @Override
-        public void onUpdated(@NonNull ListItem listItem) {
-            if (detailsListWidget.isComputingLayout() || detailsListWidget.isAnimating()) {
-                return;
-            }
-            adapter.update(listItem);
+        public void onUpdated(@NonNull List<ListItem> listItems) {
+            adapter.updateAll(listItems);
         }
     };
 
