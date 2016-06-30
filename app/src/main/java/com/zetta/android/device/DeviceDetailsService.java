@@ -76,8 +76,8 @@ class DeviceDetailsService {
         }
     }
 
-    public void startMonitoringStreamedUpdatesFor(@NonNull ZettaDeviceId deviceId, @NonNull final StreamListener listener) {
-        getStreamedUpdatesObservable(deviceId)
+    public void startMonitoringDevice(@NonNull ZettaDeviceId deviceId, @NonNull final DeviceListener listener) {
+        getDeviceUpdatesObservable(deviceId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<List<ListItem>>() {
@@ -99,12 +99,11 @@ class DeviceDetailsService {
     }
 
     @NonNull
-    private Observable<List<ListItem>> getStreamedUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
+    private Observable<List<ListItem>> getDeviceUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
         return Observable.create(new BackpressureAbsorbingOnSubscribe<List<ListItem>>() {
             @Override
             public void startAsync(final LatestStateListener<List<ListItem>> listener) {
-                monitorStreamedUpdates(deviceId, new StreamListener() {
-
+                monitorDevice(deviceId, new DeviceListener() {
                     @Override
                     public void onUpdated(@NonNull List<ListItem> listItems) {
                         listener.onNext(listItems);
@@ -114,19 +113,19 @@ class DeviceDetailsService {
         });
     }
 
-    private void monitorStreamedUpdates(@NonNull ZettaDeviceId deviceId, @NonNull StreamListener listener) {
+    private void monitorDevice(@NonNull ZettaDeviceId deviceId, @NonNull DeviceListener listener) {
         if (sdkProperties.useMockResponses()) {
-            mockService.startMonitorStreamedUpdates(listener);
+            mockService.startMonitoringDeviceUpdates(listener);
         } else {
-            sdkService.startMonitorStreamedUpdatesFor(deviceId, listener);
+            sdkService.startMonitoringDeviceUpdates(deviceId, listener);
         }
     }
 
-    public void stopMonitoringStreamedUpdates() {
+    public void stopMonitoringDevice() {
         if (sdkProperties.useMockResponses()) {
-            mockService.stopMonitoringStreamedUpdates();
+            mockService.stopMonitoringDeviceUpdates();
         } else {
-            sdkService.stopMonitoringStreamedUpdates();
+            sdkService.stopMonitoringDeviceUpdates();
         }
     }
 
@@ -136,7 +135,7 @@ class DeviceDetailsService {
         void onDeviceLoadError();
     }
 
-    interface StreamListener {
+    interface DeviceListener {
 
         void onUpdated(@NonNull List<ListItem> listItems);
 

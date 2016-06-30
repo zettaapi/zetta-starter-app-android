@@ -111,7 +111,7 @@ class DeviceDetailsMockService {
         return items;
     }
 
-    public void startMonitorStreamedUpdates(@NonNull DeviceDetailsService.StreamListener listener) {
+    public void startMonitoringDeviceUpdates(@NonNull DeviceDetailsService.DeviceListener listener) {
         streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
@@ -121,9 +121,9 @@ class DeviceDetailsMockService {
         @NonNull private final Random random = new Random();
 
         @NonNull private final Handler handler;
-        @NonNull private final DeviceDetailsService.StreamListener listener;
+        @NonNull private final DeviceDetailsService.DeviceListener listener;
 
-        private RandomStreamGenerator(@NonNull Handler handler, @NonNull DeviceDetailsService.StreamListener listener) {
+        private RandomStreamGenerator(@NonNull Handler handler, @NonNull DeviceDetailsService.DeviceListener listener) {
             this.handler = handler;
             this.listener = listener;
         }
@@ -146,7 +146,7 @@ class DeviceDetailsMockService {
         }
     }
 
-    public void stopMonitoringStreamedUpdates() {
+    public void stopMonitoringDeviceUpdates() {
         mainThreadHandler.removeCallbacks(streamGenerator);
     }
 }

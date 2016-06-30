@@ -94,7 +94,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         updateState();
         ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
         deviceDetailsService.getDetails(deviceId, onDeviceDetailsLoaded);
-        deviceDetailsService.startMonitoringStreamedUpdatesFor(deviceId, onStreamedUpdate);
+        deviceDetailsService.startMonitoringDevice(deviceId, onDeviceUpdate);
     }
 
     private final DeviceDetailsService.Callback onDeviceDetailsLoaded = new DeviceDetailsService.Callback() {
@@ -125,12 +125,12 @@ public class DeviceDetailsActivity extends AppCompatActivity {
         @Override
         public void onDeviceLoadError() {
             Toast.makeText(DeviceDetailsActivity.this, "Unrecoverable error", Toast.LENGTH_SHORT).show();
-            deviceDetailsService.stopMonitoringStreamedUpdates();
+            deviceDetailsService.stopMonitoringDevice();
             finish();
         }
     };
 
-    private final DeviceDetailsService.StreamListener onStreamedUpdate = new DeviceDetailsService.StreamListener() {
+    private final DeviceDetailsService.DeviceListener onDeviceUpdate = new DeviceDetailsService.DeviceListener() {
         @Override
         public void onUpdated(@NonNull List<ListItem> listItems) {
             adapter.updateAll(listItems);
@@ -150,7 +150,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        deviceDetailsService.stopMonitoringStreamedUpdates();
+        deviceDetailsService.stopMonitoringDevice();
         super.onPause();
     }
 

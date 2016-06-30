@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
+import com.apigee.zettakit.ZIKLogStreamEntry;
 import com.apigee.zettakit.ZIKServer;
-import com.apigee.zettakit.ZIKStreamEntry;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyle;
@@ -31,20 +31,23 @@ class DeviceDetailsSdkService {
         return deviceParser.convertToDevice(zikServer, zikDevice);
     }
 
-    public void startMonitorStreamedUpdatesFor(@NonNull final ZettaDeviceId deviceId,
-                                               @NonNull final DeviceDetailsService.StreamListener listener) {
+    public void startMonitoringDeviceUpdates(@NonNull final ZettaDeviceId deviceId,
+                                             @NonNull final DeviceDetailsService.DeviceListener listener) {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
-        zettaSdkApi.startMonitoringDeviceStreamsFor(zikDeviceId, new ZettaSdkApi.ZikStreamEntryListener() {
-            @Override
-            public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
-                ZIKDevice updatedDevice = device.fetchSync();
-                DeviceDetails deviceDetails = deviceParser.convertToDevice(server, updatedDevice);
-                listener.onUpdated(deviceDetails.getListItems());
+        zettaSdkApi.startMonitoringDevice(
+            zikDeviceId,
+            new ZettaSdkApi.ZikLogStreamEntryListener() {
+                @Override
+                public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry) {
+                    ZIKDevice updatedDevice = device.refreshWithLogEntry(entry);
+                    DeviceDetails deviceDetails = deviceParser.convertToDevice(server, updatedDevice);
+                    listener.onUpdated(deviceDetails.getListItems());
+                }
             }
-        });
+        );
     }
 
-    public void stopMonitoringStreamedUpdates() {
-        zettaSdkApi.stopMonitoringDeviceStreams();
+    public void stopMonitoringDeviceUpdates() {
+        zettaSdkApi.stopMonitoringDevice();
     }
 }
