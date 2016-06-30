@@ -15,10 +15,14 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 class DeviceDetailsService {
+
+    @NonNull private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @NonNull private final SdkProperties sdkProperties;
     @NonNull private final DeviceDetailsSdkService sdkService;
@@ -33,7 +37,7 @@ class DeviceDetailsService {
     }
 
     public void getDetails(@NonNull ZettaDeviceId deviceId, @NonNull final Callback callback) {
-        getDetailsObservable(deviceId)
+        Subscription subscription = getDetailsObservable(deviceId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(new Subscriber<DeviceDetails>() {
@@ -53,6 +57,7 @@ class DeviceDetailsService {
                     callback.on(deviceDetails);
                 }
             });
+        subscriptions.add(subscription);
     }
 
     @NonNull
@@ -77,7 +82,8 @@ class DeviceDetailsService {
     }
 
     public void startMonitoringDevice(@NonNull ZettaDeviceId deviceId, @NonNull final DeviceListener listener) {
-        getDeviceUpdatesObservable(deviceId)
+        Subscription subscription = getDeviceUpdatesObservable(deviceId)
+            .throttleLast(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<List<ListItem>>() {
@@ -96,6 +102,7 @@ class DeviceDetailsService {
                     // never completes - hot observable
                 }
             });
+        subscriptions.add(subscription);
     }
 
     @NonNull
@@ -122,6 +129,7 @@ class DeviceDetailsService {
     }
 
     public void stopMonitoringDevice() {
+        subscriptions.clear();
         if (sdkProperties.useMockResponses()) {
             mockService.stopMonitoringDeviceUpdates();
         } else {
