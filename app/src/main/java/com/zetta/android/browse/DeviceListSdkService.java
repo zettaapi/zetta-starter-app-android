@@ -45,7 +45,7 @@ class DeviceListSdkService {
         zettaSdkApi.startMonitoringAllServerDeviceStreams(new ZettaSdkApi.ZikStreamEntryListener() {
             @Override
             public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
-                DeviceListItem listItem = deviceListParser.createDeviceListItem(server, device, entry);
+                DeviceListItem listItem = deviceListParser.createDeviceListItem(server, device.fetchSync(), entry);
                 listener.onUpdated(listItem);
             }
         });
