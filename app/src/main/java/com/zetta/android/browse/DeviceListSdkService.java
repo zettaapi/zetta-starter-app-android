@@ -120,7 +120,6 @@ class DeviceListSdkService {
         return new ListItem.EmptyListItem("No actions for this device.", style);
     }
 
-    // TODO should streaming be in it's own class?
     public void startMonitorStreamedUpdates(@NonNull String url, @NonNull final StreamListener listener) {
         zettaSdkApi.registerRoot(url);
         zettaSdkApi.startMonitoringAllServerDeviceStreams(new ZettaSdkApi.ZikStreamEntryListener() {
