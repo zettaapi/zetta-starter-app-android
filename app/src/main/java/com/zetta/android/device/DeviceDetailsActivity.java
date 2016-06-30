@@ -133,6 +133,9 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private final DeviceDetailsService.DeviceListener onDeviceUpdate = new DeviceDetailsService.DeviceListener() {
         @Override
         public void onUpdated(@NonNull List<ListItem> listItems) {
+            if (detailsListWidget.isAnimating() || detailsListWidget.isComputingLayout()) {
+                return;
+            }
             adapter.updateAll(listItems);
         }
     };
