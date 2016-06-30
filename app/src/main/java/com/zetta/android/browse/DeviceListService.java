@@ -162,9 +162,9 @@ class DeviceListService {
 
     @NonNull
     private Observable<ListItem> getStreamedUpdatesObservable() {
-        return Observable.create(new BackpressureAbsorbingOnSubscribe() {
+        return Observable.create(new BackpressureAbsorbingOnSubscribe<ListItem>() {
             @Override
-            public void startAsync(final LatestStateListener listener) {
+            public void startAsync(final LatestStateListener<ListItem> listener) {
                 monitorStreamedUpdates(new StreamListener() {
                     @Override
                     public void onUpdated(@NonNull ListItem listItem) {
