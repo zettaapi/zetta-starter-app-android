@@ -13,7 +13,6 @@ import com.zetta.android.ZettaStyle;
 import com.zetta.android.browse.DeviceListService.StreamListener;
 import com.zetta.android.device.actions.ActionListItemParser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class DeviceListSdkService {
@@ -30,9 +29,7 @@ class DeviceListSdkService {
     public List<ListItem> getListItems(@NonNull String url) {
         zettaSdkApi.registerRoot(url);
         List<ZIKServer> zikServers = zettaSdkApi.getServers();
-        List<ListItem> items = new ArrayList<>();
-        items.addAll(deviceListParser.createListItems(zikServers));
-        return items;
+        return deviceListParser.createListItems(zikServers);
     }
 
     @NonNull
