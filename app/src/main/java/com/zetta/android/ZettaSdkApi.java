@@ -213,7 +213,7 @@ public enum ZettaSdkApi {
                 stream.resume();
             }
         })
-            .throttleLast(333, TimeUnit.MILLISECONDS)
+            .throttleLast(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe(new Action1<ZIKStreamEntry>() {
