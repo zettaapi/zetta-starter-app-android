@@ -1,15 +1,12 @@
 package com.zetta.android.browse;
 
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
+import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
-import com.zetta.android.ZettaStyle;
-import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
@@ -86,21 +83,12 @@ class DeviceListService {
     @NonNull
     private List<ListItem> getDeviceListItems() {
         String url = getRootUrl();
-        final List<ListItem> items = new ArrayList<>();
+        List<ListItem> items = new ArrayList<>();
         if (sdkProperties.useMockResponses()) {
             SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
             items.addAll(mockService.getListItems(url));
         } else {
-            try {
-                items.addAll(sdkService.getListItems(url));
-            } catch (Exception e) { // TODO remove this, just a temp measure
-                Log.e(e);
-                sdkService.reset();
-                items.add(new ListItem.EmptyListItem(
-                    "Something went wrong with the SDK.\nDeveloper needs to fix.\nGo into Settings and try 'demo mode' to see something working.\n" + e,
-                    new ZettaStyle(Color.WHITE, Color.LTGRAY, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL)
-                ));
-            }
+            items.addAll(sdkService.getListItems(url));
         }
         return items;
     }

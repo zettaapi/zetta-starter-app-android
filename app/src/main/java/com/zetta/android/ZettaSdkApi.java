@@ -30,7 +30,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * This singleton is not _fully_ thread safe
+ * This singleton is not _fully_ tested as thread safe
  */
 public enum ZettaSdkApi {
     INSTANCE;
@@ -43,8 +43,6 @@ public enum ZettaSdkApi {
     @Nullable private List<ZIKServer> zikServers;
     @Nullable private List<ZIKDevice> zikDevices;
     @Nullable private ZIKStream logStream;
-
-    private boolean cancelMonitoringSetup;
 
     public void registerRoot(@NonNull String url) {
         if (url.equals(this.rootUrl)) {
@@ -151,7 +149,6 @@ public enum ZettaSdkApi {
 
     public void startMonitoringDeviceStreamsFor(@NonNull ZIKDeviceId deviceId, @NonNull ZikStreamEntryListener listener) {
         stopMonitoringDeviceStreams();
-        cancelMonitoringSetup = false;
         ZIKDevice device = getLiteDevice(deviceId);
         monitorNonLogStreams(device, listener, deviceStreams);
     }
@@ -161,9 +158,6 @@ public enum ZettaSdkApi {
                                       @NonNull List<ZIKStream> streamsCache) {
         List<ZIKStream> allStreams = device.getAllStreams();
         for (ZIKStream stream : allStreams) {
-            if (cancelMonitoringSetup) {
-                return;
-            }
             if (stream.getTitle().equals("logs")) {
                 continue;
             }
@@ -175,13 +169,12 @@ public enum ZettaSdkApi {
     }
 
     public void stopMonitoringDeviceStreams() {
-        cancelMonitoringSetup = true;
         synchronized (deviceStreams) {
             for (ZIKStream stream : deviceStreams) {
                 stream.close();
             }
+            deviceStreams.clear();
         }
-        deviceStreams.clear();
     }
 
     public void startMonitoringAllServerDeviceStreams(@NonNull final ZikStreamEntryListener listener) {
@@ -189,15 +182,11 @@ public enum ZettaSdkApi {
             getServers();
         }
         stopMonitoringAllServerDeviceStreams();
-        cancelMonitoringSetup = false;
         for (final ZIKServer zikServer : zikServers) {
             List<ZIKDevice> zikDevices = zikServer.getDevices();
             for (ZIKDevice liteZikDevice : zikDevices) {
                 final ZIKDevice zikDevice = liteZikDevice.fetchSync();
                 for (final ZIKStream stream : zikDevice.getAllStreams()) {
-                    if (cancelMonitoringSetup) {
-                        return;
-                    }
                     if (stream.getTitle().equals("logs")) {
                         continue;
                     }
@@ -262,13 +251,12 @@ public enum ZettaSdkApi {
     }
 
     public void stopMonitoringAllServerDeviceStreams() {
-        cancelMonitoringSetup = true;
         synchronized (serverDevicesStreams) {
             for (ZIKStream stream : serverDevicesStreams) {
                 stream.close();
             }
+            serverDevicesStreams.clear();
         }
-        serverDevicesStreams.clear();
     }
 
     public void startMonitoringLogStreamFor(@NonNull ZIKDeviceId deviceId, @NonNull ZikLogStreamEntryListener listener) {
@@ -325,23 +313,6 @@ public enum ZettaSdkApi {
             return;
         }
         logStream.close();
-    }
-
-    /**
-     * For use when somethings FooBar'd and you want to tidy up
-     */
-    public void reset() {
-        cancelMonitoringSetup = true;
-        stopMonitoringDeviceStreams();
-        stopMonitoringAllServerDeviceStreams();
-        stopMonitoringLogStream();
-        cancelMonitoringSetup = false;
-        if (zikServers != null) {
-            zikServers.clear();
-        }
-        if (zikDevices != null) {
-            zikDevices.clear();
-        }
     }
 
     public interface ZikStreamEntryListener {

@@ -164,7 +164,4 @@ class DeviceListSdkService {
         zettaSdkApi.stopMonitoringAllServerDeviceStreams();
     }
 
-    public void reset() {
-        zettaSdkApi.reset();
-    }
 }
