@@ -63,7 +63,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
 
         @Override
         public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String action, @NonNull Map<String, Object> inputs) {
-            deviceDetailsService.updateDetails(deviceId, action, inputs, onDeviceUpdate);
+//            deviceDetailsService.updateDetails(deviceId, action, inputs, onDeviceUpdate);
         }
     };
 
