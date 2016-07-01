@@ -12,6 +12,7 @@ import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.ZIKSession;
 import com.apigee.zettakit.ZIKStream;
 import com.apigee.zettakit.ZIKStreamEntry;
+import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.apigee.zettakit.interfaces.ZIKStreamListener;
 import com.novoda.notils.exception.DeveloperError;
 import com.novoda.notils.logger.simple.Log;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Response;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
@@ -292,6 +294,38 @@ public enum ZettaSdkApi {
             return;
         }
         logStream.close();
+    }
+
+    public void update(final ZIKDeviceId deviceId, final String action, final Map<String, Object> commands, final ZIKCallback<ZIKDevice> callback) {
+        Observable.create(new Observable.OnSubscribe<ZIKDevice>() {
+            @Override
+            public void call(final Subscriber<? super ZIKDevice> subscriber) {
+                getFullDevice(deviceId).transition(action, commands, new ZIKCallback<ZIKDevice>() {
+                    @Override
+                    public void onSuccess(@NonNull ZIKDevice result) {
+                        subscriber.onNext(result);
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ZIKException exception) {
+                        subscriber.onError(exception);
+                    }
+                });
+            }
+        })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<ZIKDevice>() {
+                @Override
+                public void call(ZIKDevice device) {
+                    callback.onSuccess(device);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    callback.onFailure((ZIKException) throwable);
+                }
+            });
     }
 
     public interface ZikStreamEntryListener {

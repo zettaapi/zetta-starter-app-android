@@ -4,12 +4,17 @@ import android.support.annotation.NonNull;
 
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
+import com.apigee.zettakit.ZIKException;
 import com.apigee.zettakit.ZIKLogStreamEntry;
 import com.apigee.zettakit.ZIKServer;
+import com.apigee.zettakit.interfaces.ZIKCallback;
+import com.novoda.notils.logger.simple.Log;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyle;
 import com.zetta.android.device.actions.ActionListItemParser;
+
+import java.util.Map;
 
 class DeviceDetailsSdkService {
 
@@ -50,4 +55,25 @@ class DeviceDetailsSdkService {
     public void stopMonitoringDeviceUpdates() {
         zettaSdkApi.stopMonitoringDevice();
     }
+
+    public void updateDetails(ZettaDeviceId deviceId,
+                              String action,
+                              Map<String, Object> labelledInput,
+                              @NonNull final DeviceDetailsService.DeviceListener listener) {
+        final ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
+        zettaSdkApi.update(zikDeviceId, action, labelledInput, new ZIKCallback<ZIKDevice>() {
+
+            @Override
+            public void onSuccess(@NonNull ZIKDevice result) {
+                DeviceDetails deviceDetails = deviceParser.convertToDevice(zettaSdkApi.getServerContaining(zikDeviceId), result);
+                listener.onUpdated(deviceDetails.getListItems());
+            }
+
+            @Override
+            public void onFailure(@NonNull ZIKException exception) {
+                Log.e(exception);
+            }
+        });
+    }
+
 }

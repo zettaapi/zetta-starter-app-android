@@ -11,6 +11,9 @@ import com.novoda.notils.meta.AndroidUtils;
 import com.zetta.android.ImageLoader;
 import com.zetta.android.R;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
 
     @NonNull private final TextInputLayout actionHintWidget;
@@ -35,7 +38,9 @@ public class ActionSingleViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
                 String input = actionInputWidget.getText().toString();
                 String label = item.getLabel();
-                onActionClickListener.onActionClick(item.getDeviceId(), label, input);
+                String action = item.getAction();
+                Map<String, Object> labelledInput = Collections.<String, Object>singletonMap(label, input);
+                onActionClickListener.onActionClick(item.getDeviceId(), action, labelledInput);
                 actionInputWidget.getText().clear();
                 actionInputWidget.clearFocus();
                 AndroidUtils.requestHideKeyboard(actionInputWidget.getContext(), actionInputWidget);

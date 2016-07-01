@@ -10,6 +10,7 @@ import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -134,6 +135,17 @@ class DeviceDetailsService {
             mockService.stopMonitoringDeviceUpdates();
         } else {
             sdkService.stopMonitoringDeviceUpdates();
+        }
+    }
+
+    public void updateDetails(@NonNull ZettaDeviceId deviceId,
+                              @NonNull String action,
+                              @NonNull Map<String, Object> labelledInput,
+                              @NonNull final DeviceListener listener) {
+        if (sdkProperties.useMockResponses()) {
+            mockService.updateDetails(deviceId, action, labelledInput, listener);
+        } else {
+            sdkService.updateDetails(deviceId, action, labelledInput, listener);
         }
     }
 

@@ -19,6 +19,7 @@ import com.zetta.android.device.actions.ActionToggleListItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -30,15 +31,13 @@ class DeviceDetailsMockService {
     @NonNull private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private RandomStreamGenerator streamGenerator;
+    private static final ZettaStyle DEFAULT_STYLE = new ZettaStyle(Color.parseColor("#1111dd"), Color.parseColor("#d9d9d9"), Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
 
     @NonNull
     public DeviceDetails getDetails() {
-        int foregroundColor = Color.parseColor("#1111dd");
-        int backgroundColor = Color.parseColor("#d9d9d9");
-        ZettaStyle style = new ZettaStyle(foregroundColor, backgroundColor, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
-        List<ListItem> items = createListItems(style);
+        List<ListItem> items = createListItems(DEFAULT_STYLE);
 
-        return new DeviceDetails(getDeviceName(style), getServerName(style), style, items);
+        return new DeviceDetails(getDeviceName(DEFAULT_STYLE), getServerName(DEFAULT_STYLE), DEFAULT_STYLE, items);
     }
 
     @NonNull
@@ -114,6 +113,19 @@ class DeviceDetailsMockService {
     public void startMonitoringDeviceUpdates(@NonNull DeviceDetailsService.DeviceListener listener) {
         streamGenerator = new RandomStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
+    }
+
+    public void updateDetails(@NonNull ZettaDeviceId deviceId,
+                              @NonNull String action,
+                              @NonNull Map<String, Object> labelledInput,
+                              @NonNull DeviceDetailsService.DeviceListener listener) {
+        List<ListItem> listItems = getDetails().getListItems();
+        int i = listItems.indexOf(new PropertyListItem(deviceId, "color", "", DEFAULT_STYLE));
+        listItems.remove(i);
+        String newValue = String.valueOf(labelledInput.values().iterator().next());
+        listItems.add(i, new PropertyListItem(deviceId, "color", newValue, DEFAULT_STYLE));
+
+        listener.onUpdated(listItems);
     }
 
     private class RandomStreamGenerator implements Runnable {

@@ -53,7 +53,7 @@ public class ActionMultipleViewHolder extends RecyclerView.ViewHolder {
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> labelledInput = new HashMap<>();
+                Map<String, Object> labelledInput = new HashMap<>();
                 for (int i = 0; i < labels.size(); i++) {
                     String label = labels.get(i);
                     EditText actionInputWidget = boundInputRows.get(i);

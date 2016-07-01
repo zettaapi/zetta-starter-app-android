@@ -62,13 +62,8 @@ public class DeviceDetailsActivity extends AppCompatActivity {
     private final OnActionClickListener onActionClickListener = new OnActionClickListener() {
 
         @Override
-        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull String input) {
-            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + input, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull Map<String, String> inputs) {
-            Toast.makeText(DeviceDetailsActivity.this, "TODO clicked " + label + " " + inputs, Toast.LENGTH_LONG).show();
+        public void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String action, @NonNull Map<String, Object> inputs) {
+            deviceDetailsService.updateDetails(deviceId, action, inputs, onDeviceUpdate);
         }
     };
 

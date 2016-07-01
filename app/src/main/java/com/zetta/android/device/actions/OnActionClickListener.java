@@ -8,7 +8,5 @@ import java.util.Map;
 
 public interface OnActionClickListener {
 
-    void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull String input);
-
-    void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String label, @NonNull Map<String, String> inputs);
+    void onActionClick(@NonNull ZettaDeviceId deviceId, @NonNull String action, @NonNull Map<String, Object> inputs);
 }

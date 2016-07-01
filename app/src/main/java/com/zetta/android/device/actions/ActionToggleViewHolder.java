@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import com.zetta.android.R;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
 
     @NonNull private final TextView actionLabelWidget;
@@ -27,7 +30,10 @@ public class ActionToggleViewHolder extends RecyclerView.ViewHolder {
         actionToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionClickListener.onActionClick(item.getDeviceId(), item.getLabel(), item.getAction());
+                String label = item.getLabel();
+                String input = item.getAction();
+                Map<String, Object> labelledInput = Collections.<String, Object>singletonMap(label, input);
+                onActionClickListener.onActionClick(item.getDeviceId(), item.getAction(), labelledInput);
             }
         });
         actionToggleButton.setTextColor(item.getActionTextColor());
