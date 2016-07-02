@@ -58,14 +58,15 @@ class DeviceDetailsSdkService {
 
     public void updateDetails(ZettaDeviceId deviceId,
                               String action,
-                              Map<String, Object> labelledInput,
+                              final Map<String, Object> labelledInput,
                               @NonNull final DeviceDetailsService.DeviceListener listener) {
         final ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         zettaSdkApi.update(zikDeviceId, action, labelledInput, new ZIKCallback<ZIKDevice>() {
 
             @Override
-            public void onSuccess(@NonNull ZIKDevice result) {
-                DeviceDetails deviceDetails = deviceParser.convertToDevice(zettaSdkApi.getServerContaining(zikDeviceId), result);
+            public void onSuccess(@NonNull ZIKDevice device) {
+                ZIKServer server = zettaSdkApi.getServerContaining(zikDeviceId);
+                DeviceDetails deviceDetails = deviceParser.convertToDevice(server, device);
                 listener.onUpdated(deviceDetails.getListItems());
             }
 
