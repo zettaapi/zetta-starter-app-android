@@ -44,6 +44,10 @@ the SDK wraps a [siren spec json feed](https://github.com/kevinswiber/siren) and
 - The device is constantly refreshing as the device streams are updated
 - Shows a promoted property if this is requested in the style, otherwise shows the devices state
 
+### Events
+- Shows a list of events happening to an individual device
+- This is updated in realtime and they are ordered newest first
+
 ## Architecture
 
 This application goes somewhere towards the idea of a Model in MVP. The returned objects from the zetta api are converted into
