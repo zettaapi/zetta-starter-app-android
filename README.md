@@ -12,7 +12,7 @@ To use this app:
 ## Overview
 
 This app demonstrates the capabilities of the [Zetta Android SDK](https://github.com/zettaapi/zetta-sdk-android)
-the SDK wraps a Siren spec json feed and allows easy access to the details of IoT Servers and devices on those servers.
+the SDK wraps a [siren spec json feed](https://github.com/kevinswiber/siren) and allows easy access to the details of IoT Servers and devices on those servers.
 
 
 ## Features
@@ -43,6 +43,29 @@ the SDK wraps a Siren spec json feed and allows easy access to the details of Io
 - Themes the device according to it's style properties, if it doesn't have style it inherits the servers syle
 - The device is constantly refreshing as the device streams are updated
 - Shows a promoted property if this is requested in the style, otherwise shows the devices state
+
+## Architecture
+
+This application goes somewhere towards the idea of a Model in MVP. The returned objects from the zetta api are converted into
+view objects that are simple pojo's for displaying data. Each pojo has an id and this is how we can look the original object back up.
+The idea is to have a separation between the UI layer/display logic and the backend domain.
+
+If we where to describe the typical flow of data using the Server & Device list screen as an example
+ - Activity starts and we set up all our view references and needed dependencies
+ - Activity resumes and we check if a URL has been set (from the settings screen)
+ - If we have a URL, the Activity asks the DeviceListService to get the devices
+ - The DeviceListService is in charge of threading and so moves us to a background thread
+ - Now depending if we have Demo Mode set, we either retrive the devices from a MockDeviceListService or a SdkDeviceListService
+ - the SdkDeviceListServer requests the servers & devices from the ZettaSdkApi and then converts these into our model (ListItems)
+ - the ZettaSdkApi asks the Zetta SDK for the servers & devices, caching responses for later lookup
+ - When the data is returned to the Activity we update our view with the server and devices ListItems
+
+To explain that in terms of roles:
+ - DeviceListActivity: acts a bit like a presenter and a view
+ - DeviceListService: controls threading & backend choice
+ - DeviceListMockService: returns mock data so we can skip using the Zetta SDK
+ - DeviceListSdkService: converts the data from Zetta SDK into ListItems
+ - ZettaSdkApi: wraps the Zetta SDK to add caching & control method call order/callbacks/throttling
 
 
 See: https://github.com/zettaapi/zetta-sdk-android/pull/1
