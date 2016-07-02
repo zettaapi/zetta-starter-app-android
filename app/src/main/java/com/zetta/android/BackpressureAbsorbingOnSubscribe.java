@@ -4,31 +4,21 @@ import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
 
-import java.util.concurrent.CountDownLatch;
-
-import rx.Observable;
 import rx.Observer;
-import rx.observables.AsyncOnSubscribe;
+import rx.observables.SyncOnSubscribe;
 
-public abstract class BackpressureAbsorbingOnSubscribe<T> extends AsyncOnSubscribe<BackpressureAbsorbingOnSubscribe.LatestStateListener<T>, T> {
+public abstract class BackpressureAbsorbingOnSubscribe<T> extends SyncOnSubscribe<BackpressureAbsorbingOnSubscribe.LatestStateListener<T>, T> {
     @Override
     protected LatestStateListener<T> generateState() {
         final LatestStateListener<T> latestStateListener = new LatestStateListener<>();
-        final CountDownLatch latch = new CountDownLatch(1);
 
         startAsync(new LatestStateListener<T>() {
             @Override
             public void onNext(@NonNull T listItem) {
                 latestStateListener.onNext(listItem);
-                latch.countDown();
             }
         });
 
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            Log.e(e);
-        }
         return latestStateListener;
     }
 
@@ -41,13 +31,16 @@ public abstract class BackpressureAbsorbingOnSubscribe<T> extends AsyncOnSubscri
     public abstract void startAsync(LatestStateListener<T> listener);
 
     @Override
-    protected LatestStateListener<T> next(LatestStateListener<T> state, long requested, Observer<Observable<? extends T>> observer) {
+    protected LatestStateListener<T> next(LatestStateListener<T> state, Observer<? super T> observer) {
         T latest = state.getLatest();
+        Log.d("Latest ");
         if (latest == null) {
+            Log.d("complete");
             observer.onCompleted();
             return state;
         } else {
-            observer.onNext(Observable.just(latest));
+            Log.d("next");
+            observer.onNext(latest);
         }
         return state;
     }
