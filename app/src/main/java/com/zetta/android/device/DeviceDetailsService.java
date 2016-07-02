@@ -4,7 +4,6 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
-import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
@@ -108,13 +107,13 @@ class DeviceDetailsService {
 
     @NonNull
     private Observable<List<ListItem>> getDeviceUpdatesObservable(@NonNull final ZettaDeviceId deviceId) {
-        return Observable.create(new BackpressureAbsorbingOnSubscribe<List<ListItem>>() {
+        return Observable.create(new Observable.OnSubscribe<List<ListItem>>() {
             @Override
-            public void startAsync(final LatestStateListener<List<ListItem>> listener) {
+            public void call(final Subscriber<? super List<ListItem>> subscriber) {
                 monitorDevice(deviceId, new DeviceListener() {
                     @Override
                     public void onUpdated(@NonNull List<ListItem> listItems) {
-                        listener.onNext(listItems);
+                        subscriber.onNext(listItems);
                     }
                 });
             }
