@@ -9,6 +9,12 @@ To use this app:
 
 ### Compiling this app requires a local release of the SDK
 
+See: https://github.com/zettaapi/zetta-sdk-android/pull/1
+
+### Latest APK file can always be found on the releases page
+
+https://github.com/zettaapi/zetta-starter-app-android/releases
+
 ## Overview
 
 This app demonstrates the capabilities of the [Zetta Android SDK](https://github.com/zettaapi/zetta-sdk-android)
@@ -70,6 +76,3 @@ To explain that in terms of roles:
  - DeviceListMockService: returns mock data so we can skip using the Zetta SDK
  - DeviceListSdkService: converts the data from Zetta SDK into ListItems
  - ZettaSdkApi: wraps the Zetta SDK to add caching & control method call order/callbacks/throttling
-
-
-See: https://github.com/zettaapi/zetta-sdk-android/pull/1
