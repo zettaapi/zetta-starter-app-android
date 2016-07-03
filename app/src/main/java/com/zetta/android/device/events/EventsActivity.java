@@ -8,13 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.zetta.android.BuildConfig;
 import com.zetta.android.ListItem;
 import com.zetta.android.R;
 import com.zetta.android.ZettaDeviceId;
-import com.zetta.android.device.EmptyLoadingView;
 import com.zetta.android.settings.SdkProperties;
 
 public class EventsActivity extends AppCompatActivity {
@@ -23,7 +21,6 @@ public class EventsActivity extends AppCompatActivity {
 
     private EventsListAdapter adapter;
     private EventsService eventsService;
-    private EmptyLoadingView emptyLoadingWidget;
     private RecyclerView deviceListWidget;
 
     @Override
@@ -36,7 +33,6 @@ public class EventsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        emptyLoadingWidget = (EmptyLoadingView) findViewById(R.id.events_empty_view);
         adapter = new EventsListAdapter();
         deviceListWidget = (RecyclerView) findViewById(R.id.events_list);
         deviceListWidget.setAdapter(adapter);
@@ -52,7 +48,6 @@ public class EventsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateState();
         ZettaDeviceId deviceId = (ZettaDeviceId) getIntent().getSerializableExtra(KEY_DEVICE_ID);
         eventsService.startMonitoringLogs(deviceId, onEventsLoaded);
     }
@@ -61,20 +56,8 @@ public class EventsActivity extends AppCompatActivity {
         @Override
         public void onUpdated(@NonNull ListItem listItem) {
             adapter.update(listItem);
-            updateState();
         }
     };
-
-    private void updateState() {
-        if (adapter.isEmpty()) {
-            emptyLoadingWidget.setStateLoading();
-            emptyLoadingWidget.setVisibility(View.VISIBLE);
-            deviceListWidget.setVisibility(View.GONE);
-        } else {
-            emptyLoadingWidget.setVisibility(View.GONE);
-            deviceListWidget.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
