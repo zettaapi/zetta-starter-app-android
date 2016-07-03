@@ -40,7 +40,7 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.onEventsClickListener = onEventsClickListener;
     }
 
-    public void updateAll(@NonNull List<ListItem> listItems) {
+    public void replaceAll(@NonNull List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();

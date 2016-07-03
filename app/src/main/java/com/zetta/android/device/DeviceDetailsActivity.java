@@ -113,7 +113,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             upArrow.setColorFilter(deviceDetails.getTintColor(), PorterDuff.Mode.SRC_ATOP);
             getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-            adapter.updateAll(deviceDetails.getListItems());
+            adapter.replaceAll(deviceDetails.getListItems());
             updateState();
         }
 
@@ -131,7 +131,7 @@ public class DeviceDetailsActivity extends AppCompatActivity {
             if (detailsListWidget.isAnimating() || detailsListWidget.isComputingLayout()) {
                 return;
             }
-            adapter.updateAll(listItems);
+            adapter.replaceAll(listItems);
         }
     };
 
