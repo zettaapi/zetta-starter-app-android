@@ -51,7 +51,7 @@ class DeviceListSdkService {
     }
 
     public void stopMonitoringStreamedUpdates() {
-        zettaSdkApi.stopMonitoringAllServerDeviceStreams();
+        zettaSdkApi.stopMonitoringOpenStreams();
     }
 
 }

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKException;
-import com.apigee.zettakit.ZIKLogStreamEntry;
 import com.apigee.zettakit.ZIKServer;
 import com.apigee.zettakit.interfaces.ZIKCallback;
 import com.novoda.notils.logger.simple.Log;
@@ -41,10 +40,11 @@ class DeviceDetailsSdkService {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         zettaSdkApi.startMonitoringDevice(
             zikDeviceId,
-            new ZettaSdkApi.ZikStreamListener() {
+            new ZettaSdkApi.ZikDeviceListener() {
                 @Override
-                public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry) {
-                    ZIKDevice updatedDevice = device.refreshWithLogEntry(entry);
+                public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
+//                    ZIKDevice updatedDevice = device.refreshWithLogEntry(entry);
+                    ZIKDevice updatedDevice = device.fetchSync();
                     DeviceDetails deviceDetails = deviceParser.convertToDevice(server, updatedDevice);
                     listener.onUpdated(deviceDetails.getListItems());
                 }

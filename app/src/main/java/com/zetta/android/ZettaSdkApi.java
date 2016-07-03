@@ -27,9 +27,11 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Response;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * This singleton is not _fully_ tested as thread safe
@@ -37,7 +39,8 @@ import rx.schedulers.Schedulers;
 public enum ZettaSdkApi {
     INSTANCE;
 
-    @NonNull private final List<ZIKStream> serverDevicesStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
+    @NonNull private final List<ZIKStream> openStreams = Collections.synchronizedList(new ArrayList<ZIKStream>());
+    @NonNull private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Nullable private String rootUrl;
     @Nullable private ZIKRoot zikRoot;
@@ -148,48 +151,54 @@ public enum ZettaSdkApi {
         throw new DeveloperError("A server should always be found, what did you do?");
     }
 
-    public void startMonitoringDevice(@NonNull ZIKDeviceId deviceId, ZikStreamListener listener) {
-        stopMonitoringLogStream();
+    public void startMonitoringDevice(@NonNull ZIKDeviceId deviceId, @NonNull ZikDeviceListener listener) {
+        stopMonitoringDevice();
         ZIKDevice device = getLiteDevice(deviceId);
-        monitorLogStream(device, listener);
+        monitorDeviceStreams(getServerContaining(deviceId), device, listener);
     }
 
     public void stopMonitoringDevice() {
-        stopMonitoringLogStream();
+        stopMonitoringOpenStreams();
     }
 
     public void startMonitoringAllServerAllDevices(@NonNull final ZikDeviceListener listener) {
         if (zikServers == null) {
             getServers();
         }
-        stopMonitoringAllServerDeviceStreams();
+        stopMonitoringOpenStreams();
         for (ZIKServer zikServer : zikServers) {
             List<ZIKDevice> zikDevices = zikServer.getDevices();
             for (ZIKDevice liteZikDevice : zikDevices) {
                 final ZIKDevice zikDevice = liteZikDevice.fetchSync();
-                for (final ZIKStream stream : zikDevice.getAllStreams()) {
-                    if (stream.getTitle().equals("logs")) {
-                        continue;
-                    }
-                    monitorDevice(stream, zikDevice, zikServer, listener);
-                    serverDevicesStreams.add(stream);
-                }
+                monitorDeviceStreams(zikServer, zikDevice, listener);
             }
         }
     }
 
-    private void monitorDevice(@NonNull final ZIKStream stream,
-                               @NonNull final ZIKDevice zikDevice,
-                               @NonNull final ZIKServer zikServer,
-                               @NonNull final ZikDeviceListener listener) {
-        Observable.create(new Observable.OnSubscribe<ZIKStreamEntry>() {
+    private void monitorDeviceStreams(@NonNull ZIKServer zikServer,
+                                      @NonNull ZIKDevice zikDevice,
+                                      @NonNull ZikDeviceListener listener) {
+        for (final ZIKStream stream : zikDevice.getAllStreams()) {
+            if (stream.getTitle().equals("logs")) {
+                continue;
+            }
+            Subscription subscription = monitorDeviceStream(stream, zikServer, zikDevice, listener);
+            subscriptions.add(subscription);
+            openStreams.add(stream);
+        }
+    }
+
+    private static Subscription monitorDeviceStream(@NonNull final ZIKStream stream,
+                                                    @NonNull final ZIKServer zikServer, @NonNull final ZIKDevice zikDevice,
+                                                    @NonNull final ZikDeviceListener listener) {
+        return Observable.create(new Observable.OnSubscribe<ZIKStreamEntry>() {
             @Override
             public void call(final Subscriber<? super ZIKStreamEntry> subscriber) {
                 stream.setStreamListener(new ZIKStreamListener() {
                     @Override
                     public void onUpdate(Object object) {
-                        ZIKStreamEntry streamEntry = (ZIKStreamEntry) object;
-                        subscriber.onNext(streamEntry);
+                        ZIKStreamEntry entry = (ZIKStreamEntry) object;
+                        subscriber.onNext(entry);
                     }
 
                     @Override
@@ -221,6 +230,7 @@ public enum ZettaSdkApi {
             .subscribe(new Action1<ZIKStreamEntry>() {
                 @Override
                 public void call(ZIKStreamEntry entry) {
+//                    ZIKDevice updatedDevice = zikDevice.refreshWithLogEntry(entry);
                     ZIKDevice updatedDevice = zikDevice.fetchSync();
                     listener.updateFor(zikServer, updatedDevice);
                 }
@@ -232,12 +242,13 @@ public enum ZettaSdkApi {
             });
     }
 
-    public void stopMonitoringAllServerDeviceStreams() {
-        synchronized (serverDevicesStreams) {
-            for (ZIKStream stream : serverDevicesStreams) {
+    public void stopMonitoringOpenStreams() {
+        synchronized (openStreams) {
+            for (ZIKStream stream : openStreams) {
                 stream.close();
             }
-            serverDevicesStreams.clear();
+            openStreams.clear();
+            subscriptions.clear();
         }
     }
 
