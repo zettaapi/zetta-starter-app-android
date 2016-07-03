@@ -4,7 +4,6 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
 import com.novoda.notils.logger.simple.Log;
-import com.zetta.android.BackpressureAbsorbingOnSubscribe;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.settings.SdkProperties;
@@ -137,8 +136,8 @@ class DeviceListService {
         void on(@NonNull List<ListItem> listItems);
     }
 
-    public void startMonitoringStreamedUpdates(@NonNull final StreamListener listener) {
-        Subscription subscription = getStreamedUpdatesObservable()
+    public void startMonitoringAllDeviceUpdates(@NonNull final UpdateListener listener) {
+        Subscription subscription = getDeviceUpdatesObservable()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<ListItem>() {
@@ -161,26 +160,26 @@ class DeviceListService {
     }
 
     @NonNull
-    private Observable<ListItem> getStreamedUpdatesObservable() {
-        return Observable.create(new BackpressureAbsorbingOnSubscribe<ListItem>() {
+    private Observable<ListItem> getDeviceUpdatesObservable() {
+        return Observable.create(new Observable.OnSubscribe<ListItem>() {
             @Override
-            public void startAsync(final LatestStateListener<ListItem> listener) {
-                monitorStreamedUpdates(new StreamListener() {
+            public void call(final Subscriber<? super ListItem> subscriber) {
+                monitorDeviceUpdates(new UpdateListener() {
                     @Override
                     public void onUpdated(@NonNull ListItem listItem) {
-                        listener.onNext(listItem);
+                        subscriber.onNext(listItem);
                     }
                 });
             }
         });
     }
 
-    private void monitorStreamedUpdates(@NonNull StreamListener listener) {
+    private void monitorDeviceUpdates(@NonNull UpdateListener listener) {
         String url = sdkProperties.getUrl();
         if (sdkProperties.useMockResponses()) {
-            mockService.startMonitorStreamedUpdates(url, listener);
+            mockService.startMonitorDeviceUpdates(url, listener);
         } else {
-            sdkService.startMonitorStreamedUpdates(url, listener);
+            sdkService.startMonitorDeviceUpdates(url, listener);
         }
     }
 
@@ -193,7 +192,7 @@ class DeviceListService {
         }
     }
 
-    interface StreamListener {
+    interface UpdateListener {
 
         void onUpdated(@NonNull ListItem listItem);
 

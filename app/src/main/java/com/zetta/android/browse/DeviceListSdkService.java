@@ -5,12 +5,11 @@ import android.support.annotation.NonNull;
 import com.apigee.zettakit.ZIKDevice;
 import com.apigee.zettakit.ZIKDeviceId;
 import com.apigee.zettakit.ZIKServer;
-import com.apigee.zettakit.ZIKStreamEntry;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyle;
-import com.zetta.android.browse.DeviceListService.StreamListener;
+import com.zetta.android.browse.DeviceListService.UpdateListener;
 import com.zetta.android.device.actions.ActionListItemParser;
 
 import java.util.List;
@@ -40,12 +39,12 @@ class DeviceListSdkService {
         return deviceListParser.createQuickActions(zikServer, zikDevice);
     }
 
-    public void startMonitorStreamedUpdates(@NonNull String url, @NonNull final StreamListener listener) {
+    public void startMonitorDeviceUpdates(@NonNull String url, @NonNull final UpdateListener listener) {
         zettaSdkApi.registerRoot(url);
-        zettaSdkApi.startMonitoringAllServerDeviceStreams(new ZettaSdkApi.ZikStreamEntryListener() {
+        zettaSdkApi.startMonitoringAllServerAllDevices(new ZettaSdkApi.ZikDeviceListener() {
             @Override
-            public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKStreamEntry entry) {
-                DeviceListItem listItem = deviceListParser.createDeviceListItem(server, device.fetchSync(), entry);
+            public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
+                DeviceListItem listItem = deviceListParser.createDeviceListItem(server, device);
                 listener.onUpdated(listItem);
             }
         });

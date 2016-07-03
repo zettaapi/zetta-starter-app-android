@@ -139,11 +139,11 @@ public class DeviceListActivity extends AppCompatActivity {
         updateState();
         if (deviceListService.hasRootUrl()) {
             deviceListService.getDeviceList(onDeviceListLoaded);
-            deviceListService.startMonitoringStreamedUpdates(onStreamedUpdate);
+            deviceListService.startMonitoringAllDeviceUpdates(onStreamedUpdate);
         }
     }
 
-    @NonNull private final DeviceListService.StreamListener onStreamedUpdate = new DeviceListService.StreamListener() {
+    @NonNull private final DeviceListService.UpdateListener onStreamedUpdate = new DeviceListService.UpdateListener() {
         @Override
         public void onUpdated(@NonNull ListItem listItem) {
             if (deviceListWidget.isComputingLayout() || deviceListWidget.isAnimating()) {

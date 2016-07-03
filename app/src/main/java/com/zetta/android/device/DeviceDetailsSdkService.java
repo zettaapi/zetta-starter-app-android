@@ -41,7 +41,7 @@ class DeviceDetailsSdkService {
         ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
         zettaSdkApi.startMonitoringDevice(
             zikDeviceId,
-            new ZettaSdkApi.ZikLogStreamEntryListener() {
+            new ZettaSdkApi.ZikStreamListener() {
                 @Override
                 public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry) {
                     ZIKDevice updatedDevice = device.refreshWithLogEntry(entry);

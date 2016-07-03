@@ -28,7 +28,7 @@ class EventsSdkService {
         ZIKServer zikServer = zettaSdkApi.getServerContaining(zikDeviceId);
         ZIKDevice zikDevice = zettaSdkApi.getLiteDevice(zikDeviceId);
         final ZettaStyle style = zettaStyleParser.parseStyle(zikServer, zikDevice);
-        zettaSdkApi.startMonitoringLogStreamFor(zikDeviceId, new ZettaSdkApi.ZikLogStreamEntryListener() {
+        zettaSdkApi.startMonitoringLogStreamFor(zikDeviceId, new ZettaSdkApi.ZikStreamListener() {
             @Override
             public void updateFor(@NonNull ZIKServer server, @NonNull ZIKDevice device, @NonNull ZIKLogStreamEntry entry) {
                 EventListItem listItem = createEventListItem(style, entry);
