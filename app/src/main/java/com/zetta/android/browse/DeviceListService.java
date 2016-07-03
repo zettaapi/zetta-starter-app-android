@@ -136,14 +136,15 @@ class DeviceListService {
         void on(@NonNull List<ListItem> listItems);
     }
 
-    public void startMonitoringAllDeviceUpdates(@NonNull final UpdateListener listener) {
+    public void startMonitoringAllDeviceUpdates(@NonNull final DevicesUpdateListener listener) {
         Subscription subscription = getDeviceUpdatesObservable()
+            .buffer(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<ListItem>() {
+            .subscribe(new Observer<List<ListItem>>() {
                 @Override
-                public void onNext(ListItem listItem) {
-                    listener.onUpdated(listItem);
+                public void onNext(List<ListItem> listItems) {
+                    listener.onUpdated(listItems);
                 }
 
                 @Override
@@ -164,7 +165,7 @@ class DeviceListService {
         return Observable.create(new Observable.OnSubscribe<ListItem>() {
             @Override
             public void call(final Subscriber<? super ListItem> subscriber) {
-                monitorDeviceUpdates(new UpdateListener() {
+                monitorDeviceUpdates(new DeviceListItemListener() {
                     @Override
                     public void onUpdated(@NonNull ListItem listItem) {
                         subscriber.onNext(listItem);
@@ -174,7 +175,7 @@ class DeviceListService {
         });
     }
 
-    private void monitorDeviceUpdates(@NonNull UpdateListener listener) {
+    private void monitorDeviceUpdates(@NonNull DeviceListItemListener listener) {
         String url = sdkProperties.getUrl();
         if (sdkProperties.useMockResponses()) {
             mockService.startMonitorDeviceUpdates(url, listener);
@@ -192,7 +193,13 @@ class DeviceListService {
         }
     }
 
-    interface UpdateListener {
+    interface DevicesUpdateListener {
+
+        void onUpdated(@NonNull List<ListItem> listItems);
+
+    }
+
+    interface DeviceListItemListener {
 
         void onUpdated(@NonNull ListItem listItem);
 

@@ -29,21 +29,23 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onDeviceClickListener = onDeviceClickListener;
     }
 
-    public void updateAll(@NonNull List<ListItem> listItems) {
+    public void replaceAll(@NonNull List<ListItem> listItems) {
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
     }
 
-    public void update(@NonNull ListItem listItem) {
-        int i = listItems.indexOf(listItem);
-        if (i == -1) {
-            Log.v("Not found in list " + listItem.getType());
-            return;
+    public void update(@NonNull List<ListItem> listItems) {
+        for (ListItem listItem : listItems) {
+            int i = this.listItems.indexOf(listItem);
+            if (i == -1) {
+                Log.v("Not found in list " + listItem.getType());
+                return;
+            }
+            this.listItems.remove(i);
+            this.listItems.add(i, listItem);
         }
-        listItems.remove(i);
-        listItems.add(i, listItem);
-        notifyItemChanged(i);
+        notifyDataSetChanged();
     }
 
     @Override

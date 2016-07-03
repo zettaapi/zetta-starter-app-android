@@ -143,20 +143,20 @@ public class DeviceListActivity extends AppCompatActivity {
         }
     }
 
-    @NonNull private final DeviceListService.UpdateListener onStreamedUpdate = new DeviceListService.UpdateListener() {
+    @NonNull private final DeviceListService.DevicesUpdateListener onStreamedUpdate = new DeviceListService.DevicesUpdateListener() {
         @Override
-        public void onUpdated(@NonNull ListItem listItem) {
+        public void onUpdated(@NonNull List<ListItem> listItems) {
             if (deviceListWidget.isComputingLayout() || deviceListWidget.isAnimating()) {
                 return;
             }
-            adapter.update(listItem);
+            adapter.update(listItems);
         }
     };
 
     @NonNull private final DeviceListService.Callback onDeviceListLoaded = new DeviceListService.Callback() {
         @Override
         public void on(@NonNull List<ListItem> listItems) {
-            adapter.updateAll(listItems);
+            adapter.replaceAll(listItems);
             pullRefreshWidget.setRefreshing(false);
             updateState();
         }

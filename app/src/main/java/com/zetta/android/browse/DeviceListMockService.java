@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
-import com.zetta.android.browse.DeviceListService.UpdateListener;
+import com.zetta.android.browse.DeviceListService.DeviceListItemListener;
 import com.zetta.android.device.actions.ActionMultipleInputListItem;
 import com.zetta.android.device.actions.ActionSingleInputListItem;
 import com.zetta.android.device.actions.ActionToggleListItem;
@@ -179,7 +179,7 @@ class DeviceListMockService {
         return new ZettaStyle(foregoundColor, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
     }
 
-    public void startMonitorDeviceUpdates(@NonNull String url, @NonNull DeviceListService.UpdateListener listener) {
+    public void startMonitorDeviceUpdates(@NonNull String url, @NonNull DeviceListItemListener listener) {
         streamGenerator = new ToggleStreamGenerator(mainThreadHandler, listener);
         mainThreadHandler.postDelayed(streamGenerator, TimeUnit.SECONDS.toMillis(1));
     }
@@ -214,11 +214,11 @@ class DeviceListMockService {
     private static class ToggleStreamGenerator implements Runnable {
 
         @NonNull private final Handler handler;
-        @NonNull private final DeviceListService.UpdateListener listener;
+        @NonNull private final DeviceListItemListener listener;
 
         private boolean toggle;
 
-        private ToggleStreamGenerator(@NonNull Handler handler, @NonNull UpdateListener listener) {
+        private ToggleStreamGenerator(@NonNull Handler handler, @NonNull DeviceListItemListener listener) {
             this.handler = handler;
             this.listener = listener;
         }

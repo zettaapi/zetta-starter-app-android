@@ -9,7 +9,7 @@ import com.zetta.android.ListItem;
 import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaSdkApi;
 import com.zetta.android.ZettaStyle;
-import com.zetta.android.browse.DeviceListService.UpdateListener;
+import com.zetta.android.browse.DeviceListService.DeviceListItemListener;
 import com.zetta.android.device.actions.ActionListItemParser;
 
 import java.util.List;
@@ -39,7 +39,7 @@ class DeviceListSdkService {
         return deviceListParser.createQuickActions(zikServer, zikDevice);
     }
 
-    public void startMonitorDeviceUpdates(@NonNull String url, @NonNull final UpdateListener listener) {
+    public void startMonitorDeviceUpdates(@NonNull String url, @NonNull final DeviceListItemListener listener) {
         zettaSdkApi.registerRoot(url);
         zettaSdkApi.startMonitoringAllServerAllDevices(new ZettaSdkApi.ZikDeviceListener() {
             @Override
