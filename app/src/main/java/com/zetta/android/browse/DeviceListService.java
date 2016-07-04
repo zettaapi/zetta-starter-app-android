@@ -138,7 +138,7 @@ class DeviceListService {
 
     public void startMonitoringAllDeviceUpdates(@NonNull final DevicesUpdateListener listener) {
         Subscription subscription = getDeviceUpdatesObservable()
-            .buffer(500, TimeUnit.MILLISECONDS)
+            .buffer(700, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<List<ListItem>>() {
