@@ -76,3 +76,5 @@ To explain that in terms of roles:
  - DeviceListMockService: returns mock data so we can skip using the Zetta SDK
  - DeviceListSdkService: converts the data from Zetta SDK into ListItems
  - ZettaSdkApi: wraps the Zetta SDK to add caching & control method call order/callbacks/throttling
+
+![](extras/zetta-app-demo.gif)
