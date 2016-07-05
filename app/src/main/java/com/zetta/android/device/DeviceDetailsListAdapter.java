@@ -3,6 +3,7 @@ package com.zetta.android.device;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,6 +33,8 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @NonNull private final OnActionClickListener onActionClickListener;
     @NonNull private final OnEventsClickListener onEventsClickListener;
 
+    private boolean touchingAction;
+
     public DeviceDetailsListAdapter(@NonNull ImageLoader imageLoader,
                                     @NonNull OnActionClickListener onActionClickListener,
                                     @NonNull OnEventsClickListener onEventsClickListener) {
@@ -41,6 +44,9 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void replaceAll(@NonNull List<ListItem> listItems) {
+        if (touchingAction) {
+            return;
+        }
         this.listItems.clear();
         this.listItems.addAll(listItems);
         notifyDataSetChanged();
@@ -55,6 +61,28 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         listItems.remove(i);
         listItems.add(i, listItem);
         notifyItemChanged(i);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_UP) {
+                    touchingAction = false;
+                } else {
+                    View childView = rv.findChildViewUnder(e.getX(), e.getY());
+                    int touchingPosition = rv.getChildAdapterPosition(childView);
+                    int touchedType = getItemViewType(touchingPosition);
+                    if (touchedType == ListItem.TYPE_ACTION_TOGGLE
+                        || touchedType == ListItem.TYPE_ACTION_SINGLE_INPUT
+                        || touchedType == ListItem.TYPE_ACTION_MULTIPLE_INPUT) {
+                        touchingAction = true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
