@@ -3,6 +3,7 @@ package com.zetta.android.browse;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +25,8 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @NonNull private final ImageLoader imageLoader;
     @NonNull private final OnDeviceClickListener onDeviceClickListener;
 
+    private int touchingPosition;
+
     DeviceListAdapter(@NonNull ImageLoader imageLoader, @NonNull OnDeviceClickListener onDeviceClickListener) {
         this.imageLoader = imageLoader;
         this.onDeviceClickListener = onDeviceClickListener;
@@ -40,12 +43,30 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             int i = this.listItems.indexOf(listItem);
             if (i == -1) {
                 Log.v("Not found in list " + listItem.getType());
-                return;
+            } else if (i == touchingPosition) {
+                Log.v("currently being touched not updating");
+            } else {
+                this.listItems.remove(i);
+                this.listItems.add(i, listItem);
+                notifyItemChanged(i);
             }
-            this.listItems.remove(i);
-            this.listItems.add(i, listItem);
         }
-        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_UP) {
+                    touchingPosition = RecyclerView.NO_POSITION;
+                } else {
+                    View childView = rv.findChildViewUnder(e.getX(), e.getY());
+                    touchingPosition = rv.getChildAdapterPosition(childView);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
