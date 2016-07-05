@@ -73,6 +73,9 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 } else {
                     View childView = rv.findChildViewUnder(e.getX(), e.getY());
                     int touchingPosition = rv.getChildAdapterPosition(childView);
+                    if (touchingPosition == -1) {
+                        return false;
+                    }
                     int touchedType = getItemViewType(touchingPosition);
                     if (touchedType == ListItem.TYPE_ACTION_TOGGLE
                         || touchedType == ListItem.TYPE_ACTION_SINGLE_INPUT
