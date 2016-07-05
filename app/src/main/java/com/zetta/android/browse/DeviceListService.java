@@ -10,6 +10,7 @@ import com.zetta.android.settings.SdkProperties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -190,6 +191,16 @@ class DeviceListService {
             mockService.stopMonitoringStreamedUpdates();
         } else {
             sdkService.stopMonitoringStreamedUpdates();
+        }
+    }
+
+    public void updateDetails(@NonNull ZettaDeviceId deviceId,
+                              @NonNull String action,
+                              @NonNull Map<String, Object> labelledInput) {
+        if (sdkProperties.useMockResponses()) {
+            mockService.updateDetails(deviceId, action, labelledInput);
+        } else {
+            sdkService.updateDetails(deviceId, action, labelledInput);
         }
     }
 

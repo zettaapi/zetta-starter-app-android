@@ -13,6 +13,7 @@ import com.zetta.android.browse.DeviceListService.DeviceListItemListener;
 import com.zetta.android.device.actions.ActionListItemParser;
 
 import java.util.List;
+import java.util.Map;
 
 class DeviceListSdkService {
 
@@ -54,4 +55,8 @@ class DeviceListSdkService {
         zettaSdkApi.stopMonitoringOpenStreams();
     }
 
+    public void updateDetails(@NonNull ZettaDeviceId deviceId, @NonNull String action, @NonNull Map<String, Object> labelledInput) {
+        ZIKDeviceId zikDeviceId = new ZIKDeviceId(deviceId.getUuid().toString());
+        zettaSdkApi.update(zikDeviceId, action, labelledInput);
+    }
 }

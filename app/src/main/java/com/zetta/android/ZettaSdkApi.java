@@ -308,7 +308,16 @@ public enum ZettaSdkApi {
         logStream.close();
     }
 
-    public void update(final ZIKDeviceId deviceId, final String action, final Map<String, Object> commands, final ZIKCallback<ZIKDevice> callback) {
+    public void update(@NonNull final ZIKDeviceId deviceId,
+                       @NonNull final String action,
+                       @NonNull final Map<String, Object> commands) {
+        update(deviceId, action, commands, null);
+    }
+
+    public void update(@NonNull final ZIKDeviceId deviceId,
+                       @NonNull final String action,
+                       @NonNull final Map<String, Object> commands,
+                       @Nullable final ZIKCallback<ZIKDevice> callback) {
         Observable.create(new Observable.OnSubscribe<ZIKDevice>() {
             @Override
             public void call(final Subscriber<? super ZIKDevice> subscriber) {
@@ -330,11 +339,17 @@ public enum ZettaSdkApi {
             .subscribe(new Action1<ZIKDevice>() {
                 @Override
                 public void call(ZIKDevice device) {
+                    if (callback == null) {
+                        return;
+                    }
                     callback.onSuccess(device);
                 }
             }, new Action1<Throwable>() {
                 @Override
                 public void call(Throwable throwable) {
+                    if (callback == null) {
+                        return;
+                    }
                     callback.onFailure((ZIKException) throwable);
                 }
             });

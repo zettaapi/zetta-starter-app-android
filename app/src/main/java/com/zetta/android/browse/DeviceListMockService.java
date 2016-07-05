@@ -17,6 +17,7 @@ import com.zetta.android.device.actions.ActionToggleListItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -209,6 +210,10 @@ class DeviceListMockService {
             style
         ));
         return items;
+    }
+
+    public void updateDetails(ZettaDeviceId deviceId, String action, Map<String, Object> labelledInput) {
+        // Mock update does nothing
     }
 
     private static class ToggleStreamGenerator implements Runnable {
