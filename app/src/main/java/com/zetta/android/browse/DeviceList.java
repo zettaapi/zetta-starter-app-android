@@ -137,6 +137,9 @@ class DeviceList {
             }
             ZettaDeviceId deviceId = getDeviceId(zikDevice);
             for (ZIKTransition transition : transitions) {
+                if (transition.getName().startsWith("_")) {
+                    continue;
+                }
                 listItems.add(actionParser.parseActionListItem(deviceId, style, transition));
             }
             return listItems;
