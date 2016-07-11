@@ -74,10 +74,13 @@ class DeviceList {
         }
 
         private String getState(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
+            String state = device.getState();
             Map serverPropsStyle = (Map) server.getProperties().get("style");
+            if (serverPropsStyle == null) {
+                return state;
+            }
             Map entities = (Map) serverPropsStyle.get("entities");
             String deviceType = device.getType();
-            String state = device.getState();
             if (entities.containsKey(deviceType)) {
                 Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
                 if (deviceProperties.containsKey("state")) {

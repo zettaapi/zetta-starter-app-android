@@ -162,7 +162,12 @@ class DeviceDetails {
                                                 @NonNull ZettaStyle style,
                                                 @NonNull ZIKServer zikServer,
                                                 @NonNull ZIKDevice zikDevice) {
-            Map entities = (Map) ((Map) zikServer.getProperties().get("style")).get("entities");
+            Map serverPropsStyle = (Map) zikServer.getProperties().get("style");
+            if(serverPropsStyle == null) {
+                String state = zikDevice.getState();
+                return new StateListItem(deviceId, state, style);
+            }
+            Map entities = (Map) serverPropsStyle.get("entities");
             String deviceType = zikDevice.getType();
             if (entities.containsKey(deviceType)) {
                 Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
