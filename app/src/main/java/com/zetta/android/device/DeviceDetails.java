@@ -162,26 +162,29 @@ class DeviceDetails {
                                                 @NonNull ZettaStyle style,
                                                 @NonNull ZIKServer zikServer,
                                                 @NonNull ZIKDevice zikDevice) {
-            Map entities = (Map) ((Map) zikServer.getProperties().get("style")).get("entities");
-            String deviceType = zikDevice.getType();
-            if (entities.containsKey(deviceType)) {
-                Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
-                if (deviceProperties.containsKey("state")) {
-                    if (((Map) deviceProperties.get("state")).get("display").equals("none")) {
-                        Iterator iterator = deviceProperties.keySet().iterator();
-                        iterator.next();
-                        String promotedPropertyKey = (String) iterator.next();
-                        String value = String.valueOf(zikDevice.getProperties().get(promotedPropertyKey));
-                        Map promotedProperties = (Map) deviceProperties.get(promotedPropertyKey);
-                        String symbol = (String) promotedProperties.get("symbol");
-                        Double significantDigits = (double) promotedProperties.get("significantDigits");
-                        BigDecimal bigValue = new BigDecimal(value).setScale(significantDigits.intValue(), BigDecimal.ROUND_FLOOR);
-                        String roundedValue = bigValue.toString();
-                        return new PromotedListItem(deviceId, promotedPropertyKey, roundedValue, symbol, style);
+            Map styleMap = (Map) zikServer.getProperties().get("style");
+            if( styleMap != null ) {
+                Map entities = (Map) styleMap.get("entities");
+                String deviceType = zikDevice.getType();
+                if (entities.containsKey(deviceType)) {
+                    Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
+                    if (deviceProperties.containsKey("state")) {
+                        if (((Map) deviceProperties.get("state")).get("display").equals("none")) {
+                            Iterator iterator = deviceProperties.keySet().iterator();
+                            iterator.next();
+                            String promotedPropertyKey = (String) iterator.next();
+                            String value = String.valueOf(zikDevice.getProperties().get(promotedPropertyKey));
+                            Map promotedProperties = (Map) deviceProperties.get(promotedPropertyKey);
+                            String symbol = (String) promotedProperties.get("symbol");
+                            Double significantDigits = (double) promotedProperties.get("significantDigits");
+                            BigDecimal bigValue = new BigDecimal(value).setScale(significantDigits.intValue(), BigDecimal.ROUND_FLOOR);
+                            String roundedValue = bigValue.toString();
+                            return new PromotedListItem(deviceId, promotedPropertyKey, roundedValue, symbol, style);
+                        }
                     }
                 }
-
             }
+
             String state = zikDevice.getState();
             return new StateListItem(deviceId, state, style);
         }
