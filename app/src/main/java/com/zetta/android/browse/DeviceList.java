@@ -10,18 +10,21 @@ import com.zetta.android.ZettaDeviceId;
 import com.zetta.android.ZettaStyle;
 import com.zetta.android.device.actions.ActionListItemParser;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 class DeviceList {
 
     static class Parser {
 
         private static final Map<UUID, ZettaDeviceId> zettaDeviceIdCache = new HashMap<>();
+        private static final Pattern IS_DOUBLE = Pattern.compile("[\\x00-\\x20]*[+-]?(((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*");
 
         private final ZettaStyle.Parser zettaStyleParser;
         private final ActionListItemParser actionParser;
@@ -44,8 +47,7 @@ class DeviceList {
                     items.add(createEmptyServerListItem(serverStyle));
                 } else {
                     for (ZIKDevice device : zikDevices) {
-                        ZettaStyle deviceStyle = zettaStyleParser.parseStyle(server, device);
-                        items.add(createDeviceListItem(deviceStyle, device));
+                        items.add(createDeviceListItem(server, device));
                     }
                 }
             }
@@ -65,27 +67,17 @@ class DeviceList {
         }
 
         @NonNull
-        private DeviceListItem createDeviceListItem(@NonNull ZettaStyle deviceStyle, @NonNull ZIKDevice device) {
-            String name = device.getName();
-            String state = device.getState();
-            ZettaDeviceId deviceId = getDeviceId(device);
-            return new DeviceListItem(
-                deviceId,
-                name,
-                state,
-                deviceStyle
-            );
+        public DeviceListItem createDeviceListItem(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
+            ZettaStyle style = zettaStyleParser.parseStyle(server, device);
+            String state = getState(server, device);
+            return createDeviceListItem(style, device, state);
         }
 
-        @NonNull
-        public DeviceListItem createDeviceListItem(@NonNull ZIKServer server,
-                                                   @NonNull ZIKDevice device) {
-            ZettaStyle style = zettaStyleParser.parseStyle(server, device);
-            ZettaDeviceId zettaDeviceId = getDeviceId(device);
-            String name = device.getName();
-
-            Map entities = (Map) ((Map) server.getProperties().get("style")).get("entities");
+        private String getState(@NonNull ZIKServer server, @NonNull ZIKDevice device) {
+            Map serverPropsStyle = (Map) server.getProperties().get("style");
+            Map entities = (Map) serverPropsStyle.get("entities");
             String deviceType = device.getType();
+            String state = device.getState();
             if (entities.containsKey(deviceType)) {
                 Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
                 if (deviceProperties.containsKey("state")) {
@@ -93,21 +85,31 @@ class DeviceList {
                         Iterator iterator = deviceProperties.keySet().iterator();
                         iterator.next();
                         String promotedPropertyKey = (String) iterator.next();
-                        String state = String.valueOf(device.getProperties().get(promotedPropertyKey));
-                        return new DeviceListItem(
-                            zettaDeviceId,
-                            name,
-                            state,
-                            style
-                        );
+                        String promotedPropertyValue = String.valueOf(device.getProperties().get(promotedPropertyKey));
+                        Map promotedProperties = (Map) deviceProperties.get(promotedPropertyKey);
+                        String symbol = (String) promotedProperties.get("symbol");
+                        Double significantDigits = (double) promotedProperties.get("significantDigits");
+                        boolean isDouble = IS_DOUBLE.matcher(promotedPropertyValue).matches();
+                        if (isDouble) {
+                            BigDecimal bigValue = new BigDecimal(promotedPropertyValue).setScale(significantDigits.intValue(), BigDecimal.ROUND_FLOOR);
+                            String roundedValue = bigValue.toString();
+                            state = roundedValue + symbol;
+                        } else {
+                            state = promotedPropertyValue;
+                        }
                     }
                 }
-
             }
-            String state = device.getState();
+            return state;
+        }
+
+        @NonNull
+        private DeviceListItem createDeviceListItem(@NonNull ZettaStyle style,
+                                                    @NonNull ZIKDevice device,
+                                                    @NonNull String state) {
             return new DeviceListItem(
-                zettaDeviceId,
-                name,
+                getDeviceId(device),
+                device.getName(),
                 state,
                 style
             );
