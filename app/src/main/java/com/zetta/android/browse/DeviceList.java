@@ -84,26 +84,29 @@ class DeviceList {
             ZettaDeviceId zettaDeviceId = getDeviceId(device);
             String name = device.getName();
 
-            Map entities = (Map) ((Map) server.getProperties().get("style")).get("entities");
-            String deviceType = device.getType();
-            if (entities.containsKey(deviceType)) {
-                Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
-                if (deviceProperties.containsKey("state")) {
-                    if (((Map) deviceProperties.get("state")).get("display").equals("none")) {
-                        Iterator iterator = deviceProperties.keySet().iterator();
-                        iterator.next();
-                        String promotedPropertyKey = (String) iterator.next();
-                        String state = String.valueOf(device.getProperties().get(promotedPropertyKey));
-                        return new DeviceListItem(
-                            zettaDeviceId,
-                            name,
-                            state,
-                            style
-                        );
+            Map styleMap = (Map) server.getProperties().get("style");
+            if( styleMap != null ) {
+                Map entities = (Map) styleMap.get("entities");
+                String deviceType = device.getType();
+                if ( entities != null && entities.containsKey(deviceType)) {
+                    Map deviceProperties = (Map) ((Map) entities.get(deviceType)).get("properties");
+                    if (deviceProperties.containsKey("state")) {
+                        if (((Map) deviceProperties.get("state")).get("display").equals("none")) {
+                            Iterator iterator = deviceProperties.keySet().iterator();
+                            iterator.next();
+                            String promotedPropertyKey = (String) iterator.next();
+                            String state = String.valueOf(device.getProperties().get(promotedPropertyKey));
+                            return new DeviceListItem(
+                                    zettaDeviceId,
+                                    name,
+                                    state,
+                                    style
+                            );
+                        }
                     }
                 }
-
             }
+
             String state = device.getState();
             return new DeviceListItem(
                 zettaDeviceId,
