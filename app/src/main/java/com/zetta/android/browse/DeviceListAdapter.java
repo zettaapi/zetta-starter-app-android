@@ -167,7 +167,9 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 itemView.setTag(deviceListItem.getDeviceId());
                 itemView.setBackground(deviceListItem.createBackground());
                 nameLabelWidget.setText(deviceListItem.getName());
+                nameLabelWidget.setTextColor(deviceListItem.getTextColor());
                 stateLabelWidget.setText(deviceListItem.getState());
+                stateLabelWidget.setTextColor(deviceListItem.getTextColor());
                 imageLoader.load(deviceListItem.getStateImageUri(), stateImageWidget);
                 stateImageWidget.setColorFilter(deviceListItem.getImageColorFilter());
             }
@@ -189,6 +191,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(@NonNull ServerListItem serverListItem) {
             swatchColorWidget.setBackgroundColor(serverListItem.getSwatchColor());
             nameLabelWidget.setText(serverListItem.getName());
+            nameLabelWidget.setTextColor(serverListItem.getTextColor());
             itemView.setBackground(serverListItem.createBackground());
         }
 
@@ -205,6 +208,7 @@ class DeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(@NonNull ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
+            messageWidget.setTextColor(listItem.getTextColor());
             itemView.setBackground(listItem.createBackground());
         }
 

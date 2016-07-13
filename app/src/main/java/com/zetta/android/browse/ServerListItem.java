@@ -27,6 +27,11 @@ class ServerListItem implements ListItem {
         return style.getForegroundColor();
     }
 
+    @ColorInt
+    public int getTextColor() {
+        return style.getForegroundColor();
+    }
+
     @NonNull
     public String getName() {
         return name;

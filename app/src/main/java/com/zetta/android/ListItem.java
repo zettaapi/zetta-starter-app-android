@@ -1,6 +1,7 @@
 package com.zetta.android;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 
 public interface ListItem {
@@ -64,6 +65,11 @@ public interface ListItem {
         @NonNull
         public Drawable createBackground() {
             return style.createBackgroundDrawable();
+        }
+
+        @ColorInt
+        public int getTextColor() {
+            return style.getForegroundColor();
         }
     }
 

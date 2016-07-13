@@ -299,6 +299,7 @@ class DeviceDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public void bind(@NonNull ListItem.EmptyListItem listItem) {
             messageWidget.setText(listItem.getMessage());
+            messageWidget.setTextColor(listItem.getTextColor());
             itemView.setBackground(listItem.createBackground());
         }
 

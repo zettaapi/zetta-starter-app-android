@@ -32,7 +32,6 @@ class DeviceListItem implements ListItem {
     }
 
     @Override
-    @NonNull
     public int getType() {
         return ListItem.TYPE_DEVICE;
     }
@@ -60,6 +59,11 @@ class DeviceListItem implements ListItem {
     @NonNull
     public Drawable createBackground() {
         return style.createBackgroundDrawable();
+    }
+
+    @ColorInt
+    public int getTextColor() {
+        return style.getForegroundColor();
     }
 
     @Override
