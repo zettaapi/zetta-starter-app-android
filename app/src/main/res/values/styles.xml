@@ -9,6 +9,10 @@
 
     <item name="buttonStyle">@style/ZettaButton</item>
 
+    <item name="android:textColorPrimary">@color/textColorPrimary</item>
+    <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    <item name="android:textColorTertiary">@color/textColorTertiary</item>
+
     <item name="android:windowBackground">@color/colorPrimary</item>
   </style>
 
@@ -20,6 +24,10 @@
     <item name="colorAccent">@color/colorAccent</item>
 
     <item name="buttonStyle">@style/ZettaButton</item>
+
+    <item name="android:textColorPrimary">@color/textColorPrimary</item>
+    <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    <item name="android:textColorTertiary">@color/textColorTertiary</item>
 
     <item name="android:windowBackground">@color/colorPrimary</item>
   </style>
@@ -54,7 +62,7 @@
   </style>
 
   <style name="SettingsTheme"
-    parent="AppThemeDark">
+    parent="AppThemeLight">
     <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
   </style>
 
