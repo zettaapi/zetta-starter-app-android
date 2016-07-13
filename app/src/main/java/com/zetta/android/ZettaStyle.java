@@ -88,8 +88,8 @@ public class ZettaStyle {
     }
 
     public static class Parser {
-        private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
-        private static final int DEFAULT_FOREGROUND_COLOR = Color.BLACK;
+        private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#F7F7F7");
+        private static final int DEFAULT_FOREGROUND_COLOR = Color.parseColor("#141414");
         private static final Uri DEFAULT_URI_ICON = Uri.parse("android.resource://" + BuildConfig.APPLICATION_ID + "/" + R.drawable.device_placeholder);
         private static final TintMode DEFAULT_TINT = TintMode.ORIGINAL;
 

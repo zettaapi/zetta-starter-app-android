@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 class DeviceListMockService {
 
     private static final ZettaDeviceId DEVICE_ID = new ZettaDeviceId(UUID.fromString("86fee1a0-2fd1-11e6-a818-0002a5d5c51b"));
-    private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#f2f2f2");
-    private static final int DEFAULT_FOREGROUND_COLOR = Color.parseColor("#000000");
+    private static final int DEFAULT_BACKGROUND_COLOR = Color.parseColor("#F7F7F7");
+    private static final int DEFAULT_FOREGROUND_COLOR = Color.parseColor("#141414");
     private static final ZettaStyle DEFAULT_STYLE = new ZettaStyle(DEFAULT_FOREGROUND_COLOR, DEFAULT_BACKGROUND_COLOR, Uri.EMPTY, ZettaStyle.TintMode.ORIGINAL);
 
     @NonNull private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
